@@ -1,0 +1,44 @@
+# Keil MDK files
+*.uvguix.*
+*.uvopt
+*.uvoptx
+*.bak
+*.dep
+*.lst
+*.lnp
+*.map
+*.hex
+*.axf
+*.htm
+*.sct
+*.scr
+*.tra
+
+# Build output
+OBJ/
+Objects/
+Listings/
+Output/
+DebugConfig/
+RTE/_Target*/
+
+# Temporary files
+*.TMP
+*.tmp
+*~
+*.swp
+*.swo
+
+# JLink files
+JLinkLog.txt
+JLinkSettings.ini
+
+# Nu-Link files
+Nu_Link_Driver.ini
+
+# Event Recorder
+*.scvd
+
+# Windows
+Thumbs.db
+Desktop.ini
