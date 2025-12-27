@@ -1,5 +1,6 @@
-
+﻿
 #include "main.h"
+#include "error_handler.h"
 
 
 
@@ -124,7 +125,9 @@ uint8 IDLE_INDEX = 0;
 uint8 cmd_string111[7] = {0x5A,0xA5,0x04,0x80,0x03,0x00,0x4B}; //��ҳָ��л�����76ҳ
 
 
-void Get_IO_Inf(void)
+/* Get_IO_Inf() 已移动到 SYSTEM/error/error_handler.c */
+#if 0  /* 原函数已移动 */
+void Get_IO_Inf_OLD(void)
 {
 	uint8  Error16_Time = 8;
 	
@@ -239,9 +242,10 @@ void Get_IO_Inf(void)
 				sys_flag.Error1_Count = 0;
 			}
 			
-
 	
+
 }
+#endif  /* Get_IO_Inf_OLD */
 
 
 
@@ -328,26 +332,17 @@ uint8 Before_Ignition_Prepare(void)
 
 
 
-/**
-  * @brief  ��鲢ת����IO��ˮλ��Ϣ���ȱ�������״̬
-* @param  
-  * @retval ��
-  */
- void Self_Check_Function()
+/* Self_Check_Function() 已移动到 SYSTEM/error/error_handler.c */
+#if 0
+ void Self_Check_Function_OLD()
 {
-	
-	
-	Get_IO_Inf(); //��ȡIO��Ϣ
-
-	
-		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
-		{
-			
-			sys_flag.Error_Code = Error16_SmokeValueHigh;
-		}
-		
-						 
+	Get_IO_Inf();
+	if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
+	{
+		sys_flag.Error_Code = Error16_SmokeValueHigh;
+	}
 }
+#endif
 
 /**
   * @brief  ϵͳ������
@@ -895,7 +890,9 @@ uint8  Sys_Ignition_Fun(void)
 * @param   �����Ϻ��쳣���з��룬ȼ��ѹ����ϵͳ���к͵���м��
   * @retval ��
   */
-void Auto_Check_Fun(void)
+/* Auto_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
+#if 0
+void Auto_Check_Fun_OLD(void)
 {
 
 	uint8 Error_Buffer = 0;
@@ -992,11 +989,12 @@ void Auto_Check_Fun(void)
 	if( Temperature_Data.Pressure_Value >= (Sys_Admin.DeviceMaxPressureSet - 1))
 		{
 			 
-				sys_flag.Error_Code  = Error2_YaBianProtect;
-		}
+			sys_flag.Error_Code  = Error2_YaBianProtect;
+	}
 
 		 
 }
+#endif /* Auto_Check_Fun_OLD */
 
 	
 /**
@@ -1036,45 +1034,21 @@ void Ignition_Check_Fun(void)
 
 		
 
-/**
-  * @brief  ������ʱ������״̬������δ�����л��棬ȼ�ջ��ȱ�����¯�峬�µȽ��ǹ��ϣ����뱨����ʾ
-* @param  �������Է��ź���������
-  * @retval ��
-  */
-uint8 Idel_Check_Fun(void)
+/* Idel_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
+#if 0
+uint8 Idel_Check_Fun_OLD(void)
 {
-	//***********ˮλ�����һֱҪ���*************//
-		
-	 if(sys_flag.Error_Code )
-	 		return 0;//����й��ϣ�ֱ���˳������ٽ��м��
-
-	
-	
-
-	 
-	  Get_IO_Inf(); //��ȡIO��Ϣ
-
-	
-	
-	if (IDLE_INDEX == 0)
-		{
-		 if(sys_flag.flame_state == FLAME_OK)
-			{
-				if(sys_flag.Error_Code == 0 )
-					sys_flag.Error_Code = Error7_FlameZiJian;
-					 //����ʱ���϶�û�л��棬����̽�������ϱ���
-			}
-		
+	if(sys_flag.Error_Code) return 0;
+	Get_IO_Inf();
+	if (IDLE_INDEX == 0) {
+		if(sys_flag.flame_state == FLAME_OK) {
+			if(sys_flag.Error_Code == 0)
+				sys_flag.Error_Code = Error7_FlameZiJian;
 		}
-		
-
-
-	 
-	 
-
-		return 0 ;
-		
+	}
+	return 0;
 }
+#endif
 
 
 
@@ -1504,15 +1478,9 @@ uint8 XB_System_Pressure_Balance_Function(void)
 
 
 
-/**
-	 * @brief  ϵͳ���й����У��쳣��Ӧ�䴦�����쳣�����������ۼӣ�����Ӧ����������Ϊϵͳ����
-	 * @param    ����ʱ����Ϩ���쳣
-							 ¯�ڳ����쳣
-							 �������رպ��쳣
-							 ȼ�����ȱ��������쳣
-  * @retval ��
-  */
-void  Abnormal_Events_Response(void)
+/* Abnormal_Events_Response() 已移动到 SYSTEM/error/error_handler.c */
+#if 0
+void  Abnormal_Events_Response_OLD(void)
 {
 		
 	
@@ -1758,10 +1726,9 @@ void  Abnormal_Events_Response(void)
 
 
 		
-	
-	
-	
 }
+#endif /* Abnormal_Events_Response_OLD */
+
 /**
   * @brief  ϵͳ���г���
 * @param   Sys_Launch_Index�������л�ϵͳ���в���
@@ -1842,9 +1809,10 @@ void Sys_Launch_Function(void)
 
 
 
-void Abnormal_Check_Fun(void)
+/* Abnormal_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
+#if 0
+void Abnormal_Check_Fun_OLD(void)
 {
-	//���ȼ��ѹ���Ƿ����������������Ƿ�������¯����ˮ�Ƿ���
 		Get_IO_Inf();
 	
 		
@@ -1873,30 +1841,17 @@ void Abnormal_Check_Fun(void)
 		{
 			
 
-			sys_flag.Error_Code  = Error2_YaBianProtect;
-		}
-
-
-	
-		
+		sys_flag.Error_Code  = Error2_YaBianProtect;
+	}
 }
+#endif /* Abnormal_Check_Fun_OLD */
 
-//ˢ��LCD������Ϣ��¼����
-void Lcd_Err_Refresh(void)
-{
-	
-	
-}
+/* Lcd_Err_Refresh(), Lcd_Err_Read(), Err_Response() 已移动到 error_handler.c */
+#if 0
+void Lcd_Err_Refresh_OLD(void) {}
+void Lcd_Err_Read_OLD(void) {}
 
-void Lcd_Err_Read(void)
-{
-	
-	
-}
-
- 
-
-void  Err_Response(void)
+void  Err_Response_OLD(void)
 {
 	static uint8 Old_Error = 0;
 	//����й��ϱ�����ͣ¯��14H��15HΪ��������
@@ -1962,17 +1917,13 @@ void  Err_Response(void)
 			 				Beep_Data.beep_start_flag = 1;//���Ʒ���������	
 	 					}
 	 			}
-	 		
-	 		
 	 	}
-
-	 	 
-				
-	  
 }
+#endif /* Err_Response_OLD */
 
-
-void  IDLE_Err_Response(void)
+/* IDLE_Err_Response() 已移动到 error_handler.c */
+#if 0
+void  IDLE_Err_Response_OLD(void)
 {
 	static uint8 Old_Error = 0;
 	//����й��ϱ�����ͣ¯��
@@ -2050,6 +2001,10 @@ void  IDLE_Err_Response(void)
 	
 	  
 }
+#endif /* IDLE_Err_Response_OLD */
+
+
+
 
 
 

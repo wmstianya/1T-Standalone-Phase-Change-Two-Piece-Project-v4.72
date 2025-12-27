@@ -1,0 +1,330 @@
+# 重构提案: system_control.c 完整模块分析
+
+**Date**: 2024-12-27  
+**Author**: AI Assistant  
+**Status**: Draft - Pending User Review
+
+---
+
+## 1. 文件统计
+
+| 指标 | 数值 |
+|------|------|
+| 总行数 | 4695 |
+| 函数数量 | 53 |
+| 全局变量 | 45+ |
+| 平均函数行数 | ~88 |
+| 最大函数 | `Sys_Ignition_Fun()` (~530行) |
+
+---
+
+## 2. 完整函数清单（按行号排序）
+
+| # | 函数名 | 起始行 | 结束行 | 行数 | 职责描述 |
+|---|--------|--------|--------|------|----------|
+| 1 | `Get_IO_Inf()` | 127 | 244 | 117 | 获取IO信息，检测水位逻辑、热保护、压控信号异常 |
+| 2 | `Before_Ignition_Prepare()` | 254 | 327 | 73 | 点火前准备（风门、排污门、延时等待） |
+| 3 | `Self_Check_Function()` | 336 | 350 | 14 | 系统自检（调用Get_IO_Inf，检测烟温） |
+| 4 | `Sys_Ignition_Fun()` | 357 | 888 | 531 | **点火主流程**（10个case状态机） |
+| 5 | `Auto_Check_Fun()` | 898 | 999 | 101 | **运行中自检**（风门、燃气、水位、火焰、烟温、压力） |
+| 6 | `Ignition_Check_Fun()` | 1007 | 1033 | 26 | 点火过程检测（烟温、燃气压力） |
+| 7 | `Idel_Check_Fun()` | 1044 | 1077 | 33 | 待机状态检测（火焰自检） |
+| 8 | `System_Pressure_Balance_Function()` | 1085 | 1302 | 217 | **单机压力平衡控制**（PWM调节） |
+| 9 | `XB_System_Pressure_Balance_Function()` | 1305 | 1502 | 197 | **相变压力平衡控制**（PWM调节） |
+| 10 | `Abnormal_Events_Response()` | 1515 | 1764 | 249 | **异常事件响应**（熄火后吹、补水、排污、重启） |
+| 11 | `Sys_Launch_Function()` | 1770 | 1839 | 69 | 系统启动流程（自检→点火→运行） |
+| 12 | `Abnormal_Check_Fun()` | 1845 | 1882 | 37 | 异常状态检测（燃气、烟温、压力） |
+| 13 | `Lcd_Err_Refresh()` | 1885 | 1889 | 4 | LCD故障刷新（空函数） |
+| 14 | `Lcd_Err_Read()` | 1891 | 1895 | 4 | LCD故障读取（空函数） |
+| 15 | `Err_Response()` | 1899 | 1972 | 73 | **运行中故障响应**（停机、报警、锁定） |
+| 16 | `IDLE_Err_Response()` | 1975 | 2052 | 77 | **待机故障响应**（停机、报警、锁定） |
+| 17 | `System_Idel_Function()` | 2061 | 2073 | 12 | 待机功能（关闭风门、燃气、点火，执行排污） |
+| 18 | `System_All_Control()` | 2080 | 2268 | 188 | **总控制入口**（水位控制+状态机调度） |
+| 19 | `sys_work_time_function()` | 2272 | 2331 | 59 | 系统工作时间统计 |
+| 20 | `copy_to_lcd()` | 2334 | 2339 | 5 | 复制数据到LCD（空函数） |
+| 21 | `sys_control_config_function()` | 2343 | 2579 | 236 | **系统配置功能**（参数校验、LCD数据同步） |
+| 22 | `byte_to_bit()` | 2584 | 2592 | 8 | 字节转位（空函数） |
+| 23 | `Load_LCD_Data()` | 2607 | 2610 | 3 | 加载LCD数据（空函数） |
+| 24 | `clear_struct_memory()` | 2616 | 2636 | 20 | 清空结构体内存 |
+| 25 | `One_Sec_Check()` | 2645 | 2697 | 52 | 每秒检查（调试打印） |
+| 26 | `sys_start_cmd()` | 2701 | 2766 | 65 | **系统启动命令** |
+| 27 | `sys_close_cmd()` | 2769 | 2819 | 50 | **系统关闭命令** |
+| 28 | `Last_Blow_Start_Fun()` | 2823 | 2839 | 16 | 后吹开始 |
+| 29 | `Last_Blow_End_Fun()` | 2844 | 2855 | 11 | 后吹结束 |
+| 30 | `Water_Balance_Function()` | 2867 | 3006 | 139 | **单机水位平衡控制** |
+| 31 | `Manual_Realys_Function()` | 3011 | 3021 | 10 | 手动继电器功能（空函数） |
+| 32 | `Check_Config_Data_Function()` | 3023 | 3172 | 149 | **配置数据检查**（参数校验、LCD10D数据填充） |
+| 33 | `Fan_Speed_Check_Function()` | 3176 | 3219 | 43 | 风机转速检测 |
+| 34 | `Admin_Work_Time_Function()` | 3223 | 3276 | 53 | 管理员工作时间（锁机功能） |
+| 35 | `HardWare_Protect_Relays_Function()` | 3286 | 3289 | 3 | 硬件保护继电器（空函数） |
+| 36 | `Power_ON_Begin_Check_Function()` | 3293 | 3301 | 8 | 上电初始检测（空函数） |
+| 37 | `IDLE_Auto_Pai_Wu_Function()` | 3303 | 3308 | 5 | 待机自动排污（空函数） |
+| 38 | `Auto_Pai_Wu_Function()` | 3310 | 3436 | 126 | **自动排污功能**（状态机控制） |
+| 39 | `YunXingZhong_TimeAdjustable_PaiWu_Function()` | 3440 | 3449 | 9 | 运行中可调排污（空函数） |
+| 40 | `PaiWu_Warnning_Function()` | 3452 | 3515 | 63 | 排污警告（计时、报警） |
+| 41 | `Special_Water_Supply_Function()` | 3518 | 3561 | 43 | 特殊补水功能（换热水电磁阀） |
+| 42 | `WaterLevel_Unchange_Check()` | 3566 | 3595 | 29 | 水位无变化检测 |
+| 43 | `Water_BianPin_Function()` | 3598 | 3781 | 183 | **单机变频补水控制** |
+| 44 | `LianXu_Paiwu_Control_Function()` | 3784 | 3880 | 96 | **连续排污控制** |
+| 45 | `Auto_StartOrClose_Process_Function()` | 3884 | 3890 | 6 | 自动启停流程（空函数） |
+| 46 | `JTAG_Diable()` | 3893 | 3899 | 6 | 禁用JTAG |
+| 47 | `Speed_Pressure_Function()` | 3904 | 3963 | 59 | 压力变化速度检测 |
+| 48 | `Wifi_Lock_Time_Function()` | 3965 | 4012 | 47 | WiFi锁定时间功能 |
+| 49 | `XiangBian_Steam_AddFunction()` | 4014 | 4164 | 150 | **相变蒸汽追加**（高压侧水位、压控保护） |
+| 50 | `GetOut_Mannual_Function()` | 4167 | 4180 | 13 | 退出手动模式 |
+| 51 | `ShuangPin_Water_Balance_Function()` | 4184 | 4318 | 134 | **双拼水位平衡控制** |
+| 52 | `Double_WaterPump_LogicFunction()` | 4320 | 4489 | 169 | **双水泵逻辑控制** |
+| 53 | `Double_Water_BianPin_Function()` | 4492 | 4692 | 200 | **双拼变频补水控制** |
+
+---
+
+## 3. 全局变量清单
+
+### 3.1 定时器/控制变量
+```c
+uint32 sys_control_time;        // 定时控制时间
+uint8  sys_time_up;             // 定时到标志
+uint8  sys_time_start;          // 定时启动标志
+uint8  target_percent;          // 目标百分比
+uint8  now_percent;             // 当前百分比
+uint8  adc_sample_flag;         // ADC采样标志
+uint8  T_PERCENT;               // 温度百分比
+uint32_t BJ_TimeVar;            // 报警时间变量
+```
+
+### 3.2 状态机索引
+```c
+uint8 Self_Index;               // 自检索引
+uint8 Sys_Staus;                // 系统状态
+uint8 Sys_Launch_Index;         // 启动流程索引
+uint8 Ignition_Index;           // 点火流程索引
+uint8 Pressure_Index;           // 压力控制索引
+uint8 IDLE_INDEX;               // 待机状态索引
+uint8 Air_Door_Index;           // 风门索引
+uint8 ab_index;                 // 异常响应索引
+```
+
+### 3.3 UART数据结构
+```c
+UART_DATA U1_Inf;               // UART1数据
+UART_DATA U2_Inf;               // UART2数据(LCD)
+UART_DATA U3_Inf;               // UART3数据(主从通信)
+UART_DATA U4_Inf;               // UART4数据(从机通信)
+UART_DATA U5_Inf;               // UART5数据(调试)
+```
+
+### 3.4 系统数据结构
+```c
+struct rtc_time systmtime;      // RTC时间
+SYS_INF sys_data;               // 系统信息
+SYS_COPY copy_sys;              // 系统副本
+LCD_MEM lcd_data;               // LCD数据
+Lcd_Read_Data read_lcd_data;    // LCD读取数据
+SYS_WORK_TIME sys_time_inf;     // 工作时间信息
+SYS_WORK_TIME Start_End_Time;   // 启停时间
+SYS_WORK_TIME big_time_inf;     // 大负载时间
+SYS_WORK_TIME small_time_inf;   // 小负载时间
+sys_flags sys_flag;             // 系统标志
+SYS_CONFIG sys_config_data;     // 系统配置
+SYS_ADMIN Sys_Admin;            // 管理员配置
+AB_EVENTS Abnormal_Events;      // 异常事件
+IO_DATA IO_Status;              // IO状态
+Login_TT Login_D;               // 登录信息
+Logic_Water Water_State;        // 水位逻辑状态
+JUMP_TYPE Jump_Step;            // 跳转步骤
+```
+
+### 3.5 数据转换结构
+```c
+BYTE_WORD4 Secret_uint;         // 4字节转32位
+BYTE_WORD1 Data_wordtobyte;     // 2字节转换
+FLP_INT Float_Int;              // 浮点转整型
+BYTE_INT32 Byte_To_Duint32;     // 4字节转uint32
+```
+
+### 3.6 LCD相关
+```c
+LCD_QuXian lcd_quxian_data;     // 曲线数据
+ERR_LCD Err_Lcd_Code;           // 错误代码
+LCD_FLASH_STRUCT Lcd_FlashD;    // Flash数据
+LCD_E_M Err_Lcd_Memory[8];      // 错误记录
+ERROR_DATE_STRUCT SPI_Error_Data; // SPI错误数据
+```
+
+---
+
+## 4. 模块划分方案
+
+### 4.1 新目录结构
+
+```
+SYSTEM/
+├── system_control/
+│   ├── system_control.c      # 精简版主控（~400行）
+│   └── system_control.h      # 保留所有结构体定义
+├── ignition/
+│   ├── ignition_ctrl.c       # 点火控制（~700行）
+│   └── ignition_ctrl.h
+├── pressure/
+│   ├── pressure_ctrl.c       # 压力控制（~500行）
+│   └── pressure_ctrl.h
+├── water/
+│   ├── water_ctrl.c          # 水位控制（~700行）
+│   └── water_ctrl.h
+├── error/
+│   ├── error_handler.c       # 故障处理（~500行）
+│   └── error_handler.h
+├── blowdown/
+│   ├── blowdown_ctrl.c       # 排污控制（~300行）
+│   └── blowdown_ctrl.h
+└── config/
+    ├── sys_config.c          # 配置管理（~450行）
+    └── sys_config.h
+```
+
+### 4.2 各模块函数分配
+
+#### A. system_control（主控入口）~400行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `System_All_Control()` | 188 | 总控制入口 |
+| `Sys_Launch_Function()` | 69 | 启动流程 |
+| `sys_start_cmd()` | 65 | 启动命令 |
+| `sys_close_cmd()` | 50 | 关闭命令 |
+| `clear_struct_memory()` | 20 | 清空内存 |
+| `JTAG_Diable()` | 6 | 禁用JTAG |
+
+#### B. ignition（点火控制）~700行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `Sys_Ignition_Fun()` | 531 | 点火主流程 |
+| `Before_Ignition_Prepare()` | 73 | 点火前准备 |
+| `Ignition_Check_Fun()` | 26 | 点火检测 |
+| `Last_Blow_Start_Fun()` | 16 | 后吹开始 |
+| `Last_Blow_End_Fun()` | 11 | 后吹结束 |
+| `Fan_Speed_Check_Function()` | 43 | 风机转速检测 |
+
+#### C. pressure（压力控制）~500行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `System_Pressure_Balance_Function()` | 217 | 单机压力平衡 |
+| `XB_System_Pressure_Balance_Function()` | 197 | 相变压力平衡 |
+| `Speed_Pressure_Function()` | 59 | 压力变化速度 |
+
+#### D. water（水位控制）~700行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `Water_Balance_Function()` | 139 | 单机水位平衡 |
+| `Water_BianPin_Function()` | 183 | 单机变频补水 |
+| `ShuangPin_Water_Balance_Function()` | 134 | 双拼水位平衡 |
+| `Double_Water_BianPin_Function()` | 200 | 双拼变频补水 |
+| `Double_WaterPump_LogicFunction()` | 169 | 双水泵逻辑 |
+| `Special_Water_Supply_Function()` | 43 | 特殊补水 |
+| `WaterLevel_Unchange_Check()` | 29 | 水位无变化检测 |
+
+#### E. error（故障处理）~500行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `Get_IO_Inf()` | 117 | IO信息获取与异常检测 |
+| `Self_Check_Function()` | 14 | 系统自检 |
+| `Auto_Check_Fun()` | 101 | 运行中自检 |
+| `Idel_Check_Fun()` | 33 | 待机检测 |
+| `Abnormal_Check_Fun()` | 37 | 异常检测 |
+| `Abnormal_Events_Response()` | 249 | 异常事件响应 |
+| `Err_Response()` | 73 | 运行中故障响应 |
+| `IDLE_Err_Response()` | 77 | 待机故障响应 |
+| `Lcd_Err_Refresh()` | 4 | LCD故障刷新 |
+| `Lcd_Err_Read()` | 4 | LCD故障读取 |
+
+#### F. blowdown（排污控制）~300行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `Auto_Pai_Wu_Function()` | 126 | 自动排污 |
+| `LianXu_Paiwu_Control_Function()` | 96 | 连续排污 |
+| `PaiWu_Warnning_Function()` | 63 | 排污警告 |
+| `System_Idel_Function()` | 12 | 待机功能 |
+| `IDLE_Auto_Pai_Wu_Function()` | 5 | 待机自动排污 |
+| `YunXingZhong_TimeAdjustable_PaiWu_Function()` | 9 | 运行中可调排污 |
+
+#### G. config（配置管理）~450行
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `sys_control_config_function()` | 236 | 系统配置功能 |
+| `Check_Config_Data_Function()` | 149 | 配置数据检查 |
+| `sys_work_time_function()` | 59 | 工作时间统计 |
+| `Admin_Work_Time_Function()` | 53 | 管理员工作时间 |
+| `Wifi_Lock_Time_Function()` | 47 | WiFi锁定时间 |
+| `XiangBian_Steam_AddFunction()` | 150 | 相变蒸汽追加 |
+
+#### H. 保留在原文件的空函数（可删除）
+| 函数 | 行数 | 说明 |
+|------|------|------|
+| `copy_to_lcd()` | 5 | 空函数 |
+| `byte_to_bit()` | 8 | 空函数 |
+| `Load_LCD_Data()` | 3 | 空函数 |
+| `Manual_Realys_Function()` | 10 | 空函数 |
+| `HardWare_Protect_Relays_Function()` | 3 | 空函数 |
+| `Power_ON_Begin_Check_Function()` | 8 | 空函数 |
+| `Auto_StartOrClose_Process_Function()` | 6 | 空函数 |
+| `One_Sec_Check()` | 52 | 调试用，可删除 |
+| `GetOut_Mannual_Function()` | 13 | 退出手动模式 |
+
+---
+
+## 5. 实施计划
+
+### Phase 1: 提取 error_handler 模块（最低风险）
+**预计时间**: 2小时
+
+1. 创建 `SYSTEM/error/` 目录
+2. 创建 `error_handler.h`：
+   - 声明所有故障处理函数
+   - 定义错误码枚举
+3. 创建 `error_handler.c`：
+   - 移动 9 个函数
+   - 添加必要的 `#include`
+4. 修改 `system_control.c`：
+   - 删除已移动的函数
+   - 添加 `#include "error_handler.h"`
+5. 更新 Keil 工程文件
+6. 编译验证
+
+**验证点**：
+- 故障码检测正常
+- 故障响应正常（停机、报警）
+- 运行中火焰熄灭故障正常触发
+
+---
+
+### Phase 2-7: 其他模块（按上述顺序）
+
+---
+
+## 6. 风险评估
+
+| 风险 | 概率 | 影响 | 缓解措施 |
+|------|------|------|----------|
+| 引入新bug | 中 | 高 | 每模块独立验证 |
+| 编译错误 | 高 | 低 | 分阶段提交 |
+| 全局变量访问 | 中 | 中 | 使用extern正确声明 |
+| 中断安全 | 低 | 高 | 保持volatile标记 |
+
+---
+
+## 7. 验收标准
+
+- [ ] 所有53个函数都有明确归属
+- [ ] 每个新模块 < 800 行
+- [ ] 编译无错误、无警告
+- [ ] 点火流程正常
+- [ ] 压力控制正常
+- [ ] 水位控制正常
+- [ ] 故障检测和响应正常
+- [ ] 排污功能正常
+- [ ] 双拼联控正常
+
+---
+
+## 8. 下一步
+
+**请确认此提案，然后开始实施 Phase 1: error_handler 模块的提取。**
