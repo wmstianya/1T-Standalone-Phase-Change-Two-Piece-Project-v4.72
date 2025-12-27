@@ -4,6 +4,7 @@
 #include "ignition.h"
 #include "water_control.h"
 #include "blowdown.h"
+#include "pressure_ctrl.h"
 
 
 
@@ -1052,21 +1053,20 @@ uint8 Idel_Check_Fun_OLD(void)
 
 
 
-uint8 System_Pressure_Balance_Function(void)
+/* System_Pressure_Balance_Function() 已移动到 SYSTEM/pressure/pressure_ctrl.c */
+#if 0
+uint8 System_Pressure_Balance_Function_OLD(void)
  	{
-		
+		static	uint16  Man_Set_Pressure = 0;
+		static  uint8 	air_min = 0;
+		static  uint8   air_max = 0;
+		static	uint16  stop_wait_pressure = 0;
+		uint8  Tp_value = 0;
 
-		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ����ϵͳȫ�ֱ������û��ɵ���,����ʾ�¶�ʱ��300 = 30.0��
-		static  uint8 	air_min = 0;//��С����
-		static  uint8   air_max = 0;//������
-		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ�¼ 
-		uint8  Tp_value = 0; //���ڷ�������м�ֵ
-
-/*************************����������**************************************************/
 		uint16 Real_Pressure = 0;
-		static uint8   Yacha_Value = 65;  //�̶�ѹ��0.45Mpa��ԭ��65�����ڵ�����
-		uint16 Max_Pressure = 150;  //15����  1.50Mpa
-/******************************************************************************************/
+		static uint8   Yacha_Value = 65;
+		uint16 Max_Pressure = 150;
+
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
 			//�����������ѹ�������Ǹ����û����趨ѹ��������
@@ -1270,17 +1270,17 @@ uint8 System_Pressure_Balance_Function(void)
 		
  		return  OK;
  	}
+#endif /* System_Pressure_Balance_Function_OLD */
 
-
-uint8 XB_System_Pressure_Balance_Function(void)
+/* XB_System_Pressure_Balance_Function() 已移动到 SYSTEM/pressure/pressure_ctrl.c */
+#if 0
+uint8 XB_System_Pressure_Balance_Function_OLD(void)
  	{
-		
-
-		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ����ϵͳȫ�ֱ������û��ɵ���,����ʾ�¶�ʱ��300 = 30.0��
-		static  uint8 	air_min = 0;//��С����
-		static  uint8   air_max = 0;//������
-		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ�¼ 
-		uint8  Tp_value = 0; //���ڷ�������м�ֵ
+		static	uint16  Man_Set_Pressure = 0;
+		static  uint8 	air_min = 0;
+		static  uint8   air_max = 0;
+		static	uint16  stop_wait_pressure = 0;
+		uint8  Tp_value = 0;
 
 /*************************����������**************************************************/
 		uint16 Real_Pressure = 0;
@@ -1470,6 +1470,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		
  		return  OK;
  	}
+#endif /* XB_System_Pressure_Balance_Function_OLD */
 
 
 
@@ -3858,16 +3859,15 @@ void JTAG_Diable(void)
 }
 
 
-
-
-uint8 Speed_Pressure_Function(void)
+/* Speed_Pressure_Function() 已移动到 SYSTEM/pressure/pressure_ctrl.c */
+#if 0
+uint8 Speed_Pressure_Function_OLD(void)
 {
-	static uint16 Old_Pressure = 0; //���ڱ����ϸ��׶ε�����ֵ
-	uint16 New_Pressure =0;
+	static uint16 Old_Pressure = 0;
+	uint16 New_Pressure = 0;
 	static uint16 TimeCount = 0;
 	uint8 Chazhi = 0;
 
-	//
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
 			//������ʹ���ڲ�ѹ����Ϊ׷��Ŀ��
@@ -3920,6 +3920,7 @@ uint8 Speed_Pressure_Function(void)
 
 		return 0;
 }
+#endif /* Speed_Pressure_Function_OLD */
 
 uint8 Wifi_Lock_Time_Function(void)
 {

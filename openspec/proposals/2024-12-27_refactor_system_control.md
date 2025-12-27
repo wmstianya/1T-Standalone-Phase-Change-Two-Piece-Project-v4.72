@@ -351,6 +351,12 @@ SYSTEM/
 - 迁移 6 个排污控制函数
 - 编译验证通过
 
+### Phase 5: pressure_ctrl ✅ 已完成 (2024-12-27)
+- 创建 `SYSTEM/pressure/pressure_ctrl.h`
+- 创建 `SYSTEM/pressure/pressure_ctrl.c`
+- 迁移 3 个压力控制函数
+- 编译验证通过
+
 ---
 
 ## 8. 下一步
