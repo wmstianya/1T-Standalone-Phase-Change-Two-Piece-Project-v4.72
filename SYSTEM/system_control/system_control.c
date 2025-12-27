@@ -3,20 +3,20 @@
 
 
 
-uint32	sys_control_time = 0;  //¶¨Ê±ÄÖÁåÊ±¼ä
- uint8	   sys_time_up	   = false ;   //ÄÖÁå±êÖ¾
- uint8	   sys_time_start = false;	//Æô¶¯¿ØÖÆÊ±¼ä±êÖ¾ 0 = not ,1 = yes
+uint32	sys_control_time = 0;  //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+ uint8	   sys_time_up	   = false ;   //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+ uint8	   sys_time_start = false;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ö¾ 0 = not ,1 = yes
 
  
-uint8 target_percent = 0; //ÓÃÓÚÉè¶¨Ä¿±ê·ç»ú·çËÙ
-uint8 now_percent = 0; //ÓÃÓÚÉè¶¨ÏÖÔÚµÄÊµÊ±·çËÙ
+uint8 target_percent = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8 now_percent = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½ï¿½Úµï¿½ÊµÊ±ï¿½ï¿½ï¿½ï¿½
 
-uint8 adc_sample_flag = 0; //adc ²ÉÑùÊ±¼ä±êÖ¾
+uint8 adc_sample_flag = 0; //adc ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ö¾
 
 uint8 T_PERCENT = 0;
-uint32_t BJ_TimeVar;//¶¨ÒåÊ±¼ä´Á±äÁ¿
+uint32_t BJ_TimeVar;//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-/*Ê±¼ä½á¹¹Ìå£¬Ä¬ÈÏÊ±¼ä2000-01-01 00:00:00*/
+/*Ê±ï¿½ï¿½á¹¹ï¿½å£¬Ä¬ï¿½ï¿½Ê±ï¿½ï¿½2000-01-01 00:00:00*/
 struct rtc_time systmtime=
 {
 	0,0,0,1,1,2000,0
@@ -40,40 +40,40 @@ LCD_MEM lcd_data;
 
 
 
-Lcd_Read_Data read_lcd_data;//ÓÃÓÚ¼ÇÂ¼ÈË¹¤ÉèÖÃµÄÏµÍ³²ÎÊý
-SYS_WORK_TIME sys_time_inf;//¹øÂ¯ÏµÍ³ÀÛ¼ÆÔËÐÐÊ±¼ä±äÁ¿
-SYS_WORK_TIME Start_End_Time; //ÓÃÓÚ¼ÇÂ¼±¾´ÎÆôÍ£µÄÔËÐÐÊ±¼ä¼ä¸ô£¬±ØÐëµÃÉÕÆðÀ´
+Lcd_Read_Data read_lcd_data;//ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½Ãµï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½
+SYS_WORK_TIME sys_time_inf;//ï¿½ï¿½Â¯ÏµÍ³ï¿½Û¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
+SYS_WORK_TIME Start_End_Time; //ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-SYS_WORK_TIME big_time_inf;//¹øÂ¯Ð¡·çÁ¿ÔËÐÐÊ±¼ä
-SYS_WORK_TIME small_time_inf;//¹øÂ¯´ó·çÁ¿ÔËÐÐÊ±¼ä
+SYS_WORK_TIME big_time_inf;//ï¿½ï¿½Â¯Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+SYS_WORK_TIME small_time_inf;//ï¿½ï¿½Â¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 
-sys_flags sys_flag; //ÏµÍ³ÐèÒªÊ¹ÓÃµÄ±êÖ¾Á¿¼¯ºÏ
-
-
-SYS_CONFIG sys_config_data;//ÓÃÓÚÏµÍ³ÉèÖÃ´óÐ¡»ðÑÓÊ±µÈ²ÎÊý
-
-SYS_ADMIN  Sys_Admin; //ÓÃÓÚÉèÖÃ¹ÜÀíÔ±²ÎÊý
-
-AB_EVENTS  Abnormal_Events;//ÓÃÓÚÏµÍ³ÔËÐÐÊ±µÄÒì³£¼ÇÂ¼
-BYTE_WORD4 Secret_uint; //ÓÃÓÚ¶Ô4¸ö×Ö½Ú×ª»»Îª32Î»ÕûÐÍ
-BYTE_WORD1 Data_wordtobyte;//ÓÃÓÚ1WORD    2¸ö×Ö½Ú×ª»»
-
-FLP_INT  Float_Int;//ÓÃÓÚµ¥¾«¶È¸¡µãÐÍÊý¾ÝµÄ×ª»¯
-BYTE_INT32 Byte_To_Duint32;  //ÓÃÓÚ4¸ö×Ö½Úµ½uint32µÄÊý¾Ý×ª»»
+sys_flags sys_flag; //ÏµÍ³ï¿½ï¿½ÒªÊ¹ï¿½ÃµÄ±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
-LCD_QuXian lcd_quxian_data;//ÓÃÓÚË¢ÐÂÊý¾ÝÍ³¼ÆµÄÇúÏß
-ERR_LCD  Err_Lcd_Code;//ÓÃÓÚË¢ÐÂlcd±¨¾¯´úÂë
+SYS_CONFIG sys_config_data;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½Ã´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê±ï¿½È²ï¿½ï¿½ï¿½
+
+SYS_ADMIN  Sys_Admin; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½
+
+AB_EVENTS  Abnormal_Events;//ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Â¼
+BYTE_WORD4 Secret_uint; //ï¿½ï¿½ï¿½Ú¶ï¿½4ï¿½ï¿½ï¿½Ö½ï¿½×ªï¿½ï¿½Îª32Î»ï¿½ï¿½ï¿½ï¿½
+BYTE_WORD1 Data_wordtobyte;//ï¿½ï¿½ï¿½ï¿½1WORD    2ï¿½ï¿½ï¿½Ö½ï¿½×ªï¿½ï¿½
+
+FLP_INT  Float_Int;//ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½×ªï¿½ï¿½
+BYTE_INT32 Byte_To_Duint32;  //ï¿½ï¿½ï¿½ï¿½4ï¿½ï¿½ï¿½Ö½Úµï¿½uint32ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
+
+
+LCD_QuXian lcd_quxian_data;//ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
+ERR_LCD  Err_Lcd_Code;//ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½lcdï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 LCD_FLASH_STRUCT  Lcd_FlashD;
 
 
-LCD_E_M  Err_Lcd_Memory[8];//ÓÃÓÚ¼ÇÂ¼8¸ö¹ÊÕÏÐÅÏ¢£¨Ê±¼äºÍ¹ÊÕÏÔ­Òò£©
+LCD_E_M  Err_Lcd_Memory[8];//ï¿½ï¿½ï¿½Ú¼ï¿½Â¼8ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ê±ï¿½ï¿½Í¹ï¿½ï¿½ï¿½Ô­ï¿½ï¿½
 ERROR_DATE_STRUCT SPI_Error_Data;
 
 
 
 IO_DATA IO_Status;
- Login_TT Login_D; //¶¨ÒåµÇÂ¼ÐÅÏ¢¹ÜÀí½á¹¹Ìå
+ Login_TT Login_D; //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½
 
  Logic_Water Water_State;
 
@@ -96,7 +96,7 @@ IO_DATA IO_Status;
 
 
 
-uint8  Air_Door_Index = 0;//ÓÃÓÚ´ÅÐÔ·çÃÅÒì³££¬Ìø×ª×´Ì¬Ê¹ÓÃ
+uint8  Air_Door_Index = 0;//ï¿½ï¿½ï¿½Ú´ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½×ª×´Ì¬Ê¹ï¿½ï¿½
 uint8  ab_index =0 ;
  
 
@@ -121,7 +121,7 @@ uint8 IDLE_INDEX = 0;
 
 
 
-uint8 cmd_string111[7] = {0x5A,0xA5,0x04,0x80,0x03,0x00,0x4B}; //»»Ò³Ö¸Áî£¬ÇÐ»»µ½µÚ76Ò³
+uint8 cmd_string111[7] = {0x5A,0xA5,0x04,0x80,0x03,0x00,0x4B}; //ï¿½ï¿½Ò³Ö¸ï¿½î£¬ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½76Ò³
 
 
 void Get_IO_Inf(void)
@@ -129,7 +129,7 @@ void Get_IO_Inf(void)
 	uint8  Error16_Time = 8;
 	
 	uint8  Error_Buffer = 0;
-		//¹Ì¶¨Ò»Ö±¼ì²éÐÅºÅ£º È¼ÆøÑ¹Á¦£¬»úÐµÊ½Ñ¹Á¦´«¸ÐÆ÷ÐÅºÅ
+		//ï¿½Ì¶ï¿½Ò»Ö±ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÊ½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 	
 		Error_Buffer = FALSE ;
 		if (IO_Status.Target.water_high== WATER_OK)
@@ -160,11 +160,11 @@ void Get_IO_Inf(void)
 			}
 		else
 			{
-				sys_flag.Force_Flag = FALSE; // 22.07.12¿ÉÄÜÃ»ÓÐ¼°Ê±Çå³þÇ¿ÖÆ²¹Ë®±äÁ¿
+				sys_flag.Force_Flag = FALSE; // 22.07.12ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð¼ï¿½Ê±ï¿½ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 				sys_flag.Error16_Flag = 0;
 				sys_flag.Error16_Count = 0;
 			}
-		//Ç¿ÖÆ²¹Ë®12Ãë£¬È»ºóÇå³ýÇ¿ÖÆ²¹Ë®µÄ±êÖ¾
+		//Ç¿ï¿½Æ²ï¿½Ë®12ï¿½ë£¬È»ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½Ä±ï¿½Ö¾
 		if(sys_flag.Force_Count >= 5)
 			{
 				 sys_flag.Force_Supple_Water_Flag = 0;
@@ -177,18 +177,18 @@ void Get_IO_Inf(void)
 			Error16_Time = 5; 
 		if(sys_flag.flame_state && sys_data.Data_10H == 2)
 			{
-				//¼«µÍË®Î»ÓÐ
+				//ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½
 				if(IO_Status.Target.water_protect)
-					Error16_Time = 8; //Ô­12Ãë£¬ÏÖ¸Ä³É15Ãë2022Äê5ÔÂ6ÈÕ10:19:38
+					Error16_Time = 8; //Ô­12ï¿½ë£¬ï¿½Ö¸Ä³ï¿½15ï¿½ï¿½2022ï¿½ï¿½5ï¿½ï¿½6ï¿½ï¿½10:19:38
 				else
-					Error16_Time =5;//2022Äê7ÔÂ12ÈÕ14:18:33  ÓÉ8¸Ä³É12£¬Ôö¼ÓµãÊ±¼ä    2024Äê8ÔÂ24ÈÕ08:51:17 ÐÞ¸Ä³É5Ãë£¬ÉÏÃæ8 Ãë
+					Error16_Time =5;//2022ï¿½ï¿½7ï¿½ï¿½12ï¿½ï¿½14:18:33  ï¿½ï¿½8ï¿½Ä³ï¿½12ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ê±ï¿½ï¿½    2024ï¿½ï¿½8ï¿½ï¿½24ï¿½ï¿½08:51:17 ï¿½Þ¸Ä³ï¿½5ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½8 ï¿½ï¿½
 			}
 		else
 			Error16_Time = 10;
 		
-		if(sys_flag.Error16_Count >= Error16_Time)  //8Ãë
+		if(sys_flag.Error16_Count >= Error16_Time)  //8ï¿½ï¿½
 			{
-				//sys_data.Data_l5H = SET_BIT_N(sys_data.Data_l5H,8);//±¨´í£¬Ë®Î»Âß¼­¹ÊÕÏ
+				//sys_data.Data_l5H = SET_BIT_N(sys_data.Data_l5H,8);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(sys_flag.Error_Code == 0)
 					sys_flag.Error_Code = Error8_WaterLogic;
 				
@@ -196,7 +196,7 @@ void Get_IO_Inf(void)
 				sys_flag.Error16_Count = 0;
 			}
 
-	//¹Ì¶¨Ò»Ö±¼ì²éÐÅºÅ£º È¼ÆøÑ¹Á¦£¬»úÐµÊ½Ñ¹Á¦´«¸ÐÆ÷ÐÅºÅ
+	//ï¿½Ì¶ï¿½Ò»Ö±ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÊ½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 		 
 		if(IO_Status.Target.hot_protect == THERMAL_BAD)
 			{
@@ -219,18 +219,18 @@ void Get_IO_Inf(void)
 			}
 
 		
-		//»úÐµÊ½Ñ¹Á¦¼ì²âÐÅºÅ	
+		//ï¿½ï¿½ÐµÊ½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½	
 		if(IO_Status.Target.hpressure_signal == PRESSURE_ERROR)
 			{
 				if(sys_flag.Error1_Flag == 0)
 					sys_flag.Error1_Count = 0;
 				
 				sys_flag.Error1_Flag = OK;		
-				//ÈôÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§£¬¹ÊÕÏ£¬±¨¾¯
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(sys_flag.Error1_Count > 1)
 					{
 						 if(sys_flag.Error_Code == 0 )
-							sys_flag.Error_Code = Error1_YakongProtect; //ÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§±¨¾¯	
+							sys_flag.Error_Code = Error1_YakongProtect; //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½	
 					}
 			}
 		else
@@ -246,14 +246,14 @@ void Get_IO_Inf(void)
 
 
 /**
-  * @brief  ´¦Àíµã»ðÇ°µÄÏà¹Ø×¼±¸¹¤×÷
+  * @brief  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param  sys_flag.before_ignition_index
-  * @retval ×¼±¸ºÃ·µ»Ø1£¬·ñÔò·µ»Ø0
+  * @retval ×¼ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½0
   */
 
 uint8 Before_Ignition_Prepare(void)
 {
-		//1¡¢Ë®Î»ÐÅºÅ±ØÐëÓÐ                2¡¢Á÷Á¿ÐÅºÅ±ØÐëÓÐ
+		//1ï¿½ï¿½Ë®Î»ï¿½ÅºÅ±ï¿½ï¿½ï¿½ï¿½ï¿½                2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅ±ï¿½ï¿½ï¿½ï¿½ï¿½
 		//sys_flag.before_ignition_index
 		uint8 func_state = 0;
 
@@ -261,10 +261,10 @@ uint8 Before_Ignition_Prepare(void)
 		switch (sys_flag.before_ignition_index)
 			{
 				case 0 :
-						//¿ªÖ÷µç´Å·§£¬Ñ­»·±Ã£¬sys_flag.Pai_Wu_Already¼ì²éË®Î»ÐÅºÅ¾ö¶¨ÊÇ·ñµ÷½ÚÁ÷Á¿¿ØÖÆ·§
-							 Send_Air_Open();  //´ò¿ª·ç»úÇ°´µÉ¨	
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ã£ï¿½sys_flag.Pai_Wu_Alreadyï¿½ï¿½ï¿½Ë®Î»ï¿½ÅºÅ¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½
+							 Send_Air_Open();  //ï¿½ò¿ª·ï¿½ï¿½Ç°ï¿½ï¿½É¨	
 							 
-							 PWM_Adjust(0); //µÈ´ý5Ãëºó¿ªÆô
+							 PWM_Adjust(0); //ï¿½È´ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½
 							 Pai_Wu_Door_Close();
 							 delay_sys_sec(12000);
 							 if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
@@ -275,7 +275,7 @@ uint8 Before_Ignition_Prepare(void)
 							 			}
 							 	}
 							 
-							sys_flag.before_ignition_index = 1;//Ìø×ªµ½ÏÂ¸ö×´Ì¬
+							sys_flag.before_ignition_index = 1;//ï¿½ï¿½×ªï¿½ï¿½ï¿½Â¸ï¿½×´Ì¬
 							sys_flag.FlameOut_Count = 0;
 							sys_flag.XB_WaterLowAB_Count = 0;
 							
@@ -289,7 +289,7 @@ uint8 Before_Ignition_Prepare(void)
 							{
 								sys_time_up = 0;
 								sys_flag.Wts_Gas_Index =0;
-								sys_flag.before_ignition_index = 2;//Ìø×ªµ½ÏÂ¸ö×´Ì¬
+								sys_flag.before_ignition_index = 2;//ï¿½ï¿½×ªï¿½ï¿½ï¿½Â¸ï¿½×´Ì¬
 								Feed_First_Level();
 								if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 							 		{
@@ -302,12 +302,12 @@ uint8 Before_Ignition_Prepare(void)
 				case 2:
 					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 				 		{
-				 			//Ïà±ä»ú×é£¬ÔÙ´Î¼ì²é¸Ã·§ÓÐÃ»ÓÐ¹Ø±Õ
+				 			//ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½Ù´Î¼ï¿½ï¿½Ã·ï¿½ï¿½ï¿½Ã»ï¿½Ð¹Ø±ï¿½
 				 			LianXu_Paiwu_Close();
 				 		}
 					if( Temperature_Data.Pressure_Value >= (Sys_Admin.DeviceMaxPressureSet-1))
 						{
-							sys_flag.Error_Code =  Error2_YaBianProtect; //ÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§±¨¾¯
+							sys_flag.Error_Code =  Error2_YaBianProtect; //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½
 						}
 
 					sys_flag.before_ignition_index = 0;
@@ -316,28 +316,28 @@ uint8 Before_Ignition_Prepare(void)
 					break;
 
 			   default:
-			   	sys_flag.before_ignition_index = 0;//»Ö¸´Ä¬ÈÏ×´Ì¬
+			   	sys_flag.before_ignition_index = 0;//ï¿½Ö¸ï¿½Ä¬ï¿½ï¿½×´Ì¬
 			   			sys_close_cmd();
 			   			break;
 			}
 
 		
 
-		return func_state ;//µã»ðÇ°×¼±¸£¬×¼±¸ºÃÁË£¬·µ»Ø1
+		return func_state ;//ï¿½ï¿½ï¿½Ç°×¼ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½1
 }
 
 
 
 /**
-  * @brief  ¼ì²é²¢×ª´®µÄIO£¬Ë®Î»ÐÅÏ¢ºÍÈÈ±£»¤¿ª¹Ø×´Ì¬
+  * @brief  ï¿½ï¿½é²¢×ªï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½Ë®Î»ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 * @param  
-  * @retval ÎÞ
+  * @retval ï¿½ï¿½
   */
  void Self_Check_Function()
 {
 	
 	
-	Get_IO_Inf(); //»ñÈ¡IOÐÅÏ¢
+	Get_IO_Inf(); //ï¿½ï¿½È¡IOï¿½ï¿½Ï¢
 
 	
 		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
@@ -350,30 +350,30 @@ uint8 Before_Ignition_Prepare(void)
 }
 
 /**
-  * @brief  ÏµÍ³µã»ð³ÌÐò
-* @param   µã»ðÍê³É·µ»Ø1£¬·ñÔò·µ»Ø0
-  * @retval ÎÞ
+  * @brief  ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+* @param   ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½0
+  * @retval ï¿½ï¿½
   */
 uint8  Sys_Ignition_Fun(void)
 {
 		
-		sys_data.Data_12H = 0x00; //µã»ð¹ý³ÌÖÐ£¬Ã»ÓÐ¶ÔÒì³£½øÐÐ¼ì²â
+		sys_data.Data_12H = 0x00; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ã»ï¿½Ð¶ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½
 		Abnormal_Events.target_complete_event = 0;
 		switch(Ignition_Index)
 		{
 			case 0 : //  
 						sys_flag.Ignition_Count = 0;
-						sys_flag.FlameRecover_Time = 0; //¶Ô¸´Î»Ê±¼ä½øÐÐÇåÁã
-						sys_flag.LianxuWorkTime = 0;  //¶Ô±¾½×¶Î¹¤×÷Ê±¼äÇåÁã
+						sys_flag.FlameRecover_Time = 0; //ï¿½Ô¸ï¿½Î»Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						sys_flag.LianxuWorkTime = 0;  //ï¿½Ô±ï¿½ï¿½×¶Î¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						WTS_Gas_One_Close();
 					
-						/*******************PWM¿ØÖÆ*Ò»¼¶·çÁ¿´µÉ¨***********************************/
-						Send_Air_Open();  //·ç»úÇ°´µÉ¨			
+						/*******************PWMï¿½ï¿½ï¿½ï¿½*Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨***********************************/
+						Send_Air_Open();  //ï¿½ï¿½ï¿½Ç°ï¿½ï¿½É¨			
 						//Feed_First_Level();
 
 						delay_sys_sec(10000);
 						
-						Ignition_Index = 10; //ÇÐ»»Á÷³Ì£¬
+						Ignition_Index = 10; //ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ì£ï¿½
 							
 						
 					break;
@@ -392,7 +392,7 @@ uint8  Sys_Ignition_Fun(void)
 						{
 							
 							delay_sys_sec(500);
-							Ignition_Index = 1; //ÇÐ»»Á÷³Ì
+							Ignition_Index = 1; //ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½
 						}
 					else
 						{
@@ -403,7 +403,7 @@ uint8  Sys_Ignition_Fun(void)
 
 		case 1:
 					Feed_First_Level();
-					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) //Ïà±ä¿î£¬²»ÐèÒª²¹µ½³¬¸ß
+					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) //ï¿½ï¿½ï¿½î£¬ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						{
 							if(IO_Status.Target.water_mid == WATER_LOSE)
 								{
@@ -429,7 +429,7 @@ uint8  Sys_Ignition_Fun(void)
 								}
 						}
 					
-					//Ê±¼äµ½£¬Ò²»á¼ÌÐøÖ´ÐÐ³ÌÐò
+					//Ê±ï¿½äµ½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð³ï¿½ï¿½ï¿½
 					if(sys_time_start == 0)
 						{
 							sys_time_up = 1;
@@ -442,9 +442,9 @@ uint8  Sys_Ignition_Fun(void)
 						{
 							sys_time_up = 0;
 						
-							delay_sys_sec(Sys_Admin.First_Blow_Time);  //ÕýÊ½´µÉ¨Ê±¼ä 
+							delay_sys_sec(Sys_Admin.First_Blow_Time);  //ï¿½ï¿½Ê½ï¿½ï¿½É¨Ê±ï¿½ï¿½ 
 
-							Ignition_Index = 20; //ÇÐ»»Á÷³Ì£¬,´ó·çÇÐµã»ð·çËÙ
+							Ignition_Index = 20; //ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ì£ï¿½,ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 						}
 					else
 						{
@@ -456,7 +456,7 @@ uint8  Sys_Ignition_Fun(void)
 
 		case 20:
 					Send_Air_Open();
-					/*2024Äê11ÔÂ28ÈÕ09:26:13 ½â¾öÔÚÇ°´µÉ¨¹ý³ÌÖÐ£¬Î´ÅÐ¶¨³¬¸ßË®Î»£¬»áÇ¿ÖÆ²¹Ë®µÄÎÊÌâ*/
+					/*2024ï¿½ï¿½11ï¿½ï¿½28ï¿½ï¿½09:26:13 ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Î´ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 						{
 							if(IO_Status.Target.water_mid == WATER_OK)
@@ -510,7 +510,7 @@ uint8  Sys_Ignition_Fun(void)
 
 							
 							
-							Ignition_Index = 2; //ÇÐ»»Á÷³Ì£¬,´ó·çÇÐµã»ð·çËÙ
+							Ignition_Index = 2; //ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ì£ï¿½,ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 						}
 					else
 						{
@@ -523,10 +523,10 @@ uint8  Sys_Ignition_Fun(void)
 
 		
 		 
-		case 2://½øÐÐ·çËÙÇÐ»»,²»¿ÉÒÔËæÒâ±ä»»£¬×¢Òâ¼ì²é³¬Ñ¹Í£Â¯³ÌÐò
+		case 2://ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½Ð»ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»»ï¿½ï¿½×¢ï¿½ï¿½ï¿½é³¬Ñ¹Í£Â¯ï¿½ï¿½ï¿½ï¿½
 					Send_Air_Open();
-					Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ£¬¹Ø±Õ£¬¹Ø±Õ
-					Feed_First_Level();//¹¦ÂÊ°Ù·ÖÖ®60
+					Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±ï¿½
+					Feed_First_Level();//ï¿½ï¿½ï¿½Ê°Ù·ï¿½Ö®60
 					
 					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 						{
@@ -536,7 +536,7 @@ uint8  Sys_Ignition_Fun(void)
 										{
 
 											sys_flag.Force_Supple_Water_Flag = FALSE;
-											sys_time_up = 1;  //Ö±½Ó½øÈëÏÂ¸öÁ÷³Ì
+											sys_time_up = 1;  //Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½
 										}
 									
 								}
@@ -546,14 +546,14 @@ uint8  Sys_Ignition_Fun(void)
 							if(IO_Status.Target.water_shigh == WATER_OK)
 								{
 									sys_flag.Force_Supple_Water_Flag = FALSE;
-									sys_time_up = 1;  //Ö±½Ó½øÈëÏÂ¸öÁ÷³Ì
+									sys_time_up = 1;  //Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½
 								}
 						}
 
 					
 					if( Temperature_Data.Pressure_Value >= (Sys_Admin.DeviceMaxPressureSet-2))
 						{
-							sys_flag.Error_Code =  Error2_YaBianProtect; //ÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§±¨¾¯
+							sys_flag.Error_Code =  Error2_YaBianProtect; //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½
 						}
 			
 					if(sys_time_start == 0)
@@ -562,16 +562,16 @@ uint8  Sys_Ignition_Fun(void)
 						{
 							sys_time_up = 0;
 								
-							if(IO_Status.Target.Air_Door == AIR_CLOSE)//·çÃÅ¹Ø±ÕÔò±¨¾¯£¬¸ßµçÆ½±¨¾¯
-								sys_flag.Error_Code = Error9_AirPressureBad; //´ÅÐÔ·çÃÅ¹ÊÕÏ
+							if(IO_Status.Target.Air_Door == AIR_CLOSE)//ï¿½ï¿½ï¿½Å¹Ø±ï¿½ï¿½ò±¨¾ï¿½ï¿½ï¿½ï¿½ßµï¿½Æ½ï¿½ï¿½ï¿½ï¿½
+								sys_flag.Error_Code = Error9_AirPressureBad; //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Å¹ï¿½ï¿½ï¿½
 							else
 								{
 									//NOP
 								}
 								
-							//Ô¶³ÌÒ»¼üËøÍ£ºó£¬Ö±½Ó¹ÊÕÏÏÔÊ¾
+							//Ô¶ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ö±ï¿½Ó¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 							if(sys_config_data.Sys_Lock_Set)
-								sys_flag.Error_Code = Error9_AirPressureBad; //´ÅÐÔ·çÃÅ¹ÊÕÏ
+								sys_flag.Error_Code = Error9_AirPressureBad; //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Å¹ï¿½ï¿½ï¿½
 							else
 								{
 								//NOP
@@ -579,9 +579,9 @@ uint8  Sys_Ignition_Fun(void)
 
 							
 								
-							PWM_Adjust(30);//¼ì²â¹¦ÂÊ
+							PWM_Adjust(30);//ï¿½ï¿½â¹¦ï¿½ï¿½
 							if(Sys_Admin.Fan_Speed_Check)
-								delay_sys_sec(20000);  //µÈ´ý·çËÙ±ä»¯Ê±¼ä£¬³¬Ê±Ôò±¨¾¯
+								delay_sys_sec(20000);  //ï¿½È´ï¿½ï¿½ï¿½ï¿½Ù±ä»¯Ê±ï¿½ä£¬ï¿½ï¿½Ê±ï¿½ò±¨¾ï¿½
 							else
 								delay_sys_sec(3000);
 							Ignition_Index = 3;
@@ -590,23 +590,23 @@ uint8  Sys_Ignition_Fun(void)
 
 					break;
 						
-	case 3://ÕýÊ½¿ªÊ¼µã»ð£¬µã»ð·§×éÏÈ¿ª1.5s
-					Send_Air_Open();  //·çÃÅ±ØÐë´ò¿ª
-					Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ£¬¹Ø±Õ£¬¹Ø±Õ
-					PWM_Adjust(30);//¼ì²â¹¦ÂÊ
-					Dian_Huo_OFF();  //¹Ø±Õµã»ð¼ÌµçÆ÷
+	case 3://ï¿½ï¿½Ê½ï¿½ï¿½Ê¼ï¿½ï¿½ð£¬µï¿½ï¿½ï¿½ï¿½ï¿½È¿ï¿½1.5s
+					Send_Air_Open();  //ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ï¿½
+					Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±ï¿½
+					PWM_Adjust(30);//ï¿½ï¿½â¹¦ï¿½ï¿½
+					Dian_Huo_OFF();  //ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½
 					sys_flag.Force_Supple_Water_Flag = FALSE;
-					//µã»ðÇ°È·ÈÏ£¬
+					//ï¿½ï¿½ï¿½Ç°È·ï¿½Ï£ï¿½
 					if (IO_Status.Target.water_protect== WATER_LOSE)
  						{
 							sys_flag.Error_Code  = Error5_LowWater;
  						}
 					if(Sys_Admin.Fan_Speed_Check)
 						{
-							if(sys_flag.Fan_Rpm > 200 && sys_flag.Fan_Rpm < Sys_Admin.Fan_Fire_Value)//µã»ð·çËÙÔÚ1000×ªºÍ2500×ªÖ®¼ä
+							if(sys_flag.Fan_Rpm > 200 && sys_flag.Fan_Rpm < Sys_Admin.Fan_Fire_Value)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1000×ªï¿½ï¿½2500×ªÖ®ï¿½ï¿½
 								{
-									delay_sys_sec(8000);//Ôö¼Ó·çËÙÎÈ¶¨µÄÊ±¼ä
-									Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
+									delay_sys_sec(8000);//ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½È¶ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+									Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
 									Ignition_Index = 4;
 								}
 							else
@@ -625,15 +625,15 @@ uint8  Sys_Ignition_Fun(void)
 							if(sys_time_up)
 								{
 									sys_time_up = 0;
-									//·çËÙ¿ØÖÆÊ§Áé±¨¹ÊÕÏ£¬½áÊø
-									sys_flag.Error_Code = Error13_AirControlFail; //´ÅÐÔ·çÃÅ¹ÊÕÏ//ÏµÍ³±¨¾¯±êÖ¾
+									//ï¿½ï¿½ï¿½Ù¿ï¿½ï¿½ï¿½Ê§ï¿½é±¨ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
+									sys_flag.Error_Code = Error13_AirControlFail; //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Å¹ï¿½ï¿½ï¿½//ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 								}
 							else
 								{
 								//NOP
 								}
 						}
-					else  //Èô²»½øÐÐ·çËÙ¼ì²â
+					else  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½Ù¼ï¿½ï¿½
 						{
 							if(sys_time_start == 0)
 								{
@@ -645,7 +645,7 @@ uint8  Sys_Ignition_Fun(void)
 								}
 							if(sys_time_up)
 								{
-									Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
+									Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
 									delay_sys_sec(8000); 
 									Ignition_Index = 4;
 								}
@@ -661,10 +661,10 @@ uint8  Sys_Ignition_Fun(void)
 					break;
 
 	case 4:
-					Send_Air_Open();  //·çÃÅ±ØÐë´ò¿ª
-					Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ£¬¹Ø±Õ£¬¹Ø±Õ
-					Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
-					Dian_Huo_OFF();  //¹Ø±Õµã»ð¼ÌµçÆ÷
+					Send_Air_Open();  //ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ï¿½
+					Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ø±ï¿½
+					Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
+					Dian_Huo_OFF();  //ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½
 		
 					if(sys_time_start == 0)
 						{
@@ -679,7 +679,7 @@ uint8  Sys_Ignition_Fun(void)
 							sys_time_up = 0;
 							
 							
-							Dian_Huo_Start();//µã»ðÆô¶¯
+							Dian_Huo_Start();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							delay_sys_sec(1500);// 
 							Ignition_Index = 5;
 						}
@@ -689,9 +689,9 @@ uint8  Sys_Ignition_Fun(void)
 						}
 					
 					break;
-	case 5://¿ªÈ¼Æø2.5s
-					Send_Air_Open();  //·çÃÅ±ØÐë´ò¿ª
-					Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
+	case 5://ï¿½ï¿½È¼ï¿½ï¿½2.5s
+					Send_Air_Open();  //ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ï¿½
+					Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
 				
 					if(sys_time_start == 0)
 						{
@@ -706,7 +706,7 @@ uint8  Sys_Ignition_Fun(void)
 							 
 							sys_time_up = 0;
 							// Send_Gas_Open();
-							WTS_Gas_One_Open();//È¼Æø·§1
+							WTS_Gas_One_Open();//È¼ï¿½ï¿½ï¿½ï¿½1
 							delay_sys_sec(3500);
 							
 							Ignition_Index = 6;
@@ -718,9 +718,9 @@ uint8  Sys_Ignition_Fun(void)
 
 				break;
 					 
-	case 6: //µã»ð·§×é¹Ø±Õ£¬µÈ´ý3Ãëºó¼ì²âÓÐÎÞ»ðÑæ£¬ÒòÓ²¼þÑÓ³Ù
-					Send_Air_Open();  //·çÃÅ±ØÐë´ò¿ª
-					Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
+	case 6: //ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½È´ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ»ï¿½ï¿½æ£¬ï¿½ï¿½Ó²ï¿½ï¿½ï¿½Ó³ï¿½
+					Send_Air_Open();  //ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ï¿½
+					Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
 					 
 					 
 					if(sys_time_start == 0)
@@ -736,9 +736,9 @@ uint8  Sys_Ignition_Fun(void)
 						{
 							sys_time_up = 0;
 
-							//Dian_Huo_OFF(); //2023Äê10ÔÂ17ÈÕ12:21:58 ×¢ÊÍµô¸ÃÐÐ´úÂë
+							//Dian_Huo_OFF(); //2023ï¿½ï¿½10ï¿½ï¿½17ï¿½ï¿½12:21:58 ×¢ï¿½Íµï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
 							Send_Gas_Open();
-							delay_sys_sec(4800);  //ÐÞ¸Ä ÓÉ1Ãë±äÎª1.5Ãë
+							delay_sys_sec(4800);  //ï¿½Þ¸ï¿½ ï¿½ï¿½1ï¿½ï¿½ï¿½Îª1.5ï¿½ï¿½
 							Ignition_Index = 7;
 						}
 					else
@@ -747,7 +747,7 @@ uint8  Sys_Ignition_Fun(void)
 						}
 		
 					break;
-	case 7://3ÃëÊ±¼äµ½£¬ÓÐ»ðÑæÔòÎÂ»ðÒ»¶ÎÊ±¼ä£¬ÎÞ»ðÑæÔò±¨¾¯
+	case 7://3ï¿½ï¿½Ê±ï¿½äµ½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½Ò»ï¿½ï¿½Ê±ï¿½ä£¬ï¿½Þ»ï¿½ï¿½ï¿½ï¿½ò±¨¾ï¿½
 					 
 					if(sys_time_start == 0)
 						{
@@ -760,34 +760,34 @@ uint8  Sys_Ignition_Fun(void)
 					if(sys_time_up)
 						{
 							sys_time_up = 0;
-							Dian_Huo_OFF();  //¹Ø±Õµã»ð¼ÌµçÆ÷
+							Dian_Huo_OFF();  //ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½
 							WTS_Gas_One_Close();
 							 
-							if(sys_flag.flame_state == FLAME_OK )  //ÓÐ»ðÑæ
+							if(sys_flag.flame_state == FLAME_OK )  //ï¿½Ð»ï¿½ï¿½ï¿½
 							{
-								 //µã»ð³É¹¦£¬·ç»ú±£³ÖÔ­×´Ì¬£¬µÈ´ý»ðÑæÎÈ¶¨
-								  delay_sys_sec(Sys_Admin.Wen_Huo_Time);  //Éè¶¨ÎÈ¶¨»ðÑæÊ±¼ä10sec£¬
-								 Ignition_Index = 8;//ÇÐ»»Á÷³Ì£¬µã»ð³É¹¦£¬½øÈëÏµÍ³Õý³£ÔËÐÐ×´Ì¬	
+								 //ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­×´Ì¬ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¶ï¿½
+								  delay_sys_sec(Sys_Admin.Wen_Huo_Time);  //ï¿½è¶¨ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½10secï¿½ï¿½
+								 Ignition_Index = 8;//ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬	
  
 							}
-							else  //ÎÞ»ðÑæ
+							else  //ï¿½Þ»ï¿½ï¿½ï¿½
 							{
 								
 								sys_flag.Ignition_Count ++;
-								Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+								Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								WTS_Gas_One_Close();
 								
-								Dian_Huo_OFF();  //¹Ø±Õµã»ð¼ÌµçÆ÷£¬²¢½«µã»ðÍ¼±ê×ªÎªºìÉ«
+								Dian_Huo_OFF();  //ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½×ªÎªï¿½ï¿½É«
 								if(sys_flag.Ignition_Count < Max_Ignition_Times)
 									{
-										//Ö´ÐÐµÚ¶þ´Îµã»ð
+										//Ö´ï¿½ÐµÚ¶ï¿½ï¿½Îµï¿½ï¿½
 										Ignition_Index = 9;
 										Feed_First_Level();//
-										delay_sys_sec(Sys_Admin.First_Blow_Time);  //Éè¶¨ÏÂ´Îµã»ðÊ±¼ä¼ä¸ôÎª20sec + 10Ãëµãºó·çËÙ£¬
+										delay_sys_sec(Sys_Admin.First_Blow_Time);  //ï¿½è¶¨ï¿½Â´Îµï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Îª20sec + 10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù£ï¿½
 				  					}
 								else
 									{
-										sys_flag.Error_Code = Error11_DianHuo_Bad;//ÏµÍ³±¨¾¯±êÖ¾
+										sys_flag.Error_Code = Error11_DianHuo_Bad;//ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 										Ignition_Index = 0;
 									}
 									
@@ -800,28 +800,28 @@ uint8  Sys_Ignition_Fun(void)
 					
 						
 				break;
-			case 8: //µÈ´ýÎÂ»ðÑÓÊ±
+			case 8: //ï¿½È´ï¿½ï¿½Â»ï¿½ï¿½ï¿½Ê±
 
 					
 					Dian_Huo_OFF();
-					sys_flag.Force_UnSupply_Water_Flag = FALSE ;  //¿ÉÒÔ²¹Ë®
-					 //·ÀÖ¹Ã»µ½¸ßË®Î»£¬ÔÙ¿ªÒ»´Î
-					if(sys_flag.flame_state == FLAME_OUT)//ÎÈ»ð¹ý³Ì»ðÑæÏ¨Ãð
+					sys_flag.Force_UnSupply_Water_Flag = FALSE ;  //ï¿½ï¿½ï¿½Ô²ï¿½Ë®
+					 //ï¿½ï¿½Ö¹Ã»ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½Ù¿ï¿½Ò»ï¿½ï¿½
+					if(sys_flag.flame_state == FLAME_OUT)//ï¿½È»ï¿½ï¿½ï¿½Ì»ï¿½ï¿½ï¿½Ï¨ï¿½ï¿½
 						{ 
 							sys_flag.Ignition_Count ++;
-								Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+								Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								WTS_Gas_One_Close();
-								Dian_Huo_OFF();  //¹Ø±Õµã»ð¼ÌµçÆ÷£¬²¢½«µã»ðÍ¼±ê×ªÎªºìÉ«
+								Dian_Huo_OFF();  //ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½×ªÎªï¿½ï¿½É«
 								if(sys_flag.Ignition_Count < Max_Ignition_Times)
 									{
-										//Ö´ÐÐµÚ¶þ´Îµã»ð
+										//Ö´ï¿½ÐµÚ¶ï¿½ï¿½Îµï¿½ï¿½
 										Ignition_Index = 9;
 										Feed_First_Level();//
-										delay_sys_sec(Sys_Admin.First_Blow_Time);  //Éè¶¨ÏÂ´Îµã»ðÊ±¼ä¼ä¸ôÎª20sec + 10Ãëµãºó·çËÙ£¬
+										delay_sys_sec(Sys_Admin.First_Blow_Time);  //ï¿½è¶¨ï¿½Â´Îµï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Îª20sec + 10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù£ï¿½
 									}
 								else
 									{
-										sys_flag.Error_Code = Error11_DianHuo_Bad;//ÏµÍ³±¨¾¯±êÖ¾
+										sys_flag.Error_Code = Error11_DianHuo_Bad;//ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 										Ignition_Index = 0;
 									}
 									
@@ -838,13 +838,13 @@ uint8  Sys_Ignition_Fun(void)
 							}
 						if(sys_time_up)
 						{
-							sys_time_up = 0;//»ðÑæÎÈ¶¨Ê±¼äµ½
+							sys_time_up = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½È¶ï¿½Ê±ï¿½äµ½
 							
-	/**************************************Ìø×ªµ½µÚ¶þ½×¶Î²ÎÊýÉèÖÃ***START********************************************/
+	/**************************************ï¿½ï¿½×ªï¿½ï¿½ï¿½Ú¶ï¿½ï¿½×¶Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½***START********************************************/
 							 sys_flag.Ignition_Count = 0;
 				
 							return 1;
-	/**************************************Ìø×ªµ½µÚ¶þ½×¶Î²ÎÊýÉèÖÃ***END********************************************/
+	/**************************************ï¿½ï¿½×ªï¿½ï¿½ï¿½Ú¶ï¿½ï¿½×¶Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½***END********************************************/
 						}
 						else
 						{
@@ -853,8 +853,8 @@ uint8  Sys_Ignition_Fun(void)
 				
 					break;
 
-			case 9://µã»ðÊ§°Ü£¬ÇÐ»»·çËÙÁ÷³Ì
-					Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+			case 9://ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					Dian_Huo_OFF();
 					WTS_Gas_One_Close();
 					
@@ -870,9 +870,9 @@ uint8  Sys_Ignition_Fun(void)
 					if(sys_time_up)
 						{
 							sys_time_up = 0;
-							Dian_Huo_Air_Level();//¿ØÖÆµã»ð·çËÙ³ÌÐò
-							delay_sys_sec(6000);  //Éè¶¨ÏÂ´Îµã»ðÊ±¼äÎª15sec£¬
-							Ignition_Index =4;//ÇÐ»»Á÷³Ì£¬×¼±¸ÔÙ´Îµã»ð,·ç»ú²»Í£
+							Dian_Huo_Air_Level();//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ù³ï¿½ï¿½ï¿½
+							delay_sys_sec(6000);  //ï¿½è¶¨ï¿½Â´Îµï¿½ï¿½Ê±ï¿½ï¿½Îª15secï¿½ï¿½
+							Ignition_Index =4;//ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ì£ï¿½×¼ï¿½ï¿½ï¿½Ù´Îµï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Í£
 						}  
 
 					break;
@@ -891,31 +891,31 @@ uint8  Sys_Ignition_Fun(void)
 
 
 /**
-* @brief  ¼ì²éÔËÐÐÊ±¸÷Æ÷¼þ×´Ì¬£¬¶ÔÓÚÎ´Æô¶¯ÓÐ»ðÑæ£¬´ÅÐÔ·çÃÅ£¬È¼ÉÕ»úÈÈ±£»¤¡£Â¯Ìå³¬ÎÂµÈ½ÔÊÇ£¨Òì³££©£¬°´Òì³£´¦Àí£¬²»±¨¾¯
-* @param   ½«¹ÊÕÏºÍÒì³£½øÐÐ·ÖÀë£¬È¼ÆøÑ¹Á¦ÔÚÏµÍ³ÔËÐÐºÍµã»ðÖÐ¼ì²â
-  * @retval ÎÞ
+* @brief  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Å£ï¿½È¼ï¿½Õ»ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½Â¯ï¿½å³¬ï¿½ÂµÈ½ï¿½ï¿½Ç£ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+* @param   ï¿½ï¿½ï¿½ï¿½ï¿½Ïºï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ë£¬È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ÐºÍµï¿½ï¿½ï¿½Ð¼ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 void Auto_Check_Fun(void)
 {
 
 	uint8 Error_Buffer = 0;
-		//***********¶ÁÈ¡²¢×ª´®¿ÚµÄÊý¾Ý*************//
-		Get_IO_Inf(); //»ñÈ¡IOÐÅÏ¢
+		//***********ï¿½ï¿½È¡ï¿½ï¿½×ªï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½*************//
+		Get_IO_Inf(); //ï¿½ï¿½È¡IOï¿½ï¿½Ï¢
 	
-		//´ý»úÊ±·çÃÅÓ¦¸Ã±ÕºÏ£¬Èô´ò¿ªÔòÒì³££¬ËµÃ÷·çÃÅÃ»ÂäÏÂÀ´
+		//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã±ÕºÏ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 if(IO_Status.Target.Air_Door == AIR_CLOSE) 
 		 	if(sys_flag.Error_Code  == 0 )
 				sys_flag.Error_Code  = Error9_AirPressureBad;
 		
 		if(IO_Status.Target.gas_low_pressure == GAS_OUT)
 			{
-				//ÈôÈ¼ÆøÑ¹Á¦µÍ£¬¹ÊÕÏ£¬±¨¾¯
+				//ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 				
 				if(sys_flag.Error_Code  == 0 )
-					sys_flag.Error_Code  = Error3_LowGas; //È¼ÆøÑ¹Á¦µÍ¹ÊÕÏ±¨¾¯
+					sys_flag.Error_Code  = Error3_LowGas; //È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í¹ï¿½ï¿½Ï±ï¿½ï¿½ï¿½
 			}
 		
-//¼ì²â¼«µÍË®Î»±£»¤
+//ï¿½ï¿½â¼«ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½
 		if (IO_Status.Target.water_protect== WATER_LOSE)
  			{
 					Error_Buffer = OK;		
@@ -930,38 +930,50 @@ void Auto_Check_Fun(void)
 			}
 			
 	
-		if(sys_flag.Error5_Count >= 5)  //Ô­Éè¶¨ 7Ãë£¬ ÏÖ¸Ä³É10Ãë 2022Äê5ÔÂ6ÈÕ10:11:58
+		if(sys_flag.Error5_Count >= 5)  //Ô­ï¿½è¶¨ 7ï¿½ë£¬ ï¿½Ö¸Ä³ï¿½10ï¿½ï¿½ 2022ï¿½ï¿½5ï¿½ï¿½6ï¿½ï¿½10:11:58
 			{
-				 //ÔËÐÐÖÐ£¬¼«µÍË®Î»È±Ë®¹ÊÕÏ	
-				 sys_data.Data_12H = 6; // ÎÂ¶È¸ßÓÚÓÃ»§Éè¶¨Öµ0.01kg
-				Abnormal_Events.target_complete_event = 1;//Òì³£ÊÂ¼þ¼ÇÂ¼
+				 //ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»È±Ë®ï¿½ï¿½ï¿½ï¿½	
+				 sys_data.Data_12H = 6; // ï¿½Â¶È¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Öµ0.01kg
+				Abnormal_Events.target_complete_event = 1;//ï¿½ì³£ï¿½Â¼ï¿½ï¿½ï¿½Â¼
 
-				//sys_flag.Error_Code  = Error5_LowWater;  //×ªµ½³¬Ñ¹Í£Â¯ºó£¬ÈôÔÙ´Î³öÏÖË®Î»µÄÎÊÌâ£¬Ö±½ÓÍ£Â¯
+				//sys_flag.Error_Code  = Error5_LowWater;  //×ªï¿½ï¿½ï¿½ï¿½Ñ¹Í£Â¯ï¿½ï¿½ï¿½ï¿½ï¿½Ù´Î³ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½â£¬Ö±ï¿½ï¿½Í£Â¯
 				sys_flag.Error5_Flag = 0;
 				sys_flag.Error5_Count = 0;
 			}
 								
-//»ðÑæÌ½²âÆ÷¼ì²â
+//ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		if(sys_flag.flame_state == FLAME_OUT) //µÈÓÚ0Ê±£¬ÔòÎÞ»ðÑæÐÅºÅ
+		if(sys_flag.flame_state == FLAME_OUT) //ï¿½ï¿½ï¿½ï¿½0Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ»ï¿½ï¿½ï¿½ï¿½Åºï¿½
 			{
-					Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ
+					Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 
 					sys_flag.FlameOut_Count++;
 					if(sys_flag.FlameOut_Count >= 3)
 						{
 							sys_flag.Error_Code  = Error12_FlameLose;
+							// #region agent log
+							// è®¾å¤‡è‡ªèº«è§¦å‘â€œè¿è¡Œä¸­ç«ç„°ç†„ç­(12)â€ï¼ˆç”¨äºŽéªŒè¯H1/H3ï¼šæ˜¯çœŸæ£€æµ‹åˆ°æ— ç«ç„°ï¼Œè¿˜æ˜¯æ•°æ®è¢«è¦†ç›–å¯¼è‡´è¯¯è§¦å‘ï¼‰
+							U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:Auto_Check_Fun\",\"message\":\"Error12_FlameLose set\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"flameSignal\":%d,\"flameState\":%d,\"flameFilter\":%d,\"flameOutCount\":%d},\"timestamp\":%lu}\r\n",
+							          sys_flag.Address_Number,
+							          (int)Sys_Admin.Device_Style,
+							          (int)sys_data.Data_10H,
+							          (int)IO_Status.Target.Flame_Signal,
+							          (int)sys_flag.flame_state,
+							          (int)sys_flag.FlameFilter,
+							          (int)sys_flag.FlameOut_Count,
+							          (unsigned long)sys_time_inf.sec * 1000UL);
+							// #endregion
 						}
 					else
 						{
-							sys_data.Data_12H |= Set_Bit_5; // ÎÂ¶È¸ßÓÚÓÃ»§Éè¶¨Öµ0.01kg
-							Abnormal_Events.target_complete_event = 1;//Òì³£ÊÂ¼þ¼ÇÂ¼
+							sys_data.Data_12H |= Set_Bit_5; // ï¿½Â¶È¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Öµ0.01kg
+							Abnormal_Events.target_complete_event = 1;//ï¿½ì³£ï¿½Â¼ï¿½ï¿½ï¿½Â¼
 						}
 			}
 		
 		if(sys_flag.FlameOut_Count)
 			{
-				//Èç¹ûÕý³£È¼ÉÕ°ëÐ¡Ê±ºò£¬×Ô¶¯¶ÔÏ¨Ãð¼ÇÂ¼ÇåÁã
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½Õ°ï¿½Ð¡Ê±ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Ï¨ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 				if(sys_flag.FlameRecover_Time >= 1800)
 					sys_flag.FlameOut_Count = 0;
 			}
@@ -973,7 +985,7 @@ void Auto_Check_Fun(void)
 	if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
 			 
-				sys_flag.Error_Code  = Error16_SmokeValueHigh;//ÅÅÑÌÎÂ¶È³¬¸ß
+				sys_flag.Error_Code  = Error16_SmokeValueHigh;//ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È³ï¿½ï¿½ï¿½
 		}
 	
 		
@@ -988,26 +1000,26 @@ void Auto_Check_Fun(void)
 
 	
 /**
-* @brief  ¼ì²éµã»ðÊ±¸÷Æ÷¼þ×´Ì¬£¬£¬È¼ÉÕ»úÈÈ±£»¤£¬È¼ÆøÑ¹Á¦×´Ì¬¼ì²âµÈ½ÔÊÇ¹ÊÕÏ£¬±ØÐë±¨¾¯ÌáÊ¾¡£
-* @param  ²»¼ì²â»ðÑæºÍÂ¯Ìå³¬ÎÂ,´ÅÐÔ·çÃÅ
-  * @retval ÎÞ
+* @brief  ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½È¼ï¿½Õ»ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½È½ï¿½ï¿½Ç¹ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ë±¨ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
+* @param  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¯ï¿½å³¬ï¿½ï¿½,ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 void Ignition_Check_Fun(void)
 {
 		
-		Get_IO_Inf(); //»ñÈ¡IOÐÅÏ¢
+		Get_IO_Inf(); //ï¿½ï¿½È¡IOï¿½ï¿½Ï¢
 
 		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
 			
-				sys_flag.Error_Code  = Error16_SmokeValueHigh;//ÅÅÑÌÎÂ¶È³¬¸ß
+				sys_flag.Error_Code  = Error16_SmokeValueHigh;//ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È³ï¿½ï¿½ï¿½
 		}
 
-	 	//È¼ÆøÑ¹Á¦×´Ì¬¼ì²â
+	 	//È¼ï¿½ï¿½Ñ¹ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½
 		if(IO_Status.Target.gas_low_pressure == GAS_OUT)
 		{
 				
-				//ÈôÈ¼ÆøÑ¹Á¦µÍ£¬¹ÊÕÏ£¬±¨¾¯
+				//ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 				
 				sys_flag.Error_Code = Error3_LowGas;
 				
@@ -1025,22 +1037,22 @@ void Ignition_Check_Fun(void)
 		
 
 /**
-  * @brief  ¼ì²é´ý»úÊ±¸÷Æ÷¼þ×´Ì¬£¬¶ÔÓÚÎ´Æô¶¯ÓÐ»ðÑæ£¬È¼ÉÕ»úÈÈ±£»¤¡£Â¯Ìå³¬ÎÂµÈ½ÔÊÇ¹ÊÕÏ£¬±ØÐë±¨¾¯ÌáÊ¾
-* @param  ²»¼ì²â´ÅÐÔ·çÃÅºÍÁ÷Á¿¿ª¹Ø
-  * @retval ÎÞ
+  * @brief  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½æ£¬È¼ï¿½Õ»ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½Â¯ï¿½å³¬ï¿½ÂµÈ½ï¿½ï¿½Ç¹ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ë±¨ï¿½ï¿½ï¿½ï¿½Ê¾
+* @param  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 uint8 Idel_Check_Fun(void)
 {
-	//***********Ë®Î»¼ì²éÊÇÒ»Ö±Òª²éµÄ*************//
+	//***********Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ö±Òªï¿½ï¿½ï¿½*************//
 		
 	 if(sys_flag.Error_Code )
-	 		return 0;//Èç¹ûÓÐ¹ÊÕÏ£¬Ö±½ÓÍË³ö£¬²»ÔÙ½øÐÐ¼ì²â
+	 		return 0;//ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ï£ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù½ï¿½ï¿½Ð¼ï¿½ï¿½
 
 	
 	
 
 	 
-	  Get_IO_Inf(); //»ñÈ¡IOÐÅÏ¢
+	  Get_IO_Inf(); //ï¿½ï¿½È¡IOï¿½ï¿½Ï¢
 
 	
 	
@@ -1050,7 +1062,7 @@ uint8 Idel_Check_Fun(void)
 			{
 				if(sys_flag.Error_Code == 0 )
 					sys_flag.Error_Code = Error7_FlameZiJian;
-					 //´ý»úÊ±£¬¿Ï¶¨Ã»ÓÐ»ðÑæ£¬»ðÑæÌ½²âÆ÷¹ÊÕÏ±¨¾¯
+					 //ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ï¶ï¿½Ã»ï¿½Ð»ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½
 			}
 		
 		}
@@ -1074,20 +1086,20 @@ uint8 System_Pressure_Balance_Function(void)
  	{
 		
 
-		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ÓÃÓÚÏµÍ³È«¾Ö±äÁ¿£¬ÓÃ»§¿Éµ÷½Ú,µ±±íÊ¾ÎÂ¶ÈÊ±£¬300 = 30.0¶È
-		static  uint8 	air_min = 0;//×îÐ¡·çËÙ
-		static  uint8   air_max = 0;//×î´ó·çËÙ
-		static	uint16  	stop_wait_pressure = 0; //ÓÃÓÚ´ïµ½Ä¿±êÉè¶¨ÖµÊ±£¬·ç»ú¹¦ÂÊ¼ÇÂ¼ 
-		uint8  Tp_value = 0; //ÓÃÓÚ·ç»ú¹¦ÂÊÖÐ¼äÖµ
+		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ï¿½ï¿½ï¿½ï¿½ÏµÍ³È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Éµï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Â¶ï¿½Ê±ï¿½ï¿½300 = 30.0ï¿½ï¿½
+		static  uint8 	air_min = 0;//ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
+		static  uint8   air_max = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		static	uint16  	stop_wait_pressure = 0; //ï¿½ï¿½ï¿½Ú´ïµ½Ä¿ï¿½ï¿½ï¿½è¶¨ÖµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Â¼ 
+		uint8  Tp_value = 0; //ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Öµ
 
-/*************************Ïà±ä»ú×éÔö¼Ó**************************************************/
+/*************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**************************************************/
 		uint16 Real_Pressure = 0;
-		static uint8   Yacha_Value = 65;  //¹Ì¶¨Ñ¹²î0.45Mpa£¬Ô­À´65£¬ÏÖÔÚµ÷Õûµ½
-		uint16 Max_Pressure = 150;  //15¹«½ï  1.50Mpa
+		static uint8   Yacha_Value = 65;  //ï¿½Ì¶ï¿½Ñ¹ï¿½ï¿½0.45Mpaï¿½ï¿½Ô­ï¿½ï¿½65ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+		uint16 Max_Pressure = 150;  //15ï¿½ï¿½ï¿½ï¿½  1.50Mpa
 /******************************************************************************************/
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
-			//Ïà±ä»ú×éµÄÆô¶¯Ñ¹Á¦¸ú»¹ÊÇ¸ù¾ÝÓÃ»§µÄÉè¶¨Ñ¹Á¦À´Æô¶¯
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			
 			Yacha_Value = 65;
 			
@@ -1095,15 +1107,15 @@ uint8 System_Pressure_Balance_Function(void)
 		}
 	else
 		{
-			//³£¹æÕôÆû
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Yacha_Value = 0;
 			Real_Pressure = Temperature_Data.Pressure_Value;
 		}
 
 	
-		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//È¡µã»ð¹¦ÂÊÎª×îÐ¡ÔËÐÐ¹¦ÂÊ
+		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//È¡ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ð¡ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½
 
-		air_max = Sys_Admin.Max_Work_Power;  //¶Ô×î´ó¿ÉÔËÐÐ¹¦ÂÊ½øÐÐ±ß½ç±£»¤
+		air_max = Sys_Admin.Max_Work_Power;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ê½ï¿½ï¿½Ð±ß½ç±£ï¿½ï¿½
 		if(air_max >= 100)
 			air_max = 100;
 
@@ -1126,14 +1138,14 @@ uint8 System_Pressure_Balance_Function(void)
 				if(Real_Pressure < Man_Set_Pressure ) 
 					{
 					
-						if(sys_flag.Pressure_ChangeTime > 6) //8ÃëÒÔÉÏ±ä»¯0.01£¬Ôò0.1Mpa ÐèÒª100Ãë×óÓÒÊ±¼äÌ«³¤£¬ Èç¹û±ä»¯Ê±¼äÌ«¶Ì£¬±ÈÈçÐ¡ÓÚ2Ãë±ä»¯0.01£¬
+						if(sys_flag.Pressure_ChangeTime > 6) //8ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ä»¯0.01ï¿½ï¿½ï¿½ï¿½0.1Mpa ï¿½ï¿½Òª100ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ì«ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ä»¯Ê±ï¿½ï¿½Ì«ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½2ï¿½ï¿½ä»¯0.01ï¿½ï¿½
 							{
-								sys_flag.get_60_percent_flag = OK; //ÐèÒª¸ü¿ì
+								sys_flag.get_60_percent_flag = OK; //ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 							}
 		
 						if(sys_flag.Pressure_ChangeTime <= 5)
 							{
-								sys_flag.get_60_percent_flag = 0;  //Õâ¸ö±ä»¯ËÙÂÊ·ÅÂý
+								sys_flag.get_60_percent_flag = 0;  //ï¿½ï¿½ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½Ê·ï¿½ï¿½ï¿½
 							} 
 		
 						
@@ -1164,27 +1176,27 @@ uint8 System_Pressure_Balance_Function(void)
 		if(Real_Pressure == Man_Set_Pressure)
 			{
 		
-				if(now_percent > 80)//Ç°ÌáÊÇ±ØÐë´óÓÚ40
+				if(now_percent > 80)//Ç°ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½40
 					{
 						Tp_value = 80;
 					}
-			/*ÒÔÉÏÕâÑùÐ´£¬ÓÐÈ±ÏÝ£¬ÓÈÆäÊÇÕë¶ÔÐ¡»ðÎ»*/	
+			/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½È±ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Î»*/	
 
 				
-				sys_flag.get_60_percent_flag = 1;//È¼ÉÕÔ¤¼ÓÈÈÍê³É
+				sys_flag.get_60_percent_flag = 1;//È¼ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			}
 
-		/********************ÔÚÏà±ä»úÐÍ£¬ÄÚÑ¹ºÍÍâ²¿Ñ¹Á¦¶¼ÐèÒª±È½ÏÉè¶¨Ñ¹Á¦**********************************************/
+		/********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½â²¿Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½È½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½**********************************************/
 		if(Real_Pressure > Man_Set_Pressure  || Temperature_Data.Pressure_Value > sys_config_data.zhuan_huan_temperture_value)
 			{
-				//Ë¥¼õËÙ¶ÈÎªÃ¿Ãë¼õ1
+				//Ë¥ï¿½ï¿½ï¿½Ù¶ï¿½ÎªÃ¿ï¿½ï¿½ï¿½1
 
 				if(Temperature_Data.Pressure_Value > (sys_config_data.zhuan_huan_temperture_value ))
 					{
 						if(Real_Pressure > Man_Set_Pressure)
 							{
-								//Á½¸ö¶¼¸ß£¬Òª½µ¹¦ÂÊ
-								if(now_percent > 80)//Ç°ÌáÊÇ±ØÐë´óÓÚ40
+								//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+								if(now_percent > 80)//Ç°ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½40
 									{
 										Tp_value = 70;
 									}
@@ -1197,12 +1209,12 @@ uint8 System_Pressure_Balance_Function(void)
 							}
 						else
 							{
-								//ÄÚ²àÑ¹Á¦Ð¡ÓÚÏà¶ÔÖµ£¬Íâ²àÑ¹Á¦¸ßµÄÓÐÏÞ£¬ÔòÊÊµ±Ôö´ó¹¦ÂÊ
+								//ï¿½Ú²ï¿½Ñ¹ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½Þ£ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								if(Real_Pressure <= (Man_Set_Pressure - 5) )
 									{
 										if(Temperature_Data.Pressure_Value < (sys_config_data.zhuan_huan_temperture_value + 1 ))
 											{
-												//ÔòÊÊµ±Ôö´ó¹¦ÂÊ£¬±£Ö¤ÄÚÑ¹µÄÎÈ¶¨
+												//ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½È¶ï¿½
 												if(sys_flag.Power_1_Sec)
 													{
 														sys_flag.Power_1_Sec = 0;
@@ -1211,7 +1223,7 @@ uint8 System_Pressure_Balance_Function(void)
 											}
 										else
 											{
-												//Íâ²àÑ¹Á¦ÒÑ¾­¸ß³ö²»ÉÙÁË£¬Ö»ÄÜ½µ¹¦ÂÊ
+												//ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½Ö»ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½
 												if(sys_flag.Power_1_Sec)
 													{
 														sys_flag.Power_1_Sec = 0;
@@ -1222,10 +1234,10 @@ uint8 System_Pressure_Balance_Function(void)
 									}
 								else
 									{
-										//ÄÚÑ¹ÔÚÏà¶Ô·¶Î§ÄÚ£¬µ±Ñ¹Á¦´óÓÚµÈÓÚÉè¶¨Ñ¹Á¦Ò²Òª½µµÍ¹¦ÂÊ 
+										//ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ô·ï¿½Î§ï¿½Ú£ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½Ò²Òªï¿½ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ 
 										if(Temperature_Data.Pressure_Value >= (sys_config_data.zhuan_huan_temperture_value + 1 ))
 											{
-												//ÔòÊÊµ±½µµÍ¹¦ÂÊ£¬±£Ö¤ÄÚÑ¹µÄÎÈ¶¨
+												//ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½Ê£ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½È¶ï¿½
 												if(sys_flag.Power_1_Sec)
 													{
 														sys_flag.Power_1_Sec = 0;
@@ -1243,7 +1255,7 @@ uint8 System_Pressure_Balance_Function(void)
 					}
 				else
 					{
-						//Ã»ÓÐµ½´ïÓÃ»§Éè¶¨Ñ¹Á¦£¬µ«ÊÇÄÚ²àÑ¹Á¦ÒÑ¾­³¬¹ýÉè¶¨Öµ£¬ÔòÒ²ÐèÒª½µ¹¦ÂÊ
+						//Ã»ï¿½Ðµï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½Ñ¹ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Öµï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							if(Real_Pressure > Man_Set_Pressure)
 								{
 									if(sys_flag.Power_1_Sec)
@@ -1270,7 +1282,7 @@ uint8 System_Pressure_Balance_Function(void)
 	 
 
 		if(now_percent >= 70)
-			sys_flag.get_60_percent_flag = 1;//È¼ÉÕÔ¤¼ÓÈÈÍê³É
+			sys_flag.get_60_percent_flag = 1;//È¼ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		
 		PWM_Adjust(now_percent);
@@ -1278,11 +1290,11 @@ uint8 System_Pressure_Balance_Function(void)
 		
 
 
-		//Èç¹ûÕôÆûÑ¹Á¦´óÓÚÉè¶¨Ñ¹Á¦0.05MpaÒÔÉÏ£¬ÔòÍ£Â¯
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½0.05Mpaï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½Í£Â¯
 		if(Real_Pressure >= stop_wait_pressure  || Temperature_Data.Pressure_Value >= sys_config_data.Auto_stop_pressure)
 			{
-				sys_data.Data_12H |= Set_Bit_4; // ÎÂ¶È¸ßÓÚÓÃ»§Éè¶¨Öµ0.01kg
-				Abnormal_Events.target_complete_event = 1;//Òì³£ÊÂ¼þ¼ÇÂ¼
+				sys_data.Data_12H |= Set_Bit_4; // ï¿½Â¶È¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Öµ0.01kg
+				Abnormal_Events.target_complete_event = 1;//ï¿½ì³£ï¿½Â¼ï¿½ï¿½ï¿½Â¼
 			 
 			}
 		
@@ -1294,20 +1306,20 @@ uint8 XB_System_Pressure_Balance_Function(void)
  	{
 		
 
-		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ÓÃÓÚÏµÍ³È«¾Ö±äÁ¿£¬ÓÃ»§¿Éµ÷½Ú,µ±±íÊ¾ÎÂ¶ÈÊ±£¬300 = 30.0¶È
-		static  uint8 	air_min = 0;//×îÐ¡·çËÙ
-		static  uint8   air_max = 0;//×î´ó·çËÙ
-		static	uint16  	stop_wait_pressure = 0; //ÓÃÓÚ´ïµ½Ä¿±êÉè¶¨ÖµÊ±£¬·ç»ú¹¦ÂÊ¼ÇÂ¼ 
-		uint8  Tp_value = 0; //ÓÃÓÚ·ç»ú¹¦ÂÊÖÐ¼äÖµ
+		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ï¿½ï¿½ï¿½ï¿½ÏµÍ³È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Éµï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Â¶ï¿½Ê±ï¿½ï¿½300 = 30.0ï¿½ï¿½
+		static  uint8 	air_min = 0;//ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
+		static  uint8   air_max = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		static	uint16  	stop_wait_pressure = 0; //ï¿½ï¿½ï¿½Ú´ïµ½Ä¿ï¿½ï¿½ï¿½è¶¨ÖµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Â¼ 
+		uint8  Tp_value = 0; //ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Öµ
 
-/*************************Ïà±ä»ú×éÔö¼Ó**************************************************/
+/*************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**************************************************/
 		uint16 Real_Pressure = 0;
-		static uint8   Yacha_Value = 65;  //¹Ì¶¨Ñ¹²î0.45Mpa£¬Ô­À´65£¬ÏÖÔÚµ÷Õûµ½
-		uint16 Max_Pressure = 150;  //15¹«½ï  1.50Mpa
+		static uint8   Yacha_Value = 65;  //ï¿½Ì¶ï¿½Ñ¹ï¿½ï¿½0.45Mpaï¿½ï¿½Ô­ï¿½ï¿½65ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+		uint16 Max_Pressure = 150;  //15ï¿½ï¿½ï¿½ï¿½  1.50Mpa
 /******************************************************************************************/
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
-			//Ïà±ä»ú×éµÄÆô¶¯Ñ¹Á¦¸ú»¹ÊÇ¸ù¾ÝÓÃ»§µÄÉè¶¨Ñ¹Á¦À´Æô¶¯
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			
 			Yacha_Value = 65;
 			
@@ -1315,15 +1327,15 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		}
 	else
 		{
-			//³£¹æÕôÆû
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Yacha_Value = 0;
 			Real_Pressure = Temperature_Data.Pressure_Value;
 		}
 
 	
-		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//È¡µã»ð¹¦ÂÊÎª×îÐ¡ÔËÐÐ¹¦ÂÊ
+		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//È¡ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ð¡ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½
 
-		air_max = Sys_Admin.Max_Work_Power;  //¶Ô×î´ó¿ÉÔËÐÐ¹¦ÂÊ½øÐÐ±ß½ç±£»¤
+		air_max = Sys_Admin.Max_Work_Power;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ê½ï¿½ï¿½Ð±ß½ç±£ï¿½ï¿½
 		if(air_max >= 100)
 			air_max = 100;
 
@@ -1346,14 +1358,14 @@ uint8 XB_System_Pressure_Balance_Function(void)
 				if(Real_Pressure < Man_Set_Pressure ) 
 					{
 					
-						if(sys_flag.Pressure_ChangeTime > 6) //8ÃëÒÔÉÏ±ä»¯0.01£¬Ôò0.1Mpa ÐèÒª100Ãë×óÓÒÊ±¼äÌ«³¤£¬ Èç¹û±ä»¯Ê±¼äÌ«¶Ì£¬±ÈÈçÐ¡ÓÚ2Ãë±ä»¯0.01£¬
+						if(sys_flag.Pressure_ChangeTime > 6) //8ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ä»¯0.01ï¿½ï¿½ï¿½ï¿½0.1Mpa ï¿½ï¿½Òª100ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ì«ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ä»¯Ê±ï¿½ï¿½Ì«ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½2ï¿½ï¿½ä»¯0.01ï¿½ï¿½
 							{
-								sys_flag.get_60_percent_flag = OK; //ÐèÒª¸ü¿ì
+								sys_flag.get_60_percent_flag = OK; //ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 							}
 		
 						if(sys_flag.Pressure_ChangeTime <= 5)
 							{
-								sys_flag.get_60_percent_flag = 0;  //Õâ¸ö±ä»¯ËÙÂÊ·ÅÂý
+								sys_flag.get_60_percent_flag = 0;  //ï¿½ï¿½ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½Ê·ï¿½ï¿½ï¿½
 							} 
 		
 						
@@ -1384,28 +1396,28 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		if(Real_Pressure == Man_Set_Pressure)
 			{
 		
-				if(now_percent > 80)//Ç°ÌáÊÇ±ØÐë´óÓÚ40
+				if(now_percent > 80)//Ç°ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½40
 					{
 						Tp_value = 80;
 					}
-			/*ÒÔÉÏÕâÑùÐ´£¬ÓÐÈ±ÏÝ£¬ÓÈÆäÊÇÕë¶ÔÐ¡»ðÎ»*/	
+			/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½È±ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Î»*/	
 
 				
-				sys_flag.get_60_percent_flag = 1;//È¼ÉÕÔ¤¼ÓÈÈÍê³É
+				sys_flag.get_60_percent_flag = 1;//È¼ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			}
 
-		/********************ÔÚÏà±ä»úÐÍ£¬ÄÚÑ¹ºÍÍâ²¿Ñ¹Á¦¶¼ÐèÒª±È½ÏÉè¶¨Ñ¹Á¦**********************************************/
+		/********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½â²¿Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½È½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½**********************************************/
 		if(Real_Pressure > Man_Set_Pressure  || Temperature_Data.Pressure_Value >= sys_config_data.zhuan_huan_temperture_value)
 			{
-				//Ë¥¼õËÙ¶ÈÎªÃ¿Ãë¼õ1
+				//Ë¥ï¿½ï¿½ï¿½Ù¶ï¿½ÎªÃ¿ï¿½ï¿½ï¿½1
 
 				if(Temperature_Data.Pressure_Value >= (sys_config_data.zhuan_huan_temperture_value ))
 					{
-						//Á½¸öÌõ¼þÍ¬Ê±Âú×ã£¬Ôò±ØÐë¼õ¹¦ÂÊ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if(Real_Pressure > Man_Set_Pressure)
 							{
-								//Á½¸ö¶¼¸ß£¬Òª½µ¹¦ÂÊ
-								if(now_percent > 80)//Ç°ÌáÊÇ±ØÐë´óÓÚ40
+								//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+								if(now_percent > 80)//Ç°ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½40
 									{
 										Tp_value = 70;
 									}
@@ -1418,7 +1430,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 							}
 						else
 							{
-								//ÄÚ²àÑ¹Á¦Ð¡ÓÚÏà¶ÔÖµ£¬Íâ²àÑ¹Á¦¸ßµÄÓÐÏÞ£¬ÔòÊÊµ±Ôö´ó¹¦ÂÊ
+								//ï¿½Ú²ï¿½Ñ¹ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½Þ£ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								if(Temperature_Data.Pressure_Value >= (sys_config_data.zhuan_huan_temperture_value + 2 ))
 									{
 										if(sys_flag.Power_1_Sec)
@@ -1446,7 +1458,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 					}
 				else
 					{
-						//Ã»ÓÐµ½´ïÓÃ»§Éè¶¨Ñ¹Á¦£¬µ«ÊÇÄÚ²àÑ¹Á¦ÒÑ¾­³¬¹ýÉè¶¨Öµ£¬ÔòÒ²ÐèÒª½µ¹¦ÂÊ
+						//Ã»ï¿½Ðµï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½Ñ¹ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Öµï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							if(Real_Pressure > Man_Set_Pressure)
 								{
 									if(sys_flag.Power_1_Sec)
@@ -1473,16 +1485,16 @@ uint8 XB_System_Pressure_Balance_Function(void)
 	 
 
 		if(now_percent >= 70)
-			sys_flag.get_60_percent_flag = 1;//È¼ÉÕÔ¤¼ÓÈÈÍê³É
+			sys_flag.get_60_percent_flag = 1;//È¼ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		
 		PWM_Adjust(now_percent);
 
-		//Èç¹ûÕôÆûÑ¹Á¦´óÓÚÉè¶¨Ñ¹Á¦0.05MpaÒÔÉÏ£¬ÔòÍ£Â¯
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½0.05Mpaï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½Í£Â¯
 		if(Real_Pressure >= stop_wait_pressure  || Temperature_Data.Pressure_Value >= sys_config_data.Auto_stop_pressure)
 			{
-				sys_data.Data_12H |= Set_Bit_4; // ÎÂ¶È¸ßÓÚÓÃ»§Éè¶¨Öµ0.01kg
-				Abnormal_Events.target_complete_event = 1;//Òì³£ÊÂ¼þ¼ÇÂ¼
+				sys_data.Data_12H |= Set_Bit_4; // ï¿½Â¶È¸ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½è¶¨Öµ0.01kg
+				Abnormal_Events.target_complete_event = 1;//ï¿½ì³£ï¿½Â¼ï¿½ï¿½ï¿½Â¼
 			 
 			}
 		
@@ -1493,18 +1505,18 @@ uint8 XB_System_Pressure_Balance_Function(void)
 
 
 /**
-	 * @brief  ÏµÍ³ÔËÐÐ¹ý³ÌÖÐ£¬Òì³£µÄÓ¦±ä´¦Àí£¬Òì³£´¦Àí´ÎÊýµÄÀÛ¼Ó£¬¸ù¾ÝÓ¦±ä½á¹û£¬½ø»¯ÎªÏµÍ³¹ÊÕÏ
-	 * @param    ÔËÐÐÊ±»ðÑæÏ¨ÃðÒì³£
-							 Â¯ÄÚ³¬ÎÂÒì³£
-							 ´ÅÁ¦¿ª¹Ø±ÕºÏÒì³£
-							 È¼ÉÕÆ÷ÈÈ±£»¤¿ª¹ØÒì³£
-  * @retval ÎÞ
+	 * @brief  ÏµÍ³ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ì³£ï¿½ï¿½Ó¦ï¿½ä´¦ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¼Ó£ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªÏµÍ³ï¿½ï¿½ï¿½ï¿½
+	 * @param    ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ï¨ï¿½ï¿½ï¿½ì³£
+							 Â¯ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ì³£
+							 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õºï¿½ï¿½ì³£
+							 È¼ï¿½ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£
+  * @retval ï¿½ï¿½
   */
 void  Abnormal_Events_Response(void)
 {
 		
 	
-//µ±³öÏÖÒì³£Ê±£¬µÚÒ»²½£ºÖ´ÐÐ¹Ø±ÕÈ¼Æø·§×é£¬·ç»úÑÓÊ±´µÉ¨£¬´µÉ¨Ê±¼ä£¬ÓÃ»§¿Éµ÷
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£Ê±ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð¹Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½É¨Ê±ï¿½ä£¬ï¿½Ã»ï¿½ï¿½Éµï¿½
 	 
 		
 		if (sys_data.Data_12H)
@@ -1513,21 +1525,21 @@ void  Abnormal_Events_Response(void)
 				{
 					case 0:
 						   Dian_Huo_OFF();
-						   Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é	
+						   Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 						   Feed_First_Level();
 
-						   if(sys_flag.LianxuWorkTime < 600) //Ð¡ÓÚ10·ÖÖÓ£¬¾ÍÂý¹¦ÂÊ
+						   if(sys_flag.LianxuWorkTime < 600) //Ð¡ï¿½ï¿½10ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						   	{
-						   		sys_flag.get_60_percent_flag = 0;  //µã×Å»ðºó£¬Ð¡¹¦ÂÊÔËÐÐ
+						   		sys_flag.get_60_percent_flag = 0;  //ï¿½ï¿½ï¿½Å»ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						   	}
 						   
-						   delay_sys_sec(1000);//Ö´ÐÐºó´µÉ¨ÑÓÊ±5Ãë
-						   	ab_index = 1; //Ìø×ª³ÌÐò
+						   delay_sys_sec(1000);//Ö´ï¿½Ðºï¿½É¨ï¿½ï¿½Ê±5ï¿½ï¿½
+						   	ab_index = 1; //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 							break;
 					case 1:
-							//¸ÄÇ¿ÖÆÏ¨ÃðLCDÍ¼±ê
+							//ï¿½ï¿½Ç¿ï¿½ï¿½Ï¨ï¿½ï¿½LCDÍ¼ï¿½ï¿½
 						
-							Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+							Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							Dian_Huo_OFF();
 							Feed_First_Level();
 	
@@ -1543,7 +1555,7 @@ void  Abnormal_Events_Response(void)
 							if(sys_time_up)
 								{
 									sys_time_up = 0;
-									ab_index = 2; //Ìø×ª³ÌÐò
+									ab_index = 2; //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 									delay_sys_sec(Sys_Admin.Last_Blow_Time);//
 								}
 							else
@@ -1554,9 +1566,9 @@ void  Abnormal_Events_Response(void)
 							
 							break;
 					case 2:
-							//¸ÄÇ¿ÖÆÏ¨ÃðLCDÍ¼±ê
+							//ï¿½ï¿½Ç¿ï¿½ï¿½Ï¨ï¿½ï¿½LCDÍ¼ï¿½ï¿½
 						
-							Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+							Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							Dian_Huo_OFF();
 							Feed_First_Level();
 					
@@ -1592,12 +1604,12 @@ void  Abnormal_Events_Response(void)
 							if(sys_time_up)
 								{
 									sys_time_up = 0;
-									ab_index = 3; //Ìø×ª³ÌÐò
+									ab_index = 3; //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 									delay_sys_sec(1000);//
 									sys_flag.Force_Supple_Water_Flag = 0;
-									/*2023Äê11ÔÂ27ÈÕ11:59:34*/
+									/*2023ï¿½ï¿½11ï¿½ï¿½27ï¿½ï¿½11:59:34*/
 							
-									/*¼ì²é¼«µÍË®Î»µÄ×´¿ö*/
+									/*ï¿½ï¿½é¼«ï¿½ï¿½Ë®Î»ï¿½ï¿½×´ï¿½ï¿½*/
 									if (IO_Status.Target.water_protect== WATER_LOSE)
 										{
 											sys_flag.Error_Code  = Error5_LowWater;
@@ -1619,12 +1631,12 @@ void  Abnormal_Events_Response(void)
 					case 3:
 						 
 							Dian_Huo_OFF();
-						    Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é	
+						    Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 							Feed_First_Level();
 						
 							if(sys_flag.flame_state == FLAME_OK)
 								{
-									 //ÕâÊ±£¬¿Ï¶¨Ã»ÓÐ»ðÑæ£¬»ðÑæÌ½²âÆ÷¹ÊÕÏ±¨¾¯
+									 //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ï¶ï¿½Ã»ï¿½Ð»ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½
 									sys_flag.Error_Code = Error7_FlameZiJian;
 								}
 							
@@ -1640,36 +1652,36 @@ void  Abnormal_Events_Response(void)
 							if(sys_time_up)
 								{
 									sys_time_up = 0;
-									 //Ìø×ª³ÌÐò
-									//Send_Air_Close();//¹Ø±Õ·ç»ú	
+									 //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
+									//Send_Air_Close();//ï¿½Ø±Õ·ï¿½ï¿½	
 									 if(sys_data.Data_12H == 3)
-									 		ab_index = 10;//Ìø×ª×Ô¶¯ÅÅÎÛ³ÌÐò
+									 		ab_index = 10;//ï¿½ï¿½×ªï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Û³ï¿½ï¿½ï¿½
 									 else
 									 	{
 									 		if( Temperature_Data.Pressure_Value <= sys_config_data.Auto_start_pressure   || sys_data.Data_12H == 5 || sys_data.Data_12H == 6)
 												{
-													sys_data.Data_12H = 0 ;// ÎÂ¶ÈµÍÓÚÍ£Â¯Öµ
+													sys_data.Data_12H = 0 ;// ï¿½Â¶Èµï¿½ï¿½ï¿½Í£Â¯Öµ
 													Abnormal_Events.target_complete_event = 0;
-													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//¶ÔÒì³£½á¹¹ÌåÇåÁã
+													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//ï¿½ï¿½ï¿½ì³£ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 											 
-													ab_index = 0;  //¶Ôindex³õÊ¼»¯£¬ÔÊÐíÏÂ´Î½øÈë
-													//ÐèÌí¼ÓÏà¹ØÖ¸Ê¾Ò³Ãæ£¬´Ó¶øÌáÐÑÓÃ»§£¬ÏµÍ³ÕýÔÚÀäÈ´
-													//»Ö¸´Ïà¹Ø²ÎÊý£¬½øÐÐÖØÆô
-													sys_data.Data_10H = SYS_WORK;// ½øÈë¹¤×÷×´Ì¬
-													Sys_Staus = 2; //ÏµÍ³Ìøµ½µÚ2½×¶Î£¬Æô¶¯ÔËÐÐ
-													Sys_Launch_Index = 1; //½øÐÐµã»ðÇ°¼ì²é
+													ab_index = 0;  //ï¿½ï¿½indexï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´Î½ï¿½ï¿½ï¿½
+													//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾Ò³ï¿½æ£¬ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´
+													//ï¿½Ö¸ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+													sys_data.Data_10H = SYS_WORK;// ï¿½ï¿½ï¿½ë¹¤ï¿½ï¿½×´Ì¬
+													Sys_Staus = 2; //ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½×¶Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+													Sys_Launch_Index = 1; //ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ç°ï¿½ï¿½ï¿½
 													
-													Ignition_Index = 0;  //******************************Ìø¹ýÇ°´µÉ¨£¬Ö±½Ó½øÐÐ·çËÙ¼ì²é¹ý³Ì
-													Send_Air_Open();  //·ç»úÇ°´µÉ¨
+													Ignition_Index = 0;  //******************************ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½É¨ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½Ð·ï¿½ï¿½Ù¼ï¿½ï¿½ï¿½ï¿½ï¿½
+													Send_Air_Open();  //ï¿½ï¿½ï¿½Ç°ï¿½ï¿½É¨
 													
-												//	Feed_First_Level();//´ó·çÁ¿´µÉ¨										
-													delay_sys_sec(1000);//ÑÓ³Ù12s
+												//	Feed_First_Level();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨										
+													delay_sys_sec(1000);//ï¿½Ó³ï¿½12s
 													
 													
 												}
 											else
 												{
-													ab_index = 4; //Ìø×ª³ÌÐò
+													ab_index = 4; //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 												}
 									 		
 									 	}
@@ -1702,32 +1714,32 @@ void  Abnormal_Events_Response(void)
 								Abnormal_Events.target_complete_event = OK;
 								if (Abnormal_Events.target_complete_event)
 									{
-										//Ë«±ÃÐèÒª´ò¿ª£¬ÆäËü¹Ø±Õ
+										//Ë«ï¿½ï¿½ï¿½ï¿½Òªï¿½ò¿ª£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 											Dian_Huo_OFF();
-											Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é
+											Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 											
 											if( Temperature_Data.Pressure_Value <= sys_config_data.Auto_start_pressure ||  sys_data.Data_12H == 5 || sys_data.Data_12H == 6)
 												{
-													sys_data.Data_12H = 0 ;// ÎÂ¶ÈµÍÓÚÍ£Â¯Öµ
+													sys_data.Data_12H = 0 ;// ï¿½Â¶Èµï¿½ï¿½ï¿½Í£Â¯Öµ
 													Abnormal_Events.target_complete_event = 0;
-													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//¶ÔÒì³£½á¹¹ÌåÇåÁã
+													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//ï¿½ï¿½ï¿½ì³£ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 											 
-													ab_index = 0;  //¶Ôindex³õÊ¼»¯£¬ÔÊÐíÏÂ´Î½øÈë
-													//ÐèÌí¼ÓÏà¹ØÖ¸Ê¾Ò³Ãæ£¬´Ó¶øÌáÐÑÓÃ»§£¬ÏµÍ³ÕýÔÚÀäÈ´
-													//»Ö¸´Ïà¹Ø²ÎÊý£¬½øÐÐÖØÆô
-													sys_data.Data_10H = SYS_WORK;// ½øÈë¹¤×÷×´Ì¬
-													Sys_Staus = 2; //ÏµÍ³Ìøµ½µÚ2½×¶Î£¬Æô¶¯ÔËÐÐ
-													Sys_Launch_Index = 1; //½øÐÐµã»ðÇ°¼ì²é
+													ab_index = 0;  //ï¿½ï¿½indexï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´Î½ï¿½ï¿½ï¿½
+													//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾Ò³ï¿½æ£¬ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´
+													//ï¿½Ö¸ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+													sys_data.Data_10H = SYS_WORK;// ï¿½ï¿½ï¿½ë¹¤ï¿½ï¿½×´Ì¬
+													Sys_Staus = 2; //ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½×¶Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+													Sys_Launch_Index = 1; //ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ç°ï¿½ï¿½ï¿½
 													
-													Ignition_Index = 0;  //×îÖÕÌø×ªµØÖ·£¬µã»ðÇ°Ò»½×¶Î
-													Send_Air_Open();  //·ç»úÇ°´µÉ¨ 
-													//Feed_First_Level();//´ó·çÁ¿´µÉ¨										
-													delay_sys_sec(1000);//ÑÓ³Ù12s
+													Ignition_Index = 0;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ç°Ò»ï¿½×¶ï¿½
+													Send_Air_Open();  //ï¿½ï¿½ï¿½Ç°ï¿½ï¿½É¨ 
+													//Feed_First_Level();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨										
+													delay_sys_sec(1000);//ï¿½Ó³ï¿½12s
 													
 												}
 											else
 												{
-													Send_Air_Close();//¹Ø±Õ·ç»ú
+													Send_Air_Close();//ï¿½Ø±Õ·ï¿½ï¿½
 												}
 
 									}
@@ -1740,7 +1752,7 @@ void  Abnormal_Events_Response(void)
 			}
 		else
 			{
-				ab_index = 0;  //¶Ôindex³õÊ¼»¯£¬ÔÊÐíÏÂ´Î½øÈë
+				ab_index = 0;  //ï¿½ï¿½indexï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´Î½ï¿½ï¿½ï¿½
 			}
 			
 
@@ -1751,44 +1763,44 @@ void  Abnormal_Events_Response(void)
 	
 }
 /**
-  * @brief  ÏµÍ³ÔËÐÐ³ÌÐò
-* @param   Sys_Launch_Index±äÁ¿£¬ÇÐ»»ÏµÍ³ÔËÐÐ²½Öè
-  * @retval ÎÞ
+  * @brief  ÏµÍ³ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½
+* @param   Sys_Launch_Indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ÏµÍ³ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 void Sys_Launch_Function(void)
 {
 		switch(Sys_Launch_Index)
 		{
-			case  0: //ÏµÍ³×Ô¼ì
-						Self_Check_Function();//¼ì²éÈ¼ÆøÑ¹Á¦ºÍ»úÐµÊ½Ñ¹Á¦´«¸ÐÆ÷
+			case  0: //ÏµÍ³ï¿½Ô¼ï¿½
+						Self_Check_Function();//ï¿½ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í»ï¿½ÐµÊ½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						
 						if(Before_Ignition_Prepare())
 						{
 								Ignition_Index = 0;
-								Sys_Launch_Index = 1;//Ìø×ªµ½ÏÂ¸öÁ÷³Ì£ºµã»ð½×¶Î
+								Sys_Launch_Index = 1;//ï¿½ï¿½×ªï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½×¶ï¿½
 								
 						}
 						
 					break;
 			
-			case  1: //ÏµÍ³³õÆô¶¯
+			case  1: //ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						
 						Ignition_Check_Fun();
 						if(Sys_Ignition_Fun())
 							{
-								Sys_Launch_Index = 2;//ÇÐ»»ÏµÍ³Á÷³Ìµ½Õý³£ÔË×ª×´Ì¬
+								Sys_Launch_Index = 2;//ï¿½Ð»ï¿½ÏµÍ³ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª×´Ì¬
 							
-								Ignition_Index = 0; //¸´Î»±¾³ÌÐòÌø×ª±äÁ¿
+								Ignition_Index = 0; //ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 
-								delay_sys_sec(2000);//ºÜÖØÒª£¬Ã»ÓÐ£¬ÔõÏÂÒ»½×¶ÎµÄ³ÌÐò£¬Ö´ÐÐ²»ÆðÀ´ 
+								delay_sys_sec(2000);//ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ã»ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½×¶ÎµÄ³ï¿½ï¿½ï¿½Ö´ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
-								sys_data.Data_12H = 0; //¶ÔÒì³£¼ì²â¼ÇÂ¼¸´Î»
+								sys_data.Data_12H = 0; //ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Î»
 								Abnormal_Events.airdoor_event = 0;
 								Abnormal_Events.burner_heat_protect_count = 0;
 								Abnormal_Events.flameout_event = 0;
 								Abnormal_Events.overheat_event = 0;
 
-								sys_flag.WaterUnsupply_Count = 0; //³¤Ê±¼äÎ´²¹Ë®±êÖ¾³¬Ê±ÇåÁã
+								sys_flag.WaterUnsupply_Count = 0; //ï¿½ï¿½Ê±ï¿½ï¿½Î´ï¿½ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 							}
 						Self_Index = 0;
 						ab_index =0;
@@ -1796,26 +1808,26 @@ void Sys_Launch_Function(void)
 
 				break;
 			
-			case  2: //ÏµÍ³ÔËÐÐ
+			case  2: //ÏµÍ³ï¿½ï¿½ï¿½ï¿½
 			
-						sys_flag.Force_Supple_Water_Flag = FALSE; //ÔËÐÐ×´Ì¬¹Ø±ÕÇ¿ÖÆ²¹Ë®
+						sys_flag.Force_Supple_Water_Flag = FALSE; //ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ø±ï¿½Ç¿ï¿½Æ²ï¿½Ë®
 						sys_flag.Already_Work_On_Flag = OK ;
 								
 					    if(sys_data.Data_12H == 0)
 					    	{
-					    		Auto_Check_Fun();  //µ±Ã»ÓÐÒì³£Ê±£¬Ö´ÐÐIOºÍ¸÷²ÎÊý¼ì²â
+					    		Auto_Check_Fun();  //ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ì³£Ê±ï¿½ï¿½Ö´ï¿½ï¿½IOï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				   				System_Pressure_Balance_Function();
 								
 								
 								if(sys_flag.Paiwu_Flag)
-									sys_data.Data_12H = 3 ;//ÐèÒª½øÐÐÅÅÎÛµÄ±êÖ¾
+									sys_data.Data_12H = 3 ;//ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÛµÄ±ï¿½Ö¾
 					    	}
-						else//Òì³£×´Ì¬¶ÔÒ»Ð©×´Ì¬Á¿µÄ¼ì²â
+						else//ï¿½ì³£×´Ì¬ï¿½ï¿½Ò»Ð©×´Ì¬ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½
 							{
 								Abnormal_Check_Fun();
 							}
 	
-						Abnormal_Events_Response(); //Òì³£¼ì²â
+						Abnormal_Events_Response(); //ï¿½ì³£ï¿½ï¿½ï¿½
 						
 					break;
 			
@@ -1832,16 +1844,16 @@ void Sys_Launch_Function(void)
 
 void Abnormal_Check_Fun(void)
 {
-	//¼ì²âÈ¼ÆøÑ¹Á¦ÊÇ·ñÕý³££¬Á÷Á¿¿ª¹ØÊÇ·ñÕý³££¬Â¯ÄÚÈÈË®ÊÇ·ñ³¬ÎÂ
+	//ï¿½ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¯ï¿½ï¿½ï¿½ï¿½Ë®ï¿½Ç·ï¿½ï¿½ï¿½
 		Get_IO_Inf();
 	
 		
 		if(IO_Status.Target.gas_low_pressure == GAS_OUT)
 		{
 				
-				//ÈôÈ¼ÆøÑ¹Á¦µÍ£¬¹ÊÕÏ£¬±¨¾¯
+				//ï¿½ï¿½È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(sys_flag.Error_Code  == 0 )
-					sys_flag.Error_Code  = Error3_LowGas; //È¼ÆøÑ¹Á¦µÍ¹ÊÕÏ±¨¾¯
+					sys_flag.Error_Code  = Error3_LowGas; //È¼ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Í¹ï¿½ï¿½Ï±ï¿½ï¿½ï¿½
 				
 		}
 		
@@ -1853,7 +1865,7 @@ void Abnormal_Check_Fun(void)
 	if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
 		
-			sys_flag.Error_Code  = Error16_SmokeValueHigh;//ÅÅÑÌÎÂ¶È³¬¸ß
+			sys_flag.Error_Code  = Error16_SmokeValueHigh;//ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È³ï¿½ï¿½ï¿½
 		}
 	
 		
@@ -1869,7 +1881,7 @@ void Abnormal_Check_Fun(void)
 		
 }
 
-//Ë¢ÐÂLCD¹ÊÕÏÐÅÏ¢¼ÇÂ¼±í¸ñ
+//Ë¢ï¿½ï¿½LCDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 void Lcd_Err_Refresh(void)
 {
 	
@@ -1887,22 +1899,22 @@ void Lcd_Err_Read(void)
 void  Err_Response(void)
 {
 	static uint8 Old_Error = 0;
-	//Èç¹ûÓÐ¹ÊÕÏ±¨¾¯£¬Í£Â¯£¬14H£¬15HÎª±¨¾¯±äÁ¿
+	//ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½Í£Â¯ï¿½ï¿½14Hï¿½ï¿½15HÎªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	  if(sys_flag.Error_Code == 0)
 	  	{
 	  		if(sys_flag.Lock_Error)
-				sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+				sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				
 	  			sys_flag.Error_Code = 0;
-	  			sys_flag.Lock_Error = 0;//¶Ô¹ÊÕÏ½âËø
-				Beep_Data.beep_start_flag = 0;	//Çå³ý±¨¾¯ÉùÒô
+	  			sys_flag.Lock_Error = 0;//ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½
+				Beep_Data.beep_start_flag = 0;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					
 	  	}
 
-	/******************ÐÂÔöÖØ¸´¹ÊÕÏ¼ÇÂ¼µÄÊ±¼ä************************/
+	/******************ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½Â¼ï¿½ï¿½Ê±ï¿½ï¿½************************/
 	  if(sys_flag.Old_Error_Count >=1800)
 	  	{
-	  		Old_Error = 0; //ÔÙ´Î¼ÇÂ¼
+	  		Old_Error = 0; //ï¿½Ù´Î¼ï¿½Â¼
 	  		sys_flag.Old_Error_Count = 0;
 	  	}
 	  else
@@ -1911,15 +1923,15 @@ void  Err_Response(void)
 	  	}
 
 	  
-	 //±¨¾¯µÄÇ°ÌáÊÇ±ØÐëÏÈ¼¤»î
+	 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½
 	 if(sys_flag.Lock_Error == 0)
 	 	{
 	 		if(sys_flag.Error_Code )
 				{
 			 		sys_close_cmd();
-			 		sys_flag.Lock_Error = 1;  //¶Ô¹ÊÕÏ½øÐÐËø¶¨
+			 		sys_flag.Lock_Error = 1;  //ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			 		sys_flag.Alarm_Out = OK;
-			 		Beep_Data.beep_start_flag = 1;//¿ØÖÆ·äÃùÆ÷ÉùÒô	
+			 		Beep_Data.beep_start_flag = 1;//ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 					
 					
 					if(sys_flag.Error_Code != Old_Error)
@@ -1932,7 +1944,7 @@ void  Err_Response(void)
 							
 							}
 
-						sys_flag.Old_Error_Count = 0; //¹ÊÕÏ¼ÇÂ¼Ê±¼äÇåÁã
+						sys_flag.Old_Error_Count = 0; //ï¿½ï¿½ï¿½Ï¼ï¿½Â¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 					
 				
@@ -1947,7 +1959,7 @@ void  Err_Response(void)
 	 					{
 	 						sys_close_cmd();
 							sys_flag.Alarm_Out = OK;
-			 				Beep_Data.beep_start_flag = 1;//¿ØÖÆ·äÃùÆ÷ÉùÒô	
+			 				Beep_Data.beep_start_flag = 1;//ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 	 					}
 	 			}
 	 		
@@ -1963,23 +1975,23 @@ void  Err_Response(void)
 void  IDLE_Err_Response(void)
 {
 	static uint8 Old_Error = 0;
-	//Èç¹ûÓÐ¹ÊÕÏ±¨¾¯£¬Í£Â¯£¬
+	//ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½Í£Â¯ï¿½ï¿½
 	  if(sys_flag.Error_Code == 0)
 	  	{
 	  		if(sys_flag.Lock_Error)
-				sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+				sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 			sys_flag.Error_Code = 0;
-	  			sys_flag.Lock_Error = 0;  //¶Ô¹ÊÕÏ½âËø
-					Beep_Data.beep_start_flag = 0;	//Çå³ý±¨¾¯ÉùÒô
+	  			sys_flag.Lock_Error = 0;  //ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½
+					Beep_Data.beep_start_flag = 0;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					
 	  	}
 
 	  
-	/******************ÐÂÔöÖØ¸´¹ÊÕÏ¼ÇÂ¼µÄÊ±¼ä************************/
+	/******************ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½Â¼ï¿½ï¿½Ê±ï¿½ï¿½************************/
 	  if(sys_flag.Old_Error_Count >=1800)
 	  	{
-	  		Old_Error = 0; //ÔÙ´Î¼ÇÂ¼
+	  		Old_Error = 0; //ï¿½Ù´Î¼ï¿½Â¼
 	  		sys_flag.Old_Error_Count = 0;
 	  	}
 	  else
@@ -1988,14 +2000,14 @@ void  IDLE_Err_Response(void)
 	  	}
 
 
-		//Èç¹ûÓÐ¹ÊÕÏ±¨¾¯£¬Í£Â¯£¬
+		//ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½Í£Â¯ï¿½ï¿½
 		 if (sys_flag.Lock_Error == 0)
  		 	{	
 		  		
   				if(sys_flag.Error_Code && sys_flag.Error_Code != 0xFF)
   					{
   						
-						Sys_Staus = 0;  //ÏµÍ³½øÈë±¨¾¯³ÌÐò
+						Sys_Staus = 0;  //ÏµÍ³ï¿½ï¿½ï¿½ë±¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						
 						
 						
@@ -2010,10 +2022,10 @@ void  IDLE_Err_Response(void)
 						
 						
 						Beep_Data.beep_start_flag = 1;	
-						sys_flag.Lock_Error = 1;  //¶Ô¹ÊÕÏ½øÐÐËø¶¨
+						sys_flag.Lock_Error = 1;  //ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						sys_flag.Alarm_Out = OK;
-						sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
-						//Ë¢ÐÂLCD¹ÊÕÏÐÅÏ¢¼ÇÂ¼±í¸ñ
+						sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						//Ë¢ï¿½ï¿½LCDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 						if(sys_flag.Error_Code != Old_Error)
 							{
 								Old_Error = sys_flag.Error_Code;
@@ -2024,7 +2036,7 @@ void  IDLE_Err_Response(void)
 							
 							}
 
-						sys_flag.Old_Error_Count = 0; //¹ÊÕÏ¼ÇÂ¼Ê±¼äÇåÁã
+						sys_flag.Old_Error_Count = 0; //ï¿½ï¿½ï¿½Ï¼ï¿½Â¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						
 					
 						
@@ -2042,17 +2054,17 @@ void  IDLE_Err_Response(void)
 
 
 /**
-* @brief  ÏµÍ³´ý»ú£¬¹Ø±ÕËùÓÐµç»ú£¬µÈ´ýÆô¶¯ÃüÁî£¬Ïò·þÎñÆ÷·¢ËÍ´ý»úÖ¸Áî
+* @brief  ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 * @param   
-  * @retval ÎÞ
+  * @retval ï¿½ï¿½
   */
 void System_Idel_Function(void)
 {
-	//1¡¢	¸Ã¹ØµÄÈ«²¿¹Øµô 
+	//1ï¿½ï¿½	ï¿½Ã¹Øµï¿½È«ï¿½ï¿½ï¿½Øµï¿½ 
 		
 		Send_Air_Close();
- 		Dian_Huo_OFF();//¿ØÖÆµã»ð¼ÌµçÆ÷¹Ø±Õ
-		Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ
+ 		Dian_Huo_OFF();//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+		Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 		WTS_Gas_One_Close();
 		
 		Auto_Pai_Wu_Function();
@@ -2061,9 +2073,9 @@ void System_Idel_Function(void)
 }
 
 /**
-* @brief  ÏµÍ³×Ü¿Ø³ÌÐò
+* @brief  ÏµÍ³ï¿½Ü¿Ø³ï¿½ï¿½ï¿½
 * @param   
-  * @retval ÎÞ
+  * @retval ï¿½ï¿½
   */
 void System_All_Control()
 {
@@ -2076,17 +2088,17 @@ void System_All_Control()
 						if(Sys_Admin.Water_BianPin_Enabled)
 							{
 								
-								Water_BianPin_Function();//±äÆµ²¹Ë®Ä£Ê½
+								Water_BianPin_Function();//ï¿½ï¿½Æµï¿½ï¿½Ë®Ä£Ê½
 							}
 						else
 							{
-								Water_Balance_Function();//³£¹æ²¹Ë®Ä£Ê½
+								Water_Balance_Function();//ï¿½ï¿½ï¿½æ²¹Ë®Ä£Ê½
 							}
 						
 						break;
 				case 2:
 				case 3:
-						//·Ç±äÆµ²¹Ë®
+						//ï¿½Ç±ï¿½Æµï¿½ï¿½Ë®
 						if(Sys_Admin.Water_BianPin_Enabled)
 							{
 								Double_Water_BianPin_Function();
@@ -2107,11 +2119,11 @@ void System_All_Control()
 						break;
 					
 			}
-	//²¹Ë®¹¦ÄÜ
+	//ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 
 		if(sys_flag.Work_1S_Flag)
 			{
-				//È¡¸ö·ç»ú¹¦ÂÊÔËÐÐµÄÊ±¼ä£¬È»ºó¼ÆÊý£¬ÓÃÓÚµã»ð¹ý³ÌÖÐµÄ´µÉ¨Ê±¼ä¿ØÖÆ
+				//È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ä£¬È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ´ï¿½É¨Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 				sys_flag.Work_1S_Flag = 0;
 				if(sys_data.Data_1FH > 0)
 					{
@@ -2128,27 +2140,27 @@ void System_All_Control()
 		switch(Sys_Staus)
 			{
 
-					case 0 :	//ÏµÍ³´ý»ú
+					case 0 :	//ÏµÍ³ï¿½ï¿½ï¿½ï¿½
 
 						 switch(IDLE_INDEX)
 						 	{
-						 		case  0 : //Õý³£´ý»ú×´Ì¬  ,, ×¢Òâ´ý»ú×´Ì¬Ñ­»·Ë®±ÃµÄ¿ªÆô£¬¸ù¾Ý»ØË®ÎÂ¶È
+						 		case  0 : //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬  ,, ×¢ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬Ñ­ï¿½ï¿½Ë®ï¿½ÃµÄ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½Ë®ï¿½Â¶ï¿½
 						 				
-						 				sys_flag.Ignition_Count = 0;//´ý»úÊ±¶Ôµã»ð´ÎÊýÇåÁã
-										sys_flag.last_blow_flag = 0;//ºó´µÉ¨×´Ì¬½áÊø±êÖ¾
+						 				sys_flag.Ignition_Count = 0;//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+										sys_flag.last_blow_flag = 0;//ï¿½ï¿½É¨×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 									
-										 System_Idel_Function( );//´ý»ú¹¦ÄÜ´¦Àí
-										//¼ì²é»ù±¾ÊäÈëÁ¿£¬ÊµÊ±ÏÔÊ¾µ½ÆÁÉÏ£¬Ö»ÌáÐÑ²»Ö´ÐÐ
+										 System_Idel_Function( );//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½
+										//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÊ±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½Ö»ï¿½ï¿½ï¿½Ñ²ï¿½Ö´ï¿½ï¿½
 										 Idel_Check_Fun();
 										 IDLE_Err_Response();
 										 Sys_Launch_Index = 0;
 										break;
 
-								case  1: //µÈ´ýºó´µÉ¨ÑÓÊ±
+								case  1: //ï¿½È´ï¿½ï¿½ï¿½É¨ï¿½ï¿½Ê±
 									 
-										Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ
-									 	Dian_Huo_OFF();//¿ØÖÆµã»ð¼ÌµçÆ÷¹Ø±Õ
-										sys_data.Data_14H &= Rst_Bit_0;//Õâ¸ö×´Ì¬ÌØÊâ£¬·çÃÅ±¨¾¯Ò»µ©½â³ý£¬²»ÔÙ±¨¾¯
+										Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+									 	Dian_Huo_OFF();//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+										sys_data.Data_14H &= Rst_Bit_0;//ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½
 										Get_IO_Inf();
 										sys_flag.Force_Supple_Water_Flag = 0;
 										if(sys_time_start == 0)
@@ -2162,22 +2174,22 @@ void System_All_Control()
 										if(sys_time_up)
 										{
 											sys_time_up = 0;
-											IDLE_INDEX = 2;//½øÈëÕý³£´ý»ú×´Ì¬
-											//¹Ø±Õ·ç»ú£¬´µÉ¨½áÊø£¬½øÈë´ý»ú
+											IDLE_INDEX = 2;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+											//ï¿½Ø±Õ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 											Send_Air_Close();
 										}
 										break;
-								case 2: //µÈ´ý·çÃÅ×ÔÓÉÂäÏÂ£¬·ÀÖ¹Îó¼ì²â£¬´ó¸Å10Ãë×óÓÒ
-									  Send_Air_Close();//·ç»úµçÔ´¹Ø±Õ
-									  Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ
-									  Dian_Huo_OFF();//¿ØÖÆµã»ð¼ÌµçÆ÷¹Ø±Õ
+								case 2: //ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									  Send_Air_Close();//ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Ø±ï¿½
+									  Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+									  Dian_Huo_OFF();//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 									 
 									  Get_IO_Inf();
 									  IDLE_Err_Response();
 									
 	 									sys_time_up = 0;
-	 									IDLE_INDEX = 0;//½øÈëÕý³£´ý»ú×´Ì¬
-	 									Last_Blow_End_Fun();//ºó´µÉ¨±ØÐëÖ´ÐÐµ½Î»
+	 									IDLE_INDEX = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+	 									Last_Blow_End_Fun();//ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ðµï¿½Î»
 	 									sys_flag.Force_Supple_Water_Flag = 0;
 										sys_flag.Force_UnSupply_Water_Flag = FALSE ;
 	
@@ -2192,17 +2204,17 @@ void System_All_Control()
 							
 						break;
 					
-					case 2:		//ÏµÍ³Æô¶¯
+					case 2:		//ÏµÍ³ï¿½ï¿½ï¿½ï¿½
 						
 						Sys_Launch_Function();
-						 //ÓÃÓÚ¿ØÖÆËÙ¶È
-						Err_Response();//½øÐÐ´íÎó×´Ì¬ÏìÓ¦
+						 //ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+						Err_Response();//ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ó¦
 						break;
 			
-					case 3://ÊÖ¶¯²âÊÔ×´Ì¬
-							//ÊÖ¶¯Ä£Ê½£º1¡¢ ÖÐË®Î»£¬¶ªÊ§£¬×Ô¶¯²¹Ë®£¬¸ßË®Î»ÔòÍ£
+					case 3://ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+							//ï¿½Ö¶ï¿½Ä£Ê½ï¿½ï¿½1ï¿½ï¿½ ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Í£
 							
-							//½«×ªËÙµÄÖµËÍÍùLCDÏÔÊ¾
+							//ï¿½ï¿½×ªï¿½Ùµï¿½Öµï¿½ï¿½ï¿½ï¿½LCDï¿½ï¿½Ê¾
 							
 							if(IO_Status.Target.hot_protect == THERMAL_BAD)
 								{
@@ -2211,33 +2223,33 @@ void System_All_Control()
 								}
 
 		
-							//»úÐµÊ½Ñ¹Á¦¼ì²âÐÅºÅ	
+							//ï¿½ï¿½ÐµÊ½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½	
 							if(IO_Status.Target.hpressure_signal == PRESSURE_ERROR)
 								{
 											
-									//ÈôÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§£¬¹ÊÕÏ£¬±¨¾¯
+									//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 									 if(sys_flag.Error_Code == 0 )
-										sys_flag.Error_Code = Error1_YakongProtect; //ÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§±¨¾¯			
+										sys_flag.Error_Code = Error1_YakongProtect; //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½			
 								}
-							Send_Gas_Close();//È¼Æø·§×é¹Ø±Õ
+							Send_Gas_Close();//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 							
 							IDLE_Err_Response();
 			
 							break;
 
 
-					case 4://¹ÊÕÏ±¨¾¯Ä£Ê½
+					case 4://ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½Ä£Ê½
 							
 							if(sys_flag.Error_Code == 0)
 									{
 										if(sys_flag.Lock_Error)
-											sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+											sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							
 										sys_flag.Error_Code = 0;
-										sys_flag.Lock_Error = 0;  //¶Ô¹ÊÕÏ½âËø
-										Beep_Data.beep_start_flag = 0;	//Çå³ý±¨¾¯ÉùÒô	
+										sys_flag.Lock_Error = 0;  //ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½
+										Beep_Data.beep_start_flag = 0;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
 
-										//Òª½øÐÐ×´Ì¬Ìø×ª
+										//Òªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½×ª
 									}
 
 							break;
@@ -2259,7 +2271,7 @@ void System_All_Control()
 
 uint8   sys_work_time_function(void)
 {
-//ÏµÍ³ÀÛ¼ÆÔËÐÐÊ±¼ä,¹øÂ¯¿ªÆôÊ±¼ä
+//ÏµÍ³ï¿½Û¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½,ï¿½ï¿½Â¯ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	 uint16  data = 0;
 	static uint8 Work_State = 0;
 	static uint8 Main_secs = 0;
@@ -2272,15 +2284,15 @@ uint8   sys_work_time_function(void)
 
 	
 	lcd_data.Data_21H = data >> 8;
-	lcd_data.Data_21L = data & 0x00FF; //ÓÃÓÚ½çÃæÏÔÊ¾
+	lcd_data.Data_21L = data & 0x00FF; //ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 	
 
 	if(sys_data.Data_10H == 0)
 		{
-			//ÉÏ¸ö×´Ì¬Ê±ÔËÐÐ×´Ì¬ 
+			//ï¿½Ï¸ï¿½×´Ì¬Ê±ï¿½ï¿½ï¿½ï¿½×´Ì¬ 
 			if(Work_State == 2)
 				{
-					//ËµÃ÷Ö÷¿Ø½øÐÐ¹Ø»ú£¬Ôò¶ÔÏà¹ØÊý¾Ý½øÐÐ±£´æ
+					//Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½Ð¹Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½
 					//Write_Second_Flash();
 				}
 			Work_State = sys_data.Data_10H ;
@@ -2289,12 +2301,12 @@ uint8   sys_work_time_function(void)
 		Work_State =sys_data.Data_10H;
 
 	
-	//²»Âú×ã1ÃëÊ±¼ä»ò´¦ÓÚ´ý»ú×´Ì¬£¬Ö±½ÓÍË³ö
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½
 	if(sys_flag.Work_1sec_Flag == FALSE || sys_data.Data_10H == 0)
 		return 0;
 
 	
-	sys_flag.Work_1sec_Flag = FALSE; //Ïû³ý±êÖ¾Î»
+	sys_flag.Work_1sec_Flag = FALSE; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Î»
 		
 	 if(sys_data.Data_10H == 2 )
 	 	{
@@ -2331,7 +2343,7 @@ void copy_to_lcd(void)
 void sys_control_config_function(void)
 {
 
-//ÉèÖÃ¿ª»úÏµÍ³Ä¬ÈÏ²ÎÊýÅäÖÃ
+//ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ÏµÍ³Ä¬ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	uint16  data_temp = 0;
 	uint8 temp = 0;
 
@@ -2351,7 +2363,7 @@ void sys_control_config_function(void)
 				}
 			LCD10D.DLCD.YunXu_Flag = SlaveG[1].Key_Power; 
 			
-			sys_flag.Wifi_Lock_System = 0; //Ä¬ÈÏwifiÃ»Ëø»ú
+			sys_flag.Wifi_Lock_System = 0; //Ä¬ï¿½ï¿½wifiÃ»ï¿½ï¿½ï¿½ï¿½
 			sys_flag.wifi_Lock_Year = 0;
 			sys_flag.wifi_Lock_Month = 0;
 			sys_flag.Wifi_Lock_Day = 0;
@@ -2364,20 +2376,20 @@ void sys_control_config_function(void)
 			
  			
 
-			Sys_Admin.Device_Style  = 0;  //0 ÔòÊÇ³£¹æµ¥Ìå1¶ÖÕôÆû£¬1ÔòÏà±äÕôÆûÔËÐÐ
+			Sys_Admin.Device_Style  = 0;  //0 ï¿½ï¿½ï¿½Ç³ï¿½ï¿½æµ¥ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 			
-			Sys_Admin.LianXu_PaiWu_DelayTime = 10; //Ä¬ÈÏ15·ÖÖÓ¶¯×÷Ò»´Î£¬Ã¿´Î3Ãë
-			Sys_Admin.LianXu_PaiWu_OpenSecs = 4; //¾«¶Èµ½1s,Ä¬ÈÏ¿ªÆô3Ãë
+			Sys_Admin.LianXu_PaiWu_DelayTime = 10; //Ä¬ï¿½ï¿½15ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½Ò»ï¿½Î£ï¿½Ã¿ï¿½ï¿½3ï¿½ï¿½
+			Sys_Admin.LianXu_PaiWu_OpenSecs = 4; //ï¿½ï¿½ï¿½Èµï¿½1s,Ä¬ï¿½Ï¿ï¿½ï¿½ï¿½3ï¿½ï¿½
 
-			Sys_Admin.Water_BianPin_Enabled = 0;  //Ä¬ÈÏ²»´ò¿ª±äÆµ²¹Ë®¹¦ÄÜ
+			Sys_Admin.Water_BianPin_Enabled = 0;  //Ä¬ï¿½Ï²ï¿½ï¿½ò¿ª±ï¿½Æµï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 			Sys_Admin.Water_Max_Percent = 45; 
 			
 			
-			Sys_Admin.YuRe_Enabled  = 1; //Ä¬ÈÏ´ò¿ª¸±ÎÂ±£»¤
-			Sys_Admin.Inside_WenDu_ProtectValue  = 270;// ±¾ÌåÎÂ¶ÈÄ¬ÈÏÎª270¶È
+			Sys_Admin.YuRe_Enabled  = 1; //Ä¬ï¿½Ï´ò¿ª¸ï¿½ï¿½Â±ï¿½ï¿½ï¿½
+			Sys_Admin.Inside_WenDu_ProtectValue  = 270;// ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½Ä¬ï¿½ï¿½Îª270ï¿½ï¿½
 
-			Sys_Admin.Steam_WenDu_Protect  = 173;//È¡Ïû²»ÐèÒª ÕôÆûÎÂ¶ÈÄ¬ÈÏÎª180¶È
+			Sys_Admin.Steam_WenDu_Protect  = 173;//È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½Ä¬ï¿½ï¿½Îª180ï¿½ï¿½
 		
 			Sys_Admin.Special_Secs = 18;
 			 
@@ -2387,48 +2399,48 @@ void sys_control_config_function(void)
 			Sys_Admin.Balance_Big_Time = 90;
 			Sys_Admin.Balance_Small_Time = 150;
 		
-			Sys_Admin.DeviceMaxPressureSet = 100; //Ä¬ÈÏ¶î¶¨Ñ¹Á¦ÊÇ10¹«½ï
+			Sys_Admin.DeviceMaxPressureSet = 100; //Ä¬ï¿½Ï¶î¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½
 			
-		//µÚÒ»²½£º ¶ÔÏàÓ¦½á¹¹Ìå¸³Öµ
-			Sys_Admin.First_Blow_Time = 30 * 1000;  //Ç°´µÉ¨Ê±¼ä
+		//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½á¹¹ï¿½å¸³Öµ
+			Sys_Admin.First_Blow_Time = 30 * 1000;  //Ç°ï¿½ï¿½É¨Ê±ï¿½ï¿½
 	 	
 	
-			Sys_Admin.Last_Blow_Time = 30 *1000;//ºó´µÉ¨Ê±¼ä
+			Sys_Admin.Last_Blow_Time = 30 *1000;//ï¿½ï¿½É¨Ê±ï¿½ï¿½
 			
 
-			Sys_Admin.Dian_Huo_Power = 30;  //Ä¬ÈÏµã»ð¹¦ÂÊÎª30% 
+			Sys_Admin.Dian_Huo_Power = 30;  //Ä¬ï¿½Ïµï¿½ï¿½ï¿½ï¿½Îª30% 
 		
-			Sys_Admin.Max_Work_Power = 85;  //Ä¬ÈÏ×î´ó¹¦ÂÊÎª100
-			Sys_Admin.Wen_Huo_Time =6 * 1000;  //ÎÈ¶¨»ðÑæÊ±¼ä 10Ãë
+			Sys_Admin.Max_Work_Power = 85;  //Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª100
+			Sys_Admin.Wen_Huo_Time =6 * 1000;  //ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ 10ï¿½ï¿½
 
-			Sys_Admin.Fan_Speed_Check = 1;  //Ä¬ÈÏÊÇ¼ì²â·çËÙ	
+			Sys_Admin.Fan_Speed_Check = 1;  //Ä¬ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½	
 			
-			 Sys_Admin.Fan_Speed_Value = 4800; //Ä¬ÈÏ·ç»ú×î´ó×ªËÙÎª6600£»
+			 Sys_Admin.Fan_Speed_Value = 4800; //Ä¬ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îª6600ï¿½ï¿½
 
-			  Sys_Admin.Fan_Pulse_Rpm = 3;   //Ä¬ÈÏÃ¿×ªÂö³åÊý3¸ö£¬Amtek 
+			  Sys_Admin.Fan_Pulse_Rpm = 3;   //Ä¬ï¿½ï¿½Ã¿×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½Amtek 
 
-			 Sys_Admin.Fan_Fire_Value = 3000 ; //Ä¬ÈÏ·ç»úµã»ð¼ì²â×ªËÙÎª3500rpm
+			 Sys_Admin.Fan_Fire_Value = 3000 ; //Ä¬ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îª3500rpm
 
-			 Sys_Admin.Danger_Smoke_Value =  850; //ÅÅÑÌÎÂ¶ÈÄ¬ÈÏÖµÎª80¶È
-			 Sys_Admin.Supply_Max_Time =  320; //²¹Ë®³¬Ê±Ä¬ÈÏ±¨¾¯ÖµÎª300Ãë
+			 Sys_Admin.Danger_Smoke_Value =  850; //ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½Ä¬ï¿½ï¿½ÖµÎª80ï¿½ï¿½
+			 Sys_Admin.Supply_Max_Time =  320; //ï¿½ï¿½Ë®ï¿½ï¿½Ê±Ä¬ï¿½Ï±ï¿½ï¿½ï¿½ÖµÎª300ï¿½ï¿½
 			
-			 Sys_Admin.ModBus_Address = 0; //Ä¬ÈÏµØÖ·Îª20
+			 Sys_Admin.ModBus_Address = 0; //Ä¬ï¿½Ïµï¿½Ö·Îª20
 
-			 sys_config_data.Sys_Lock_Set = 0;  //Ä¬ÈÏ²»½øÐÐËøÍ£¿ØÖÆ
+			 sys_config_data.Sys_Lock_Set = 0;  //Ä¬ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½
  
 		  
-		   	sys_config_data.Auto_stop_pressure = 60; //ÈôÉèÖÃ4kg,Í£Â¯Ä¬ÈÏÎª5kg
+		   	sys_config_data.Auto_stop_pressure = 60; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4kg,Í£Â¯Ä¬ï¿½ï¿½Îª5kg
 
-			sys_config_data.Auto_start_pressure = 40; //ÈôÉèÖÃ4kg,Æô¶¯Ñ¹Á¦¾Í1kgÆô¶¯¹ø  
-	 		sys_config_data.zhuan_huan_temperture_value = 50; //ÉèÖÃÄ¿±êÑ¹Á¦Öµ0.4Mpa
+			sys_config_data.Auto_start_pressure = 40; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4kg,ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½1kgï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
+	 		sys_config_data.zhuan_huan_temperture_value = 50; //ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ñ¹ï¿½ï¿½Öµ0.4Mpa
 	 		
 			
-			Sys_Admin.Admin_Work_Day = 0; //¿ÉÔËÐÐÊ±¼ä¹ÜÀí£¬Ä¬ÈÏÎª0£¬Ä¬ÈÏ²»¿ªÆô
+			Sys_Admin.Admin_Work_Day = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Îª0ï¿½ï¿½Ä¬ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½
 			Sys_Admin.Admin_Save_Day = 30;
 			Sys_Admin.Admin_Save_Month = 12;
 			Sys_Admin.Admin_Save_Year = 2025;
 			
-		//µÚÒ»²½£º Ð´ÈëÄÚ²¿FLASH
+		//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ Ð´ï¿½ï¿½ï¿½Ú²ï¿½FLASH
 			sys_flag.Lcd_First_Connect = OK;
 
 			
@@ -2441,7 +2453,7 @@ void sys_control_config_function(void)
 			
 			
 		}
-	else  //ËµÃ÷ÒÑ¾­Ð´Èë¹ý£¬²»ÔÙÏò¸ÃÄÚ´æÌîÈë³ö³§Êý¾Ý,¶Á³öÄÚ²¿FLASHÄÚÈÝ£¬¸³Öµ¸øÏàÓ¦½á¹¹Ìå
+	else  //Ëµï¿½ï¿½ï¿½Ñ¾ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½FLASHï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ó¦ï¿½á¹¹ï¿½ï¿½
 		{
 				
 			Sys_Admin.Fan_Pulse_Rpm = *(uint32 *)(FAN_PULSE_RPM_ADDRESS);
@@ -2472,8 +2484,8 @@ void sys_control_config_function(void)
 		
 			Sys_Admin.YuRe_Enabled  = *(uint32 *)(WENDU_PROTECT_ADDRESS);
 
-			Sys_Admin.Inside_WenDu_ProtectValue  = *(uint32 *)(BENTI_WENDU_PROTECT_ADDRESS);//±¾ÌåÎÂ¶È
-		//	Sys_Admin.Steam_WenDu_Protect  = *(uint32 *)(STEAM_WENDU_PROTECT_ADDRESS);//ÕôÆûÎÂ¶È
+			Sys_Admin.Inside_WenDu_ProtectValue  = *(uint32 *)(BENTI_WENDU_PROTECT_ADDRESS);//ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
+		//	Sys_Admin.Steam_WenDu_Protect  = *(uint32 *)(STEAM_WENDU_PROTECT_ADDRESS);//ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
 		
 			Sys_Admin.Special_Secs = *(uint32 *)(SPECIAL_SECS_ADDRESS);
 			
@@ -2495,23 +2507,23 @@ void sys_control_config_function(void)
 
 			  Sys_Admin.Supply_Max_Time =*(uint32 *)(SUPPLY_MAX_TIME_ADDRESS); 
 			
-			Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ô¤´µÉ¨Ê±¼ä
+			Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ô¤ï¿½ï¿½É¨Ê±ï¿½ï¿½
 			
 		
-			Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//ºó´µÉ¨Ê±¼ä
+			Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//ï¿½ï¿½É¨Ê±ï¿½ï¿½
 			
 			
-			Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //µã»ð¹¦ÂÊ
+			Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //ï¿½ï¿½ï¿½ï¿½ï¿½
 			
 
 
-			Sys_Admin.Max_Work_Power = *(uint32 *)(MAX_WORK_POWER_ADDRESS);  //Ä¬ÈÏ×î´ó¹¦ÂÊÎª100
+			Sys_Admin.Max_Work_Power = *(uint32 *)(MAX_WORK_POWER_ADDRESS);  //Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª100
 			
-			Sys_Admin.Wen_Huo_Time = *(uint32 *)(WEN_HUO_ADDRESS);  //ÎÈ¶¨»ðÑæÊ±¼ä  
+			Sys_Admin.Wen_Huo_Time = *(uint32 *)(WEN_HUO_ADDRESS);  //ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½  
 
-			Sys_Admin.Fan_Speed_Check = *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //ÊÇ·ñ½øÐÐ·çËÙ¼ì²â
+			Sys_Admin.Fan_Speed_Check = *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //ï¿½Ç·ï¿½ï¿½ï¿½Ð·ï¿½ï¿½Ù¼ï¿½ï¿½
 			
-			Sys_Admin.Fan_Speed_Value = *(uint32 *)(FAN_SPEED_VALUE_ADDRESS);  //ÊÇ·ñ½øÐÐ·çËÙ¼ì²â
+			Sys_Admin.Fan_Speed_Value = *(uint32 *)(FAN_SPEED_VALUE_ADDRESS);  //ï¿½Ç·ï¿½ï¿½ï¿½Ð·ï¿½ï¿½Ù¼ï¿½ï¿½
 			Sys_Admin.Fan_Fire_Value = *(uint32 *)(FAN_FIRE_VALUE_ADDRESS);
 
 			Sys_Admin.Danger_Smoke_Value = *(uint32 *)(DANGER_SMOKE_VALUE_ADDRESS);
@@ -2519,13 +2531,13 @@ void sys_control_config_function(void)
 			
 			 Sys_Admin.ModBus_Address = *(uint32 *)(MODBUS_ADDRESS_ADDRESS) ;  
 			
-			sys_config_data.wifi_record = *(uint32 *)(CHECK_WIFI_ADDRESS);  //È¡³öwifi¼ÇÂ¼µÄÖµ
+			sys_config_data.wifi_record = *(uint32 *)(CHECK_WIFI_ADDRESS);  //È¡ï¿½ï¿½wifiï¿½ï¿½Â¼ï¿½ï¿½Öµ
 
-			sys_config_data.zhuan_huan_temperture_value = *(uint32 *)(ZHUAN_HUAN_TEMPERATURE); //ÉèÖÃÄ¿±êÑ¹Á¦Öµ0.4Mpa
+			sys_config_data.zhuan_huan_temperture_value = *(uint32 *)(ZHUAN_HUAN_TEMPERATURE); //ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ñ¹ï¿½ï¿½Öµ0.4Mpa
 
-			sys_config_data.Auto_stop_pressure = *(uint32 *)(AUTO_STOP_PRESSURE_ADDRESS); //È¡³ö×Ô¶¯Í£Â¯Ñ¹Á¦
+			sys_config_data.Auto_stop_pressure = *(uint32 *)(AUTO_STOP_PRESSURE_ADDRESS); //È¡ï¿½ï¿½ï¿½Ô¶ï¿½Í£Â¯Ñ¹ï¿½ï¿½
 
-			sys_config_data.Auto_start_pressure = *(uint32 *)(AUTO_START_PRESSURE_ADDRESS);//È¡³ö×Ô¶¯ÆôÂ¯Ñ¹Á¦
+			sys_config_data.Auto_start_pressure = *(uint32 *)(AUTO_START_PRESSURE_ADDRESS);//È¡ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Â¯Ñ¹ï¿½ï¿½
 
 				SlaveG[1].Key_Power = *(uint32 *)(A1_KEY_POWER_ADDRESS) ;
 				
@@ -2541,9 +2553,9 @@ void sys_control_config_function(void)
 				SlaveG[3].Smoke_Protect = *(uint32 *)(A3_SMOKE_PROTECT_ADDRESS);
 				SlaveG[3].Inside_WenDu_ProtectValue = *(uint32 *)(A3_INSIDESMOKE_PROTECT_ADDRESS);
 
-			/**********************ÀúÊ·¹ÊÕÏÐÅÏ¢ÌáÈ¡  *************************************/
+			/**********************ï¿½ï¿½Ê·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½È¡  *************************************/
 			
-			/**********************ÀúÊ·¹ÊÕÏÐÅÏ¢ÌáÈ¡  ½áÊø*************************************/		
+			/**********************ï¿½ï¿½Ê·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½È¡  ï¿½ï¿½ï¿½ï¿½*************************************/		
 			
 		}
 
@@ -2561,14 +2573,14 @@ void sys_control_config_function(void)
 
 	 
 
-  //×îÖÕ£¬½«Êý¾Ý·¢¸øLCDÕ¹Ê¾
+  //ï¿½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½LCDÕ¹Ê¾
 	
 	
 }
 
 
 
-//½«´íÎóÐÅÏ¢ÓÉÕûÐÎ×ª»»Îªbit,¸ù¾ÝÊý¾ÝË¢ÐÂlcd¹ÊÕÏÂë
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªbit,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½lcdï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 uint8  byte_to_bit(void)
 {
 	 
@@ -2591,7 +2603,7 @@ uint8  byte_to_bit(void)
 
 
 
-//¼ÓÔØLCD·¢¸øMCUµÄÊý¾Ý
+//ï¿½ï¿½ï¿½ï¿½LCDï¿½ï¿½ï¿½ï¿½MCUï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Load_LCD_Data(void)
 {
 	
@@ -2604,17 +2616,17 @@ void Load_LCD_Data(void)
 void clear_struct_memory(void)
 {
 	uint8 temp = 0;
-		//¶Ô½á¹¹Ìå±äÁ¿³õÊ¼»¯	
-	memset(&sys_data,0,sizeof(sys_data));	//¶Ô×´Ì¬ÐÅÏ¢½á¹¹ÌåÇåÁã
-  	memset(&lcd_data,0,sizeof(lcd_data));	//¶Ô×´Ì¬ÐÅÏ¢½á¹¹ÌåÇåÁã
-	memset(&sys_time_inf,0,sizeof(sys_time_inf));	//¶Ô×´Ì¬ÐÅÏ¢½á¹¹ÌåÇåÁã
+		//ï¿½Ô½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½	
+	memset(&sys_data,0,sizeof(sys_data));	//ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  	memset(&lcd_data,0,sizeof(lcd_data));	//ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	memset(&sys_time_inf,0,sizeof(sys_time_inf));	//ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
-	memset(&sys_config_data,0,sizeof(sys_config_data));	//¶Ô×´Ì¬ÐÅÏ¢½á¹¹ÌåÇåÁã
+	memset(&sys_config_data,0,sizeof(sys_config_data));	//ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	
-	memset(&Switch_Inf,0,sizeof(Switch_Inf));//¶ÔÏµÍ³±êÖ¾Á¿½øÐÐÇåÁã
-	memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//¶ÔÒì³£½á¹¹ÌåÇåÁã
-	memset(&sys_flag,0,sizeof(sys_flag));//¶ÔÏµÍ³±êÖ¾ÇåÁã
+	memset(&Switch_Inf,0,sizeof(Switch_Inf));//ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//ï¿½ï¿½ï¿½ì³£ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	memset(&sys_flag,0,sizeof(sys_flag));//ï¿½ï¿½ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 	
 	memset(&Flash_Data,0,sizeof(Flash_Data));
 	memset(&Temperature_Data,0,sizeof(Temperature_Data));
@@ -2633,16 +2645,16 @@ void clear_struct_memory(void)
 void One_Sec_Check(void)
 {
  	 
-	 //ÈýÃëºôÎüÐ§¹û£¬ÑéÖ¤¿ØÖÆÔÚÕý³£ÔËÐÐ
+	 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(sys_flag.Relays_3Secs_Flag)
 		{
 			sys_flag.Relays_3Secs_Flag = 0;
 
-	//	u1_printf("\n* Í¨ÐÅµØÖ·²âÊÔ = %d\n",Sys_Admin.ChaYa_WaterHigh_Set);
-	//	u1_printf("\n* ÖÐÒºÎ»¸ß¶È = %d\n",Sys_Admin.ChaYa_WaterMid_Set);
+	//	u1_printf("\n* Í¨ï¿½Åµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ = %d\n",Sys_Admin.ChaYa_WaterHigh_Set);
+	//	u1_printf("\n* ï¿½ï¿½ÒºÎ»ï¿½ß¶ï¿½ = %d\n",Sys_Admin.ChaYa_WaterMid_Set);
 	
-	//		u1_printf("\n* ´Ó»úÐ¡¹¦ÂÊÊ±¼ä = %d\n",SlaveG[2].Small_time);
-	//		u1_printf("\n* Ð¡Æ½ºâÉè¶¨Ê±¼ä = %d\n",Sys_Admin.Balance_Small_Time);
+	//		u1_printf("\n* ï¿½Ó»ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ = %d\n",SlaveG[2].Small_time);
+	//		u1_printf("\n* Ð¡Æ½ï¿½ï¿½ï¿½è¶¨Ê±ï¿½ï¿½ = %d\n",Sys_Admin.Balance_Small_Time);
 
 		
 		
@@ -2663,18 +2675,18 @@ void One_Sec_Check(void)
 	
 
 	
-//´òÓ¡²âÊÔÐÅÏ¢
+//ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	if(sys_flag.two_sec_flag)
 		{
 			sys_flag.two_sec_flag = 0;
 			
 			//sys_flag.LianxuWorkTime
-			//u1_printf("\n* ÉèÖÃµÄÊ±¼ä= %d\n",Sys_Admin.LianXu_PaiWu_DelayTime);
-			//u1_printf("\n* ÒÑ¾­ÔËÐÐµÄÊ±¼ä= %d\n",sys_flag.LianxuWorkTime);
-			//u1_printf("\n* sÉèÖÃ¿ªÆôµÄÊ±¼ä= %d\n",Sys_Admin.LianXu_PaiWu_OpenSecs);
+			//u1_printf("\n* ï¿½ï¿½ï¿½Ãµï¿½Ê±ï¿½ï¿½= %d\n",Sys_Admin.LianXu_PaiWu_DelayTime);
+			//u1_printf("\n* ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½= %d\n",sys_flag.LianxuWorkTime);
+			//u1_printf("\n* sï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½= %d\n",Sys_Admin.LianXu_PaiWu_OpenSecs);
 			
-			//u1_printf("\n* ¿ªÆôµÄÊ±¼ä= %d\n",sys_flag.Lianxu_OpenTime);
-		//	u1_printf("\n* ²¹Ë®µÄ±êÖ¾= %d\n",Switch_Inf.water_switch_flag);
+			//u1_printf("\n* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½= %d\n",sys_flag.Lianxu_OpenTime);
+		//	u1_printf("\n* ï¿½ï¿½Ë®ï¿½Ä±ï¿½Ö¾= %d\n",Switch_Inf.water_switch_flag);
 
 			
 		}
@@ -2692,7 +2704,7 @@ uint8  sys_start_cmd(void)
 
 		if(sys_flag.Lock_System)
 			{
-				//Ìø×ªµ½¹ÊÕÏ½çÃæ£¬µ«ÎÞ¹ÊÕÏ´úÂëÏÔÊ¾
+				//ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½Ï½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 				
 				return 0 ;
 			}
@@ -2702,7 +2714,7 @@ uint8  sys_start_cmd(void)
 			{
 					 	Sys_Staus = 0;  // 
 						sys_data.Data_10H = 0x00;  //ÏµÍ³Í£Ö¹×´Ì¬
-						sys_data.Data_12H = 0x00; //¶Ô·À¶³±£»¤Òì³£½øÐÐÇåÁã
+						sys_data.Data_12H = 0x00; //ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 						
 						
@@ -2710,8 +2722,8 @@ uint8  sys_start_cmd(void)
 					
 						IDLE_INDEX = 1; 
 
-						sys_flag.Lock_Error = 1;  //¶Ô¹ÊÕÏ½øÐÐËø¶¨
-						sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+						sys_flag.Lock_Error = 1;  //ï¿½Ô¹ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						Beep_Data.beep_start_flag = 1;	
 						
 			}
@@ -2719,20 +2731,20 @@ uint8  sys_start_cmd(void)
 			{
 				if(sys_data.Data_10H == 0)
 					{
-						IDLE_INDEX = 0;  //·ÀÖ¹ÔÚºó´µÉ¨Ê±Îó²Ù×÷
+						IDLE_INDEX = 0;  //ï¿½ï¿½Ö¹ï¿½Úºï¿½É¨Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 						Sys_Staus = 2;
 						Sys_Launch_Index = 0;
 						sys_flag.before_ignition_index = 0;
 						Ignition_Index = 0;
 						sys_time_up = 0;	
 
-	   					 sys_data.Data_10H = 0x02;  //ÏµÍ³ÔËÐÐ×´Ì¬
+	   					 sys_data.Data_10H = 0x02;  //ÏµÍ³ï¿½ï¿½ï¿½ï¿½×´Ì¬
 					
-						sys_flag.Paiwu_Flag = 0; //ÕâÑùÐ´»áÒýÆðÊ²Ã´Ô­ÒòÄØ
+						sys_flag.Paiwu_Flag = 0; //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê²Ã´Ô­ï¿½ï¿½ï¿½ï¿½
 						
 						
-	    				sys_time_start = 0; //Çå³ý´ý»ú×´Ì¬ÏÂ£¬¿ÉÄÜ´æÔÚµÄÑÓÊ±µÈ´ý£¬·ÀÖ¹Îó¸ÉÈÅÏµÍ³
-					/************¶Ô´ý»úÑ­»·±Ã¹¤×÷Ê±¼ä±äÁ¿ÇåÁã*****************8*/
+	    				sys_time_start = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â£ï¿½ï¿½ï¿½ï¿½Ü´ï¿½ï¿½Úµï¿½ï¿½ï¿½Ê±ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³
+					/************ï¿½Ô´ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*****************8*/
 						
 						sys_flag.Already_Work_On_Flag = FALSE;
 					
@@ -2740,9 +2752,9 @@ uint8  sys_start_cmd(void)
 						sys_flag.Pai_Wu_Idle_Index = 0;
 
 						sys_flag.before_ignition_index = 0;	
-						sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷											
-	    				Dian_Huo_OFF();//¿ØÖÆµã»ð¼ÌµçÆ÷¹Ø±Õ
-	    				//LCDÇÐ»»µ½Ö÷Ò³Ãæ
+						sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½											
+	    				Dian_Huo_OFF();//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+	    				//LCDï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
 	    				
 					}
 				
@@ -2756,31 +2768,46 @@ uint8  sys_start_cmd(void)
 
 void sys_close_cmd(void)
 {
+	// #region agent log
+	// è‹¥å› â€œç«ç„°ç†„ç­(12)â€è¿›å…¥åœæœºæµç¨‹ï¼Œè®°å½•ä¸€æ¬¡ï¼ˆç”¨äºŽç¡®è®¤â€œä»Žæœºåœæœºâ€æ˜¯å¦ç”±Error12è§¦å‘ï¼‰
+	if(sys_flag.Error_Code == Error12_FlameLose)
+	{
+		U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:sys_close_cmd\",\"message\":\"sys_close_cmd with Error12\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"errorCode\":%d,\"flameSignal\":%d,\"flameState\":%d},\"timestamp\":%lu}\r\n",
+		          sys_flag.Address_Number,
+		          (int)Sys_Admin.Device_Style,
+		          (int)sys_data.Data_10H,
+		          (int)sys_flag.Error_Code,
+		          (int)IO_Status.Target.Flame_Signal,
+		          (int)sys_flag.flame_state,
+		          (unsigned long)sys_time_inf.sec * 1000UL);
+	}
+	// #endregion
+
 			sys_data.Data_10H = 0x00;  //ÏµÍ³Í£Ö¹×´Ì¬
 																		
 			lcd_data.Data_16H = 0X00;
-			lcd_data.Data_16L = 0x00;  //ÏµÍ³Ë¢ÐÂ¿ØÖÆÍ¼±ê£¬ÏÔÊ¾START
-			//ÏµÍ³Í£Ö¹£¬¶Ô¹Ø¼üÊý¾Ý½øÐÐ´æ´¢
+			lcd_data.Data_16L = 0x00;  //ÏµÍ³Ë¢ï¿½Â¿ï¿½ï¿½ï¿½Í¼ï¿½ê£¬ï¿½ï¿½Ê¾START
+			//ÏµÍ³Í£Ö¹ï¿½ï¿½ï¿½Ô¹Ø¼ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð´æ´¢
 		 	WTS_Gas_One_Close();
 		  	
 		
 			Abnormal_Events.target_complete_event = 0;
-			Dian_Huo_OFF();//¹Ø±Õµã»ð¼ÌµçÆ÷
-			Send_Gas_Close();//¹Ø±ÕÈ¼Æø·§×é 
+			Dian_Huo_OFF();//ï¿½Ø±Õµï¿½ï¿½Ìµï¿½ï¿½ï¿½
+			Send_Gas_Close();//ï¿½Ø±ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 			
 			sys_flag.get_60_percent_flag = 0;
 		
 			 
-			sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+			sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			 
-			Write_Second_Flash(); //±£´æÔËÐÐÊ±¼äµÄÖµ
-		  //¶ÔÉÏ´Î³ÌÐòÖÐ¿ÉÄÜ´æÔÚµÄÒì³£×´Ì¬½øÐÐÇå0
-		memset(&Abnormal_Events,0,sizeof(Abnormal_Events));	//¶Ô×´Ì¬ÐÅÏ¢½á¹¹ÌåÇåÁã			
+			Write_Second_Flash(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Öµ
+		  //ï¿½ï¿½ï¿½Ï´Î³ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ü´ï¿½ï¿½Úµï¿½ï¿½ì³£×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
+		memset(&Abnormal_Events,0,sizeof(Abnormal_Events));	//ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½			
 														
-		//½øÐÐºó´µÉ¨ÑÓÊ±
-		//´ò¿ª·ç»ú¶þµ²ºó´µÉ¨ÑÓÊ±
-		//½øÈë´ý»ú×´Ì¬1
-		//±ê×¼Ìø×ª²½Öè
+		//ï¿½ï¿½ï¿½Ðºï¿½É¨ï¿½ï¿½Ê±
+		//ï¿½ò¿ª·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½Ê±
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬1
+		//ï¿½ï¿½×¼ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
 		sys_data.Data_10H = SYS_IDLE; // 
 		Sys_Staus = 0; // 
 		Sys_Launch_Index = 0;
@@ -2792,39 +2819,39 @@ void sys_close_cmd(void)
 }
 
 
-//ºó´µÉ¨¿ªÊ¼Ö´ÐÐ³ÌÐò
+//ï¿½ï¿½É¨ï¿½ï¿½Ê¼Ö´ï¿½Ð³ï¿½ï¿½ï¿½
 void Last_Blow_Start_Fun(void)
 {
-	//È·ÈÏ·ç»úÒÑ¾­´ò¿ª
+	//È·ï¿½Ï·ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½
 	Send_Air_Open();
 
-	sys_flag.last_blow_flag = 1;//ºó´µÉ¨×´Ì¬¿ªÊ¼±êÖ¾
+	sys_flag.last_blow_flag = 1;//ï¿½ï¿½É¨×´Ì¬ï¿½ï¿½Ê¼ï¿½ï¿½Ö¾
 	 
-	sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+	sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	
 	
-	Feed_First_Level();//90%µÄ·çÁ¿½øÐÐºó´µÉ¨
+	Feed_First_Level();//90%ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½É¨
 	if(sys_flag.Already_Work_On_Flag)
-		delay_sys_sec(Sys_Admin.Last_Blow_Time);//Ö´ÐÐºó´µÉ¨ÑÓÊ±	
+		delay_sys_sec(Sys_Admin.Last_Blow_Time);//Ö´ï¿½Ðºï¿½É¨ï¿½ï¿½Ê±	
 	else
-		delay_sys_sec(15000);//µã»ðÃ»³É¹¦£¬¾Í´µ¸ö15Ãë
+		delay_sys_sec(15000);//ï¿½ï¿½ï¿½Ã»ï¿½É¹ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½15ï¿½ï¿½
 }
 
 
-/*Çå³ýºó´µÉ¨½áÊø±êÖ¾£¬  Èí¹ÊÕÏÖ÷¶¯¸´Î»¡£µã»ðÊ§°Ü¹ÊÕÏ£¬È¼Æø·§×éÐ¹Â¶¹ÊÕÏ£¬ÏµÍ³ÔËÐÐÖÐ»ðÑæÏ¨Ãð*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü¹ï¿½ï¿½Ï£ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹Â¶ï¿½ï¿½ï¿½Ï£ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Ï¨ï¿½ï¿½*/
 
 void Last_Blow_End_Fun(void)
 {
-	//È·ÈÏ·ç»ú¹Ø±Õ
+	//È·ï¿½Ï·ï¿½ï¿½ï¿½Ø±ï¿½
 	
 			Send_Air_Close();
 
-	sys_flag.tx_hurry_flag = 1;//Á¢¼´·¢ËÍÊý¾Ý¸ø·þÎñÆ÷
+	sys_flag.tx_hurry_flag = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 
 	 
 	 
-	sys_flag.last_blow_flag = 0;//ºó´µÉ¨×´Ì¬½áÊø±êÖ¾
+	sys_flag.last_blow_flag = 0;//ï¿½ï¿½É¨×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 }
 
  
@@ -2832,11 +2859,11 @@ void Last_Blow_End_Fun(void)
 
 
 
-/*·ÀÖ¹ÓÃ»§ÇÐ»»µ½ÊÖ¶¯²âÊÔÒ³Ãæ£¬³¤Ê±¼äÃ»ÓÐÍË³öÊÖ¶¯²âÊÔ£¬10·ÖÖÓºóÍË³öÊÖ¶¯²âÊÔ*/
+/*ï¿½ï¿½Ö¹ï¿½Ã»ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½æ£¬ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ë³ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Ô£ï¿½10ï¿½ï¿½ï¿½Óºï¿½ï¿½Ë³ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 
 
-//²ÉÓÃ¼ÌµçÆ÷ÐÅºÅ¿ØÖÆÁ÷Á¿¿ªÆô£¬ÔËÓÃÁ½¸ùË®Î»ÐÅºÅÕë,²¢¼ì²éË®Î»Âß¼­´íÎó
+//ï¿½ï¿½ï¿½Ã¼Ìµï¿½ï¿½ï¿½ï¿½ÅºÅ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½Åºï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 uint8  Water_Balance_Function(void)
 {
 	
@@ -2867,13 +2894,13 @@ uint8  Water_Balance_Function(void)
 				buffer &= 0x07;
 
 
-//Õë¶ÔÔËÐÐ¹ý³ÌÖÐ£¬³¬¸ßË®Î»µÄÌ½Õë¹ÒË®µÄÎÊÌâ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(sys_data.Data_10H == 2)
 			{
-				//Èç¹û¸ßË®Î»Ã»ÓÐÐÅºÅ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»Ã»ï¿½ï¿½ï¿½Åºï¿½
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//½â¾öÔËÐÐÖÐ£¬³¬¸ßË®Î»ÏÔÊ¾²»×¼µÄÎÊÌâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ê¾ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if (IO_Status.Target.water_shigh== WATER_OK)
 							{
 								buffer &= 0x07;
@@ -2886,18 +2913,18 @@ uint8  Water_Balance_Function(void)
 		lcd_data.Data_15L = buffer;
 		LCD10D.DLCD.Water_State = buffer;
 
-	//½øË®³¬Ê±  ºÍ ±£Ë®³¬Ê±¹ÊÕÏ´¦Àí
-	//±£Ë®³¬Ê±Âß¼­
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±  ï¿½ï¿½ ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ß¼ï¿½
 
 	
-	if(sys_flag.Error_Code)//Õë¶ÔÈÈ±£¹ÊÕÏºÍË®Î»Âß¼­´íÎó£¬²»²¹Ë®
+	if(sys_flag.Error_Code)//ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½Ïºï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½Ë®
 		{
 			Feed_Main_Pump_OFF();	
 			Second_Water_Valve_Close();
 			 return 0;
 		}
 
-	 if(sys_data.Data_10H == SYS_MANUAL)   //ÊÖ¶¯Ä£Ê½²¹Ë®×ÔÀí
+	 if(sys_data.Data_10H == SYS_MANUAL)   //ï¿½Ö¶ï¿½Ä£Ê½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 	 		return 0;
 
 
@@ -2907,7 +2934,7 @@ uint8  Water_Balance_Function(void)
 	 		
 	 		if(sys_flag.last_blow_flag)
 	 			{
-	 				/*2023Äê3ÔÂ10ÈÕ09:20:37 ÓÉ³¬¸ßÐÅºÅ£¬¸Ä³ÉÖÐÐÅºÅ£¬·ÀÖ¹Ë®¹ý¶à*/
+	 				/*2023ï¿½ï¿½3ï¿½ï¿½10ï¿½ï¿½09:20:37 ï¿½É³ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½ï¿½Ö¹Ë®ï¿½ï¿½ï¿½ï¿½*/
 	 				if( IO_Status.Target.water_mid == WATER_LOSE)
 	 					sys_flag.Force_Supple_Water_Flag = OK;
 
@@ -2917,13 +2944,13 @@ uint8  Water_Balance_Function(void)
 	 			}
 			else
 				{ 
-					//ÐÞÕýºó´µÉ¨½áÊøºó£¬Ã»²¹µ½ÖÐË®Î»£¬Ë®±Ã»¹ÔÚ¹¤×÷µÄÊÂÏî
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ë®ï¿½Ã»ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					
 					sys_flag.Force_Supple_Water_Flag = FALSE;
 					
 					
 				}
-			if(sys_flag.Force_Supple_Water_Flag) //Ç¿ÖÆ²¹Ë®±êÖ¾£¬ÔòÇ¿ÖÆ´ò¿ª²¹Ë®·§£¬
+			if(sys_flag.Force_Supple_Water_Flag) //Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ´ò¿ª²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 				{
 					Feed_Main_Pump_ON();
 					Second_Water_Valve_Open();
@@ -2941,7 +2968,7 @@ uint8  Water_Balance_Function(void)
 	 	}
 			  
 
-	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ÖÆ²¹Ë®±êÖ¾£¬ÔòÇ¿ÖÆ´ò¿ª²¹Ë®·§£¬
+	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ´ò¿ª²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 		{
 			Feed_Main_Pump_ON();
 			Second_Water_Valve_Open();
@@ -2951,10 +2978,10 @@ uint8  Water_Balance_Function(void)
 /**************************************************************/
 	
 	 
-	//ÕâÁ½¸ùË®Î»¼ì²âÕëÊÇ²»ÄÜ»µµÄ£¬·ñÔò»áÔì³É¿ÕÉÕ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç²ï¿½ï¿½Ü»ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¿ï¿½ï¿½ï¿½
 	if(sys_flag.Error_Code == 0)
 		{
-	 		if(IO_Status.Target.water_mid == WATER_LOSE || IO_Status.Target.water_protect == WATER_LOSE)//ÖÐË®Î»ÐÅºÅ¶ªÊ§£¬±ØÐë²¹Ë®
+	 		if(IO_Status.Target.water_mid == WATER_LOSE || IO_Status.Target.water_protect == WATER_LOSE)//ï¿½ï¿½Ë®Î»ï¿½ÅºÅ¶ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ë²¹Ë®
 	 			{
 						Feed_Main_Pump_ON();
 						Second_Water_Valve_Open();
@@ -2980,14 +3007,14 @@ uint8  Water_Balance_Function(void)
 
 
 
-//ÓÃÓÚÊÖ¶¯Ä£Ê½Ò»Ð©¹¦ÄÜµÄ´¦Àí
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½Ä£Ê½Ò»Ð©ï¿½ï¿½ï¿½ÜµÄ´ï¿½ï¿½ï¿½
 uint8 Manual_Realys_Function(void)
 {
 	
 	
 	
 	
-	//²¹Ë®³¬Ê±ÌáÊ¾£¬·ÀÖ¹Ë®ÎÞÏÞÖÆÔÙ²¹
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ö¹Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù²ï¿½
 	
 	
 	return 0;
@@ -2997,23 +3024,23 @@ void Check_Config_Data_Function(void)
 {
 	float ResData = 0;
 	
-	//1¡¢ Ç°´µÉ¨¼ì²é30--120s
-	Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ô¤´µÉ¨Ê±¼ä
-	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000) //Èç¹û³¬³öÉè¶¨·¶Î§£¬½«Öµ×·»Ø
+	//1ï¿½ï¿½ Ç°ï¿½ï¿½É¨ï¿½ï¿½ï¿½30--120s
+	Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ô¤ï¿½ï¿½É¨Ê±ï¿½ï¿½
+	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½Öµ×·ï¿½ï¿½
 		Sys_Admin.First_Blow_Time =30000 ;
 	
-	//2¡¢ ºó´µÉ¨¼ì²é30--120s	
-	Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//ºó´µÉ¨Ê±¼ä
-	if(Sys_Admin.Last_Blow_Time > 300000 ||Sys_Admin.Last_Blow_Time < 30000) //Èç¹û³¬³öÉè¶¨·¶Î§£¬½«Öµ×·»Ø
+	//2ï¿½ï¿½ ï¿½ï¿½É¨ï¿½ï¿½ï¿½30--120s	
+	Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//ï¿½ï¿½É¨Ê±ï¿½ï¿½
+	if(Sys_Admin.Last_Blow_Time > 300000 ||Sys_Admin.Last_Blow_Time < 30000) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½Öµ×·ï¿½ï¿½
 		Sys_Admin.Last_Blow_Time =30000 ;
 	
-	//3¡¢ µã»ð¹¦ÂÊ20--35%
-	Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //µã»ð¹¦ÂÊ
-	if(Sys_Admin.Dian_Huo_Power > Max_Dian_Huo_Power ||Sys_Admin.Dian_Huo_Power < Min_Dian_Huo_Power) //Èç¹û³¬³öÉè¶¨·¶Î§£¬½«Öµ×·»Ø
+	//3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½20--35%
+	Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //ï¿½ï¿½ï¿½ï¿½ï¿½
+	if(Sys_Admin.Dian_Huo_Power > Max_Dian_Huo_Power ||Sys_Admin.Dian_Huo_Power < Min_Dian_Huo_Power) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½Öµ×·ï¿½ï¿½
 		Sys_Admin.Dian_Huo_Power =25 ;
 	
 
-	//4¡¢ ×î´ó¿ÉÔËÐÐ¹¦ÂÊ¼ì²é30--100%
+	//4ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½Ê¼ï¿½ï¿½30--100%
 	if(Sys_Admin.Max_Work_Power > 100 ||Sys_Admin.Max_Work_Power < 20)
 		Sys_Admin.Max_Work_Power = 100;
 
@@ -3021,12 +3048,12 @@ void Check_Config_Data_Function(void)
 		Sys_Admin.Max_Work_Power = Sys_Admin.Dian_Huo_Power;
 
 
-	Sys_Admin.Fan_Speed_Check =  *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //·çËÙ¼ì²âÊÇ·ñ¿ªÆô
+	Sys_Admin.Fan_Speed_Check =  *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //ï¿½ï¿½ï¿½Ù¼ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
 	if(Sys_Admin.Fan_Speed_Check > 1)
-		Sys_Admin.Fan_Speed_Check = 1; //Ä¬ÈÏÊÇ¼ì²â·çËÙµÄ
+		Sys_Admin.Fan_Speed_Check = 1; //Ä¬ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½Ùµï¿½
 	
 		
-	Sys_Admin.Danger_Smoke_Value =  *(uint32 *)(DANGER_SMOKE_VALUE_ADDRESS); //¶ÔÅÅÑÌÎÂ¶È±¨¾¯±£»¤
+	Sys_Admin.Danger_Smoke_Value =  *(uint32 *)(DANGER_SMOKE_VALUE_ADDRESS); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(Sys_Admin.Danger_Smoke_Value > 2000 && Sys_Admin.Danger_Smoke_Value < 600)
 		Sys_Admin.Danger_Smoke_Value = 800;
 	
@@ -3036,14 +3063,14 @@ void Check_Config_Data_Function(void)
 
 	sys_config_data.zhuan_huan_temperture_value = *(uint32 *)(ZHUAN_HUAN_TEMPERATURE);
 	if(sys_config_data.zhuan_huan_temperture_value < 10|| sys_config_data.zhuan_huan_temperture_value >= Sys_Admin.DeviceMaxPressureSet)
-		sys_config_data.zhuan_huan_temperture_value = 55; //Èç¹û³¬ÏÞ£¬Ä¬ÈÏ5.5¹«½ï
+		sys_config_data.zhuan_huan_temperture_value = 55; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ£ï¿½Ä¬ï¿½ï¿½5.5ï¿½ï¿½ï¿½ï¿½
 
 	if(sys_config_data.Auto_stop_pressure >= Sys_Admin.DeviceMaxPressureSet)
-		sys_config_data.Auto_stop_pressure = Sys_Admin.DeviceMaxPressureSet - 5; //Èç¹û³¬ÏÞ£¬Ä¬ÈÏÔò±È¶î¶¨Ñ¹Á¦ÉÙ0.05Mpa
+		sys_config_data.Auto_stop_pressure = Sys_Admin.DeviceMaxPressureSet - 5; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ£ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½È¶î¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½0.05Mpa
 	
 
 	Sys_Admin.DeviceMaxPressureSet = *(uint32 *)(DEVICE_MAX_PRESSURE_SET_ADDRESS);
-	if(Sys_Admin.DeviceMaxPressureSet > 250) //25¹«½ïµÄÐèÒªÁíÍâÖÆ×÷
+	if(Sys_Admin.DeviceMaxPressureSet > 250) //25ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Sys_Admin.DeviceMaxPressureSet = 80;
 
 	
@@ -3081,7 +3108,7 @@ void Check_Config_Data_Function(void)
 	LCD10D.DLCD.YunXu_Flag = SlaveG[1].Key_Power; 
 	LCD10D.DLCD.Pump_State = Switch_Inf.Water_Valve_Flag ;
 
-//	LCD10D.DLCD.Air_Power = 0;  //ÔÚPWMµ÷½Ú¹ý³ÌÖÐ£¬×Ô¶¯ÐÞ¸Ä
+//	LCD10D.DLCD.Air_Power = 0;  //ï¿½ï¿½PWMï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Ô¶ï¿½ï¿½Þ¸ï¿½
 
 	LCD10D.DLCD.Paiwu_State = Switch_Inf.pai_wu_flag;
 
@@ -3090,7 +3117,7 @@ void Check_Config_Data_Function(void)
 
 	LCD10D.DLCD.Flame_State = sys_flag.flame_state;
 
-	LCD10D.DLCD.Air_Speed  = sys_flag.Fan_Rpm;  //·ç»ú×ªËÙÏÔÊ¾
+	LCD10D.DLCD.Air_Speed  = sys_flag.Fan_Rpm;  //ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Ê¾
 	LCD10D.DLCD.Air_Power = sys_data.Data_1FH ;
 
 	
@@ -3110,10 +3137,10 @@ void Check_Config_Data_Function(void)
 	LCD10D.DLCD.Fan_Pulse_Rpm = Sys_Admin.Fan_Pulse_Rpm ;
 
 	LCD10D.DLCD.Error_Code = sys_flag.Error_Code ;
-	LCD10D.DLCD.Paiwu_Flag = sys_flag.Paiwu_Flag ;  //ÅÅÎÛ±êÖ¾Í¬²½
+	LCD10D.DLCD.Paiwu_Flag = sys_flag.Paiwu_Flag ;  //ï¿½ï¿½ï¿½Û±ï¿½Ö¾Í¬ï¿½ï¿½
 
 	LCD10D.DLCD.Air_State = Switch_Inf.air_on_flag ; 
-	LCD10D.DLCD.lianxuFa_State = Switch_Inf.LianXu_PaiWu_flag;   //·ç»úºÍÁ¬ÐøÅÅÎÛ·§×´Ì¬
+	LCD10D.DLCD.lianxuFa_State = Switch_Inf.LianXu_PaiWu_flag;   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û·ï¿½×´Ì¬
 	
 	LCD10D.DLCD.Water_BianPin_Enabled  = Sys_Admin.Water_BianPin_Enabled ;
 	LCD10D.DLCD.Water_Max_Percent  = Sys_Admin.Water_Max_Percent ;
@@ -3133,11 +3160,11 @@ void Check_Config_Data_Function(void)
 
 	 
 	//LCD10D.DLCD.YunXu_Flag = 0;
-	LCD10D.DLCD.System_Version  = Soft_Version ; //ÏµÍ³°æ±¾ºÅ
-	LCD10D.DLCD.Device_Style = Sys_Admin.Device_Style  ;  //Éè±¸ÀàÐÍµÄÑ¡Ôñ
+	LCD10D.DLCD.System_Version  = Soft_Version ; //ÏµÍ³ï¿½æ±¾ï¿½ï¿½
+	LCD10D.DLCD.Device_Style = Sys_Admin.Device_Style  ;  //ï¿½è±¸ï¿½ï¿½ï¿½Íµï¿½Ñ¡ï¿½ï¿½
 	
 	ResData = Sys_Admin.DeviceMaxPressureSet;													
-	LCD10D.DLCD.Max_Pressure = ResData / 100;  //¶î¶¨ÕôÆûÑ¹Á¦µÄÏÔÊ¾
+	LCD10D.DLCD.Max_Pressure = ResData / 100;  //ï¿½î¶¨ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 
 	LCD10JZ[2].DLCD.YunXu_Flag = SlaveG[2].Key_Power;
 	LCD10JZ[1].DLCD.YunXu_Flag = SlaveG[1].Key_Power;
@@ -3149,27 +3176,27 @@ void Check_Config_Data_Function(void)
 void Fan_Speed_Check_Function(void)
 {
 	
-	//Fan_Rpm = (1000/(2* fan_count)) / 3(Ã¿¸öÖÜÆÚ3×ª) *60Ãë = 100000 / sys_flag.Fan_count
+	//Fan_Rpm = (1000/(2* fan_count)) / 3(Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3×ª) *60ï¿½ï¿½ = 100000 / sys_flag.Fan_count
 
 
 		 
-		static uint8 Pulse = 3;    //Á½¶Ö·ç»úÃ¿×ª5¸öÂö³å
+		static uint8 Pulse = 3;    //ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ã¿×ª5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 
 		uint32 All_Fan_counts = 0;
 			
 		
-			//G1G170   0.5T·ç»ú	Ã¿×ª3¸öÂö³å£¬  Ametek  0.5T·ç»ú Ã¿×ª2¸öÂö³å
-			//G3G250   1T·ç»úµÄ²ÎÊý Ã¿×ª3¸öÂö³å
-			//G3G315   2T·ç»úµÄ²ÎÊý  Ã¿×ª 5¸öÂö³å
+			//G1G170   0.5Tï¿½ï¿½ï¿½	Ã¿×ª3ï¿½ï¿½ï¿½ï¿½ï¿½å£¬  Ametek  0.5Tï¿½ï¿½ï¿½ Ã¿×ª2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			//G3G250   1Tï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ Ã¿×ª3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			//G3G315   2Tï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½  Ã¿×ª 5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if(sys_flag.Rpm_1_Sec)
 				{
 					sys_flag.Rpm_1_Sec = FALSE;
 
 			
 
-					//×ßÁËPB0ÉÏÉýÑØÖÐ¶Ï£¬¼ÆÊý
+					//ï¿½ï¿½ï¿½ï¿½PB0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½
 					if(Sys_Admin.Fan_Pulse_Rpm >=  10  || Sys_Admin.Fan_Pulse_Rpm == 0)
-							Sys_Admin.Fan_Pulse_Rpm = 3; //×öÂö³å¸öÊý±£»¤
+							Sys_Admin.Fan_Pulse_Rpm = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 					if(sys_flag.Fan_count > 0 )
 						{
@@ -3177,7 +3204,7 @@ void Fan_Speed_Check_Function(void)
 							sys_flag.Fan_count = 0;
 							
 						}
-						  //£¨ÖÜÆÚÊý/5£©  *60	£¬60ÊÇÖ¸60Ãë£¬ÆäÖÐ5 ÊÇ3¶ÖÃ¿×ª5¸öÂö³å
+						  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/5ï¿½ï¿½  *60	ï¿½ï¿½60ï¿½ï¿½Ö¸60ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½5 ï¿½ï¿½3ï¿½ï¿½Ã¿×ª5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					else
 						{
 							sys_flag.Fan_count = 0;
@@ -3192,10 +3219,10 @@ void Fan_Speed_Check_Function(void)
 }
 
 
-/*ÓÃÓÚ¾­ÏúÉÌ¹ÜÀí¿ØÖÆÆ÷¿ÉÒÔÔËÐÐµÄÊ±¼ä*/
+/*ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½*/
 uint8 Admin_Work_Time_Function(void)
 {
-	//Éæ¼°µ½µÄ±äÁ¿£ºFlash_Data.Admin_Work_Time£¬systmtime
+	//ï¿½æ¼°ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Flash_Data.Admin_Work_Timeï¿½ï¿½systmtime
 	
 	uint16 Now_Year = 0;
 	uint16 Now_Month = 0;
@@ -3205,14 +3232,14 @@ uint8 Admin_Work_Time_Function(void)
 	uint16 Set_Month = 0;
 	uint16 Set_Day = 0;
 	
-	uint8 Set_Function = 0;  //ÓÃ»§ÉèÖÃµÄÌìÊý
+	uint8 Set_Function = 0;  //ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½
 
 	Set_Function = *(uint32 *)(ADMIN_WORK_DAY_ADDRESS); 
 
 	//lcd_data.Data_40H = Set_Function>> 8;
-	//lcd_data.Data_40L =Set_Function &0x00FF;//½«ÌìÊýË¢ÐÂ¸øLCD
+	//lcd_data.Data_40L =Set_Function &0x00FF;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½Â¸ï¿½LCD
 	
-	sys_flag.Lock_System = 0; //Çå³ýËø»úÃüÁî
+	sys_flag.Lock_System = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(Set_Function == FALSE )
 		return 0;
 
@@ -3284,15 +3311,15 @@ uint8 Auto_Pai_Wu_Function(void)
 {
 	static uint8 OK_Pressure = 5;
 	static uint8 PaiWu_Count = 0;
-	uint8  Paiwu_Times = 3;  //4´Î½µÑ¹ÅÅÎÛ
-	//´ý»ú£¬¼ì²âÑ¹Á¦Ð¡ÓÚ°ë¹«½ïÊ±£¬×Ô¶¯ÅÅÎÛÒ»´Î
+	uint8  Paiwu_Times = 3;  //4ï¿½Î½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Ð¡ï¿½Ú°ë¹«ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
     
-	uint8  Time = 15;//³¬¹ýÑ¹Á¦²¹Ë®30Ãë
+	uint8  Time = 15;//ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ë®30ï¿½ï¿½
 
 	uint8 	Ok_Value = 0;
 	
 	
-		//1¡¢ Òª¹øÂ¯ÒªÔËÐÐ¹ý£¬2¡¢×Ô¶¯ÅÅÎÛ¹¦ÄÜ£¬Òª¿ªÆô
+		//1ï¿½ï¿½ Òªï¿½ï¿½Â¯Òªï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Û¹ï¿½ï¿½Ü£ï¿½Òªï¿½ï¿½ï¿½ï¿½
 		
 		
 				
@@ -3311,14 +3338,14 @@ uint8 Auto_Pai_Wu_Function(void)
 										}
 									else
 										{
-											delay_sys_sec(35000); //µÍÑ¹ÅÅÎÛ×î´óÊ±¼ä
+											delay_sys_sec(35000); //ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 										}
 										sys_flag.Pai_Wu_Idle_Index = 2;
 										
 
 										break;
 								
-								case 2:  //¼ì²â¼«µÍË®Î»ÅÐ¶¨ÊÇ·ñ½áÊø
+								case 2:  //ï¿½ï¿½â¼«ï¿½ï¿½Ë®Î»ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 										if(sys_time_start == 0)
 											{
 												sys_time_up = 1;
@@ -3331,7 +3358,7 @@ uint8 Auto_Pai_Wu_Function(void)
 										if ( IO_Status.Target.water_protect== WATER_LOSE ) 
 											{
 												sys_flag.Pai_Wu_Idle_Index = 3;
-												delay_sys_sec(60000);//¸ø¼«µÍË®Î»ÉÏË®µÄÊ±¼ä
+												delay_sys_sec(60000);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½
 												 Pai_Wu_Door_Close();
 											}
 
@@ -3341,7 +3368,7 @@ uint8 Auto_Pai_Wu_Function(void)
 												sys_time_up = 0;
 												sys_flag.Force_Supple_Water_Flag = FALSE;
 												 Pai_Wu_Door_Close();
-												 delay_sys_sec(60000); //¸ø¼«µÍË®Î»ÉÏË®µÄÊ±¼ä
+												 delay_sys_sec(60000); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½
 												sys_flag.Pai_Wu_Idle_Index = 3;
 											}
 										else
@@ -3384,7 +3411,7 @@ uint8 Auto_Pai_Wu_Function(void)
 										sys_flag.Force_Supple_Water_Flag  = 0;
 										sys_flag.Paiwu_Flag = FALSE;
 										sys_flag.Pai_Wu_Idle_Index = 0;
-										Ok_Value = OK;  //½áÊø×Ô¶¯ÅÅÎÛ³ÌÐò
+										Ok_Value = OK;  //ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Û³ï¿½ï¿½ï¿½
 										break;
 								
 								default:
@@ -3412,7 +3439,7 @@ uint8 Auto_Pai_Wu_Function(void)
 
 uint8 YunXingZhong_TimeAdjustable_PaiWu_Function(void)
 {
-	//Éè±¸ÔËÐÐ¹ý³ÌÖÐÊ¹ÓÃ¸Ã¹¦ÄÜ
+	//ï¿½è±¸ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¸Ã¹ï¿½ï¿½ï¿½
 	uint8  set_flag = 0;
 	
 		
@@ -3424,9 +3451,9 @@ uint8 YunXingZhong_TimeAdjustable_PaiWu_Function(void)
 
 uint8 PaiWu_Warnning_Function(void)
 {
-	//ÅÅÎÛ¼ÆÊ±ÌáÐÑ2E       2F ,30£¬
-	static uint16 Max_Time = 480 ;  //×î´óÊ±¼äÊ±8Ð¡Ê±
-	static uint16 Max_Value = 1439; //×î´óÏÔÊ¾µÄÊ±¼äÎª23:59
+	//ï¿½ï¿½ï¿½Û¼ï¿½Ê±ï¿½ï¿½ï¿½ï¿½2E       2F ,30ï¿½ï¿½
+	static uint16 Max_Time = 480 ;  //ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ê±8Ð¡Ê±
+	static uint16 Max_Value = 1439; //ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ê±ï¿½ï¿½Îª23:59
 	static uint8 Low_Flag = 0;
 
 	if(sys_data.Data_10H == SYS_WORK)
@@ -3450,25 +3477,25 @@ uint8 PaiWu_Warnning_Function(void)
 	if(sys_time_inf.UnPaiwuMinutes > Max_Time)
 		{
 			lcd_data.Data_2EH = 0;
-			lcd_data.Data_2EL = OK; //ÅÅÎÛÏÔÊ¾Í¼±ê±äÉ«
+			lcd_data.Data_2EL = OK; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Í¼ï¿½ï¿½ï¿½É«
 			//sys_flag.Paiwu_Alarm_Flag  = OK;
 		}
 	else
 		{
 			lcd_data.Data_2EH = 0;
-			lcd_data.Data_2EL = 0; //ÅÅÎÛÏÔÊ¾Í¼±ê±äÉ«
+			lcd_data.Data_2EL = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Í¼ï¿½ï¿½ï¿½É«
 			//sys_flag.Paiwu_Alarm_Flag  = FALSE;
 		}
 
 	
 	if(Low_Flag == 0)
 		sys_flag.Low_Count = 0;
-	if(sys_time_inf.UnPaiwuMinutes > 1) //Î´ÅÅÎÛÊ±¼ä³¬¹ý10·ÖÖÓ£¬Ë®Î»¶ªÊ§ºó£¬»á¶ÔÅÅÎÛÊ±¼äÇåÁã
+	if(sys_time_inf.UnPaiwuMinutes > 1) //Î´ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä³¬ï¿½ï¿½10ï¿½ï¿½ï¿½Ó£ï¿½Ë®Î»ï¿½ï¿½Ê§ï¿½ó£¬»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			if (IO_Status.Target.water_protect == WATER_LOSE)
 				{
 					Low_Flag = OK;
-					if(sys_flag.Low_Count >= 3)//Èç¹ûµÍË®Î»³ÖÐø20Ãëºó£¬ÅÅÎÛÍê³É
+					if(sys_flag.Low_Count >= 3)//ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						{
 							Low_Flag = 0;
 							sys_time_inf.UnPaiwuMinutes = 0;
@@ -3479,9 +3506,9 @@ uint8 PaiWu_Warnning_Function(void)
 		}
 
 	lcd_data.Data_2FH = 0;
-	lcd_data.Data_2FL = sys_time_inf.UnPaiwuMinutes / 60; //Î´ÅÅÎÛÊ±¼ä£º Ð¡Ê±ÏÔÊ¾
+	lcd_data.Data_2FL = sys_time_inf.UnPaiwuMinutes / 60; //Î´ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£º Ð¡Ê±ï¿½ï¿½Ê¾
 	lcd_data.Data_30H = 0;
-	lcd_data.Data_30L = sys_time_inf.UnPaiwuMinutes % 60; //Î´ÅÅÎÛÊ±¼ä£º ·ÖÖÓÏÔÊ¾
+	lcd_data.Data_30L = sys_time_inf.UnPaiwuMinutes % 60; //Î´ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 
 	
 	return 0;
@@ -3491,21 +3518,21 @@ uint8 PaiWu_Warnning_Function(void)
 uint8 Special_Water_Supply_Function(void)
 {
 	static uint8 High_Flag = 0;
-	//¸ßÎÂ½øË®µç´Å·§ £¬Éæ¼°µ½¸ßÎÂ»ØË®µç´Å·§
+	//ï¿½ï¿½ï¿½Â½ï¿½Ë®ï¿½ï¿½Å·ï¿½ ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½Ë®ï¿½ï¿½Å·ï¿½
 	 
 
 	if(Sys_Admin.Special_Secs > 50)
- //×î´óÊ±¼ä¼ä¸ô±£»¤
+ //ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Sys_Admin.Special_Secs = 20;
 	
 	if(sys_flag.Error_Code)
 		Special_Water_OFF();
 
-	if(sys_data.Data_10H == 0 || sys_data.Data_12H) //´ý»ú»ò³¬Ñ¹Í£Â¯Ä£Ê½
+	if(sys_data.Data_10H == 0 || sys_data.Data_12H) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹Í£Â¯Ä£Ê½
 		Special_Water_OFF();
 
 
-	if (IO_Status.Target.water_high== WATER_OK) //´ïµ½¸ßË®Î»£¬Ôò¹Ø±Õ¸ßÎÂ»ØË®·§
+	if (IO_Status.Target.water_high== WATER_OK) //ï¿½ïµ½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½Ø±Õ¸ï¿½ï¿½Â»ï¿½Ë®ï¿½ï¿½
 		{
 			Special_Water_OFF();
 			sys_flag.High_Lose_Flag = 0;
@@ -3521,10 +3548,10 @@ uint8 Special_Water_Supply_Function(void)
 					sys_flag.High_Lose_Count = 0;
 				}
 
-			if(sys_flag.High_Lose_Count >= Sys_Admin.Special_Secs) //18Ãë
+			if(sys_flag.High_Lose_Count >= Sys_Admin.Special_Secs) //18ï¿½ï¿½
 				{
-					sys_flag.High_Lose_Count = Sys_Admin.Special_Secs; //Ëø×¡
-					Special_Water_Open(); //´ò¿ª¸ßÎÂ»ØË®µç´Å·§
+					sys_flag.High_Lose_Count = Sys_Admin.Special_Secs; //ï¿½ï¿½×¡
+					Special_Water_Open(); //ï¿½ò¿ª¸ï¿½ï¿½Â»ï¿½Ë®ï¿½ï¿½Å·ï¿½
 				}
 		}
 
@@ -3535,32 +3562,32 @@ uint8 Special_Water_Supply_Function(void)
 
 
 
-//ÔÝÊ±²»½«¸Ã³ÌÐòÍ¶ÈëÊ¹ÓÃ
+//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½Í¶ï¿½ï¿½Ê¹ï¿½ï¿½
 uint8 WaterLevel_Unchange_Check(void)
 {
 	static uint8 LastState = 0;
 	uint8  Water_Buffer = 0;
 
-	//Ö»ÔÚÔËÐÐ×´Ì¬½øÐÐ¼ì²â
-	if(Sys_Admin.WaterUnchangeMaxTime >= 250) //Ä¬ÈÏ×î´óÔò¹Ø±Õ¼ì²â
+	//Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½
+	if(Sys_Admin.WaterUnchangeMaxTime >= 250) //Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ¼ï¿½ï¿½
 		return 0; 
 
-	//³ÌÐò¹¦ÄÜ£¬ÔÚÔËÐÐ¹ý³ÌÖÐ£¬ ¼à²âË®Î»Èô³¤Ê±¼ä²»±ä»¯£¬Ôò±¨¾¯
-	Water_Buffer = lcd_data.Data_15L & 0x07; //È¡Ïû¶Ô×î¸ßË®Î»×´Ì¬µÄ¼àÊÂ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä²»ï¿½ä»¯ï¿½ï¿½ï¿½ò±¨¾ï¿½
+	Water_Buffer = lcd_data.Data_15L & 0x07; //È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»×´Ì¬ï¿½Ä¼ï¿½ï¿½ï¿½
 
 
 	if(LastState != Water_Buffer)
 		{
 			LastState = Water_Buffer;
-			//È¡ÏûÊ±¼ä
-			//ÐèÒªÔÚÊ×´Î½øÈëÔËÐÐ³ÌÐòÇ°ÇåÁã
-			sys_flag.WaterUnsupply_Count = 0; //ÖØÐÂ¼ÆÊ±
+			//È¡ï¿½ï¿½Ê±ï¿½ï¿½
+			//ï¿½ï¿½Òªï¿½ï¿½ï¿½×´Î½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+			sys_flag.WaterUnsupply_Count = 0; //ï¿½ï¿½ï¿½Â¼ï¿½Ê±
 		}
 
 
 	if(sys_flag.WaterUnsupply_Count >= Sys_Admin.WaterUnchangeMaxTime)
 		{
-			//³¤Ê±¼äÎ´½øÐÐ²¹Ë®±¨¾¯ £¬Ä¬ÈÏÊÇ 150Ãë
+			//ï¿½ï¿½Ê±ï¿½ï¿½Î´ï¿½ï¿½ï¿½Ð²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½ 150ï¿½ï¿½
 			//sys_flag.Error_Code  = Error19_NotSupplyWater;
 		}
 
@@ -3579,10 +3606,10 @@ uint8  Water_BianPin_Function(void)
 	uint8 Jump_Index = 0;
 
 	if(Sys_Admin.Water_Max_Percent > 99)
-		Sys_Admin.Water_Max_Percent = 99; //×î´ó¿ª¶ÈÖµ²»ÄÜ³¬¹ý100
+		Sys_Admin.Water_Max_Percent = 99; //ï¿½ï¿½ó¿ª¶ï¿½Öµï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½100
 
 	if(Sys_Admin.Water_Max_Percent < 25)
-		Sys_Admin.Water_Max_Percent = 25; //ÏÞÖÆ×îÐ¡¿ª¶ÈÖµ²»ÄÜµÍÓÚ25
+		Sys_Admin.Water_Max_Percent = 25; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½25
 		
 	Max_Percent = Sys_Admin.Water_Max_Percent;
 	
@@ -3610,13 +3637,13 @@ uint8  Water_BianPin_Function(void)
 				buffer &= 0x07;
 
 
-//Õë¶ÔÔËÐÐ¹ý³ÌÖÐ£¬³¬¸ßË®Î»µÄÌ½Õë¹ÒË®µÄÎÊÌâ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(sys_data.Data_10H == 2)
 			{
-				//Èç¹û¸ßË®Î»Ã»ÓÐÐÅºÅ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»Ã»ï¿½ï¿½ï¿½Åºï¿½
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//½â¾öÔËÐÐÖÐ£¬³¬¸ßË®Î»ÏÔÊ¾²»×¼µÄÎÊÌâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ê¾ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -3630,8 +3657,8 @@ uint8  Water_BianPin_Function(void)
 		lcd_data.Data_15L = buffer;
 		LCD10D.DLCD.Water_State = buffer;
 
-	//½øË®³¬Ê±  ºÍ ±£Ë®³¬Ê±¹ÊÕÏ´¦Àí
-	//±£Ë®³¬Ê±Âß¼­
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±  ï¿½ï¿½ ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ß¼ï¿½
 	if(sys_flag.Water_Percent > 0)
 		{
 			Feed_Main_Pump_ON();
@@ -3647,7 +3674,7 @@ uint8  Water_BianPin_Function(void)
 		}
 
 
-	//´ý»ú ºÍ ÊÖ¶¯Ä£Ê½ÏÂ£¬²»½øÐÐ²¹Ë®¶¯×÷
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö¶ï¿½Ä£Ê½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 	 if(sys_data.Data_10H == SYS_MANUAL )  
 	 	  return 0;
 	
@@ -3656,7 +3683,7 @@ uint8  Water_BianPin_Function(void)
 
 	
 
-	 if(sys_flag.Error_Code)//Õë¶ÔÈÈ±£¹ÊÕÏºÍË®Î»Âß¼­´íÎó£¬²»²¹Ë®
+	 if(sys_flag.Error_Code)//ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½Ïºï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½Ë®
 		{
 			sys_flag.Water_Percent = 0;
 			 return 0;
@@ -3666,9 +3693,9 @@ uint8  Water_BianPin_Function(void)
 	 	
 
 	
-//È¡ÏûÇ¿ÖÆ²¹Ë®µÄ´ëÊ©
+//È¡ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½Ä´ï¿½Ê©
 	
-	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ÖÆ²¹Ë®±êÖ¾£¬ÔòÇ¿ÖÆ´ò¿ª²¹Ë®·§£¬
+	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ´ò¿ª²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 		{
 			
 			sys_flag.Water_Percent = Max_Percent;
@@ -3703,12 +3730,12 @@ uint8  Water_BianPin_Function(void)
 
 	switch (Jump_Index)
 		{
-		case 0://Ã»ÓÐË®Ê±
+		case 0://Ã»ï¿½ï¿½Ë®Ê±
 				sys_flag.Water_Percent = Max_Percent;
 				Old_State = 0;
 
 				break;
-		case 1://µÍË®Î»Ê±
+		case 1://ï¿½ï¿½Ë®Î»Ê±
 				if(Old_State == 2)
 					New_Percent++;
 				sys_flag.Water_Percent = Max_Percent;
@@ -3716,7 +3743,7 @@ uint8  Water_BianPin_Function(void)
 
 				break;
 
-		case 2://ÖÐË®Î»Ê±
+		case 2://ï¿½ï¿½Ë®Î»Ê±
 				if(New_Percent < Min_Percent)
 					New_Percent = Min_Percent;
 
@@ -3729,7 +3756,7 @@ uint8  Water_BianPin_Function(void)
 
 				break;
 
-		case 3://¸ßË®Î»Ê±
+		case 3://ï¿½ï¿½Ë®Î»Ê±
 				if(Old_State == 2)
 					New_Percent--;
 				if(New_Percent < Min_Percent)
@@ -3757,34 +3784,34 @@ uint8  Water_BianPin_Function(void)
 uint8 LianXu_Paiwu_Control_Function(void)
 {
 	uint32 Dealy_Time = 0;
-	uint16 Open_Time = 0; //Á¬ÐøÅÅÎÛ·§µÄÊµ¼Ê¿ªÆôÊ±¼äÉè¶¨£¬¾«È·µ½0.1s
+	uint16 Open_Time = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½Êµï¿½Ê¿ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½0.1s
 
 	uint16 Cong_Work_Time = 0;
-	static uint8 Time_Ok = 0;  //¹¤×÷Ê±¼äµ½µÄ±êÖ¾£¬¾²Ì¬±äÁ¿
+	static uint8 Time_Ok = 0;  //ï¿½ï¿½ï¿½ï¿½Ê±ï¿½äµ½ï¿½Ä±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½
 	
-	//Á¬ÐøÅÅÎÛ¿ªÆô±êÖ¾£¬Á¬ÐøÅÅÎÛÊ±¼ä¼ä¸ô£¬Á¬ÐøÅÅÎÛ¿ªÆôÊ±¼äÃë
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 
-	//²âÊÔÔÚ4¹«½ïÑ¹Á¦ÏÂ£¬ÅÅÎÛ2Ãë£¬ÅÅË®Á¿ÔÚ1L
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ë£¬ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½1L
 
 	//Sys_Admin.LianXu_PaiWu_Enabled 
-	//Sys_Admin.LianXu_PaiWu_DelayTime //¾«¶Èµ½0.1Ð¡Ê±
-	//Sys_Admin.LianXu_PaiWu_OpenSecs //¾«¶Èµ½1s
+	//Sys_Admin.LianXu_PaiWu_DelayTime //ï¿½ï¿½ï¿½Èµï¿½0.1Ð¡Ê±
+	//Sys_Admin.LianXu_PaiWu_OpenSecs //ï¿½ï¿½ï¿½Èµï¿½1s
 
-	//ADouble5[1].True.LianXuTime_H£¬´Ó»úµ±Ç°ÒÑ¾­¹¤×÷µÄÊ±¼ä
-	//************ÐèÒª¿¼ÂÇÖ÷´Ó»úÍ¬Ê±ÅÅÎÛ£¬ÔõÃ´´¦Àí£¬´í·åÈý·ÖÖÓ£¬´Ó»ú°´ÕÕÔ­À´Ê±¼äÉè¶¨£¬Ö÷»úÑÓ³ÙÈý·ÖÖÓ£¬Òª²»Òª¼ä¸ôÅÅÎÛ£¬
-	//ÐèÒª°Ñ´Ó»úµÄÁ¬Ðø¹¤×÷Ê±¼ä£¬Í¬²½µ½Ö÷»úÀ´
+	//ADouble5[1].True.LianXuTime_Hï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½Ç°ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	//************ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½Í¬Ê±ï¿½ï¿½ï¿½Û£ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½Ê±ï¿½ï¿½ï¿½è¶¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½Òªï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û£ï¿½
+	//ï¿½ï¿½Òªï¿½Ñ´Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	//ÅÅÎÛÐèÒª¸úË®±Ã²¹Ë®Áª¶¯²ÅÄÜ´ò¿ª
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ë®ï¿½Ã²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½
 
 	//sys_flag.LianXu_1sFlag
 	Dealy_Time = Sys_Admin.LianXu_PaiWu_DelayTime * 1 * 60; //0.1h * min  * 60sec/min
 	
 
-	Open_Time = Sys_Admin.LianXu_PaiWu_OpenSecs * 10; //»»Ëã³É100msµ¥Î»£¬·½±ã¾«×¼¿ØÖÆÊ±¼ä
+	Open_Time = Sys_Admin.LianXu_PaiWu_OpenSecs * 10; //ï¿½ï¿½ï¿½ï¿½ï¿½100msï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ã¾«×¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 		{
-			//Ïà±ä»ú×é£¬¸Ã¼ÌµçÆ÷ÓÃÓÚÕæ¿ÕÐ¹Ñ¹
+			//ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½Ã¼Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹Ñ¹
 			return 0 ;
 		}
 	
@@ -3792,13 +3819,13 @@ uint8 LianXu_Paiwu_Control_Function(void)
 		return 0;
 	
 
-	//ÔËÐÐ×´Ì¬ÏÂÓÐ»ðÑæµÄ±êÖ¾£¬²Å¶Ô¹¤×÷µÄÊ±¼ä½øÐÐÍ³¼Æ
+	//ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Ä±ï¿½Ö¾ï¿½ï¿½ï¿½Å¶Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½
 	if(sys_data.Data_10H == 2)
 		{
 			if(sys_flag.flame_state)
 				if(sys_flag.LianXu_1sFlag)
 					{
-						sys_flag.LianxuWorkTime ++;//Ãë¼Æ
+						sys_flag.LianxuWorkTime ++;//ï¿½ï¿½ï¿½
 						sys_flag.LianXu_1sFlag = 0;
 					}
 		}
@@ -3806,22 +3833,22 @@ uint8 LianXu_Paiwu_Control_Function(void)
 
 	 
 
-	//¼ì²é¹¤×÷µÄµÄÊ±¼ä£¬ÓÐÃ»ÓÐ´ïµ½Éè¶¨µÄÖµ
+	//ï¿½ï¿½é¹¤ï¿½ï¿½ï¿½Äµï¿½Ê±ï¿½ä£¬ï¿½ï¿½Ã»ï¿½Ð´ïµ½ï¿½è¶¨ï¿½ï¿½Öµ
 	if(sys_flag.LianxuWorkTime >= Dealy_Time)
 		{
-			sys_flag.LianxuWorkTime = 0; //±äÁ¿ÇåÁã
+			sys_flag.LianxuWorkTime = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			sys_flag.Lianxu_OpenTime  = 0;
 		
-			Time_Ok = OK;//ÉèÖÃÁ¬ÐøÅÅÎÛ±êÖ¾
+			Time_Ok = OK;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û±ï¿½Ö¾
 		}
 
-	//¹¤×÷µÄÊ±¼äµ½£¬ÇÒ´¦ÓÚ²¹Ë®×´Ì¬£¬Ôò´ò¿ªÁ¬ÐøÅÅÎÛ·§£¬¼ì²é·§ÃÅ¿ªÆôµÄÊ±¼ä
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½äµ½ï¿½ï¿½ï¿½Ò´ï¿½ï¿½Ú²ï¿½Ë®×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ï¿½ï¿½é·§ï¿½Å¿ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	if(Time_Ok)
 		{
 			
 			if(sys_flag.Lianxu_OpenTime < Open_Time)
 				{
-					 if( Switch_Inf.water_switch_flag)//  ¸ú±äÆµ²¹Ë®Áª¶¯»¹ÊÇ¸úË®±ÃÁª¶¯£¬¸úÆô¶¯ÐÅºÅÁª¶¯
+					 if( Switch_Inf.water_switch_flag)//  ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½
 					 	{
 					 		LianXu_Paiwu_Open();
 							if(sys_flag.LianXu_100msFlag)
@@ -3836,14 +3863,14 @@ uint8 LianXu_Paiwu_Control_Function(void)
 				}
 			else
 				{
-					Time_Ok = FALSE; //Ê±¼äµ½µÄ±êÖ¾ÇåÁã
+					Time_Ok = FALSE; //Ê±ï¿½äµ½ï¿½Ä±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 					
 				}
 			
 		}
 	else
 		{
-			sys_flag.Lianxu_OpenTime  = 0; //Çå³ýÉÏ´ÎÊ¹ÓÃµÄ±äÁ¿±êÖ¾
+			sys_flag.Lianxu_OpenTime  = 0; //ï¿½ï¿½ï¿½ï¿½Ï´ï¿½Ê¹ï¿½ÃµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 			LianXu_Paiwu_Close();
 		}
 	
@@ -3876,7 +3903,7 @@ void JTAG_Diable(void)
 
 uint8 Speed_Pressure_Function(void)
 {
-	static uint16 Old_Pressure = 0; //ÓÃÓÚ±£´æÉÏ¸ö½×¶ÎµÄÕôÆûÖµ
+	static uint16 Old_Pressure = 0; //ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½×¶Îµï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 	uint16 New_Pressure =0;
 	static uint16 TimeCount = 0;
 	uint8 Chazhi = 0;
@@ -3884,12 +3911,12 @@ uint8 Speed_Pressure_Function(void)
 	//
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
-			//Ïà±ä»ú×éÊ¹ÓÃÄÚ²àÑ¹Á¦×÷Îª×·×ÙÄ¿±ê
-			New_Pressure = Temperature_Data.Inside_High_Pressure;  //²ÉÓÃÒ»´Î²àµÄÑ¹Á¦×÷ÎªÄ¿±ê
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ú²ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Îª×·ï¿½ï¿½Ä¿ï¿½ï¿½
+			New_Pressure = Temperature_Data.Inside_High_Pressure;  //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î²ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ÎªÄ¿ï¿½ï¿½
 		}
 	else
 		{
-			New_Pressure = Temperature_Data.Pressure_Value;   //¶þ´Î²àÑ¹Á¦×÷Îª×·×ÙÄ¿±ê
+			New_Pressure = Temperature_Data.Pressure_Value;   //ï¿½ï¿½ï¿½Î²ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Îª×·ï¿½ï¿½Ä¿ï¿½ï¿½
 		}
 
 	
@@ -3922,7 +3949,7 @@ uint8 Speed_Pressure_Function(void)
 							TimeCount = 0;
 						}
 				}
-			else   //Ã»ÓÐ»ðÑæÊ±£¬×´Ì¬¹éÁã
+			else   //Ã»ï¿½Ð»ï¿½ï¿½ï¿½Ê±ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
 				{
 					Old_Pressure = New_Pressure;
 					TimeCount = 0;
@@ -3937,7 +3964,7 @@ uint8 Speed_Pressure_Function(void)
 
 uint8 Wifi_Lock_Time_Function(void)
 {
-	//Éæ¼°µ½µÄ±äÁ¿£ºFlash_Data.Admin_Work_Time£¬systmtime
+	//ï¿½æ¼°ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Flash_Data.Admin_Work_Timeï¿½ï¿½systmtime
 	Date Now;
 	Date Set;
 
@@ -3945,7 +3972,7 @@ uint8 Wifi_Lock_Time_Function(void)
 
 	Now.iYear = LCD10D.DLCD.Year;
 	Now.iMonth = LCD10D.DLCD.Month;
-	Now.iDay = LCD10D.DLCD.Day;     //»»Ëã³ÉÆÁÄ»µÄÊ±¼ä
+	Now.iDay = LCD10D.DLCD.Day;     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ê±ï¿½ï¿½
 
 	Set.iYear= *(uint32 *)(WIFI_LOCK_YEAR_ADDRESS); 
 	Set.iMonth = *(uint32 *)(WIFI_LOCK_MONTH_ADDRESS); 
@@ -3989,11 +4016,11 @@ uint8 XiangBian_Steam_AddFunction(void)
 
 	uint16 Protect_Pressure = 150;  //1.5Mpa
 	
-	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)  //Õë¶ÔÏà±ä»ú×éµÄÀàÐÍ
+	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			if(sys_data.Data_10H == 2)
 				{
-					if(Temperature_Data.Inside_High_Pressure >=Protect_Pressure) //´óÓÚ15½ï£¬ÔòÖ±½Ó±¨¾¯
+					if(Temperature_Data.Inside_High_Pressure >=Protect_Pressure) //ï¿½ï¿½ï¿½ï¿½15ï¿½ï£¬ï¿½ï¿½Ö±ï¿½Ó±ï¿½ï¿½ï¿½
 						{
 							if(sys_flag.Error_Code == 0 )
 								sys_flag.Error_Code  = Error20_XB_HighPressureYabian_Bad;
@@ -4005,7 +4032,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 
 			switch (sys_data.Data_10H)
 				{
-					case 0:  //´ý»ú×´Ì¬,Èô³öÏÖ¼«µÍË®Î»£¬ÔòÁ¢¼´±¨¾¯
+					case 0:  //ï¿½ï¿½ï¿½ï¿½×´Ì¬,ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							if(IO_Status.Target.XB_WaterLow == FALSE)
 								{
 									if(sys_flag.XB_WaterLow_Flag == 0)
@@ -4026,10 +4053,10 @@ uint8 XiangBian_Steam_AddFunction(void)
 								}
 							
 							break;
-					case 2://ÔËÐÐ×´Ì¬
+					case 2://ï¿½ï¿½ï¿½ï¿½×´Ì¬
 							if(sys_flag.flame_state == OK)
 								{
-									//³öÏÖ¼«µÍË®Î»£¬²¢ÇÒ±¾ÌåÎÂ¶È³¬¹ý230¶È£¬ÔòÍ£»ú×ªºó´µÉ¨£¬Á¬Ðø4´Îºó£¬Ôò±¨¾¯
+									//ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½Â¶È³ï¿½ï¿½ï¿½230ï¿½È£ï¿½ï¿½ï¿½Í£ï¿½ï¿½×ªï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½Îºï¿½ï¿½ò±¨¾ï¿½
 									if(IO_Status.Target.XB_WaterLow == FALSE && sys_flag.Protect_WenDu >= 200)
 										{
 											if(sys_flag.XB_WaterLow_Flag == 0)
@@ -4038,7 +4065,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 													sys_flag.XB_WaterLow_Count = 0;
 												}
 
-											if(sys_flag.XB_WaterLow_Count > 10)  //µÍË®Î»³ÖÐø15Ãë
+											if(sys_flag.XB_WaterLow_Count > 10)  //ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½15ï¿½ï¿½
 												{
 													if(sys_data.Data_12H == 0)
 														{
@@ -4051,35 +4078,35 @@ uint8 XiangBian_Steam_AddFunction(void)
 														}
 													else
 														{
-															//×ªÈëÒì³£×´Ì¬
+															//×ªï¿½ï¿½ï¿½ì³£×´Ì¬
 															sys_data.Data_12H = 5; //  
-															Abnormal_Events.target_complete_event = 1;//Òì³£ÊÂ¼þ¼ÇÂ¼
+															Abnormal_Events.target_complete_event = 1;//ï¿½ì³£ï¿½Â¼ï¿½ï¿½ï¿½Â¼
 														}
 												}
 											
 										}
 									else
 										{
-											//µ±ÎÂ¶È»òË®Î»ÈÎºÎÒ»Ïî²»Âú×ã£¬ÔòÇå0
+											//ï¿½ï¿½ï¿½Â¶È»ï¿½Ë®Î»ï¿½Îºï¿½Ò»ï¿½î²»ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½0
 												sys_flag.XB_WaterLow_Flag = 0;
 												sys_flag.XB_WaterLow_Count = 0;
 
 												if(sys_flag.XB_WaterLowAB_Count)
 													{
-														//Èç¹ûÕý³£È¼ÉÕ°ëÐ¡Ê±ºò£¬×Ô¶¯¶ÔÏ¨Ãð¼ÇÂ¼ÇåÁã
-														if(sys_flag.XB_WaterLowAB_RecoverTime >= 1800)//30minÕý³£ÔËÐÐ£¬ÔòÈÏÎªÊÇÕý³£µÄ
+														//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½Õ°ï¿½Ð¡Ê±ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Ï¨ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
+														if(sys_flag.XB_WaterLowAB_RecoverTime >= 1800)//30minï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 															sys_flag.XB_WaterLowAB_Count = 0;
 													}
 										}
 								}
 							else
 								{
-									//Éè±¸ÔÚÔËÐÐ×´Ì¬£¬·ÀÖ¹¸Õ´¦ÀíÍêÒì³££¬Ë®Î»»¹Ã»ÎÈ¶¨£¬µÃÇø·ÖÁ½ÖÖÇé¿ö
-									//Éè±¸ÔÚÇ°´µÉ¨¹ý³ÌÖÐ£¬¼ì²âµ½È±Ë®£¬Ò²ÊÇÖ±½Ó±¨¾¯
+									//ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½Õ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Ë®Î»ï¿½ï¿½Ã»ï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									//ï¿½è±¸ï¿½ï¿½Ç°ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½âµ½È±Ë®ï¿½ï¿½Ò²ï¿½ï¿½Ö±ï¿½Ó±ï¿½ï¿½ï¿½
 								
 									if(sys_data.Data_12H == 0)
 										{
-											//·ÇÒì³£×´Ì¬£¬ÔòÖ±½Ó±¨¾¯
+											//ï¿½ï¿½ï¿½ì³£×´Ì¬ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó±ï¿½ï¿½ï¿½
 											if(IO_Status.Target.XB_WaterLow == FALSE)
 												{
 													if(sys_flag.XB_WaterLow_Flag == 0)
@@ -4088,7 +4115,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 															sys_flag.XB_WaterLow_Count = 0;
 														}
 
-													if(sys_flag.XB_WaterLow_Count > 10) //µÈ´ý10Ãë
+													if(sys_flag.XB_WaterLow_Count > 10) //ï¿½È´ï¿½10ï¿½ï¿½
 														{
 															sys_flag.Error_Code = Error22_XB_HighPressureWater_Low; 
 														}
@@ -4104,7 +4131,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 										}
 									else
 										{
-											//³¬Ñ¹Í£Â¯×´Ì¬£¬Ö±½Ó²»¼ì²âË®Î»£¬½«±êÖ¾ÇåÁã
+											//ï¿½ï¿½Ñ¹Í£Â¯×´Ì¬ï¿½ï¿½Ö±ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 											sys_flag.XB_WaterLow_Flag = 0;
 											sys_flag.XB_WaterLow_Count = 0;	
 										}
@@ -4122,7 +4149,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 			if(IO_Status.Target.XB_Hpress_Ykong == PRESSURE_ERROR)
 				{
 					 if(sys_flag.Error_Code == 0 )
-						sys_flag.Error_Code = Error21_XB_HighPressureYAKONG_Bad; //ÕôÆûÑ¹Á¦³¬³ö°²È«·¶Î§±¨¾¯	
+						sys_flag.Error_Code = Error21_XB_HighPressureYAKONG_Bad; //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½	
 				}
 
 			if(Temperature_Data.Inside_High_Pressure >= 2)//0.02Mpa
@@ -4182,14 +4209,14 @@ uint8  ShuangPin_Water_Balance_Function(void)
 				buffer &= 0x07;
 
 
-//Õë¶ÔÔËÐÐ¹ý³ÌÖÐ£¬³¬¸ßË®Î»µÄÌ½Õë¹ÒË®µÄÎÊÌâ
-		//Õë¶ÔÔËÐÐ¹ý³ÌÖÐ£¬³¬¸ßË®Î»µÄÌ½Õë¹ÒË®µÄÎÊÌâ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(sys_data.Data_10H == 2)
 			{
-				//Èç¹û¸ßË®Î»Ã»ÓÐÐÅºÅ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»Ã»ï¿½ï¿½ï¿½Åºï¿½
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//½â¾öÔËÐÐÖÐ£¬³¬¸ßË®Î»ÏÔÊ¾²»×¼µÄÎÊÌâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ê¾ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -4201,16 +4228,16 @@ uint8  ShuangPin_Water_Balance_Function(void)
 	
 	
 
-	//´ý»ú ºÍ ÊÖ¶¯Ä£Ê½ÏÂ£¬²»½øÐÐ²¹Ë®¶¯×÷
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö¶ï¿½Ä£Ê½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 	 if(sys_data.Data_10H == SYS_MANUAL)  
 	 		return 0;
 
 
-	//ÔÚÕý³£×´Ì¬ÏÂ¼ì²é½øË®µç´Å·§µÄ¿ªÆô»ò¹Ø±Õ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â¼ï¿½ï¿½ï¿½Ë®ï¿½ï¿½Å·ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 	
 	if(sys_flag.Address_Number == 0)
 		{
-			//Ö÷»ú¿ÉÒÔ×Ô¼º¿ª½øË®µç´Å·§£¬´Ó»úµÃÔÚ´®¿ÚÖÐÊÕµ½ÃüÁî¿ª
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½î¿ª
 			if(Water_State.ZCommand)
 				Second_Water_Valve_Open();
 			else
@@ -4219,13 +4246,13 @@ uint8  ShuangPin_Water_Balance_Function(void)
 	
 	 
 
-	if(sys_flag.Error_Code )//Õë¶ÔÈÈ±£¹ÊÕÏºÍË®Î»Âß¼­´íÎó£¬²»²¹Ë®
+	if(sys_flag.Error_Code )//ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½Ïºï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½Ë®
 		{
 			Water_State.ZSignal = FALSE;
 			 return 0;
 		}
 
-	 //´ý»ú¹ý³ÌÖÐ²¹Ë®µÄÎÊÌâ**************************
+	 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**************************
 
 	
 	 if(sys_data.Data_10H == SYS_IDLE)
@@ -4233,7 +4260,7 @@ uint8  ShuangPin_Water_Balance_Function(void)
 	 		
 	 		if(sys_flag.last_blow_flag)
 	 			{
-	 				/*2023Äê3ÔÂ10ÈÕ09:20:37 ÓÉ³¬¸ßÐÅºÅ£¬¸Ä³ÉÖÐÐÅºÅ£¬·ÀÖ¹Ë®¹ý¶à*/
+	 				/*2023ï¿½ï¿½3ï¿½ï¿½10ï¿½ï¿½09:20:37 ï¿½É³ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½ï¿½Ö¹Ë®ï¿½ï¿½ï¿½ï¿½*/
 	 				if( IO_Status.Target.water_mid == WATER_LOSE)
 	 					sys_flag.Force_Supple_Water_Flag = OK;
 
@@ -4253,9 +4280,9 @@ uint8  ShuangPin_Water_Balance_Function(void)
 	 	
 				
 	
-//È¡ÏûÇ¿ÖÆ²¹Ë®µÄ´ëÊ©
+//È¡ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½Ä´ï¿½Ê©
 	
-	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ÖÆ²¹Ë®±êÖ¾£¬ÔòÇ¿ÖÆ´ò¿ª²¹Ë®·§£¬
+	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ´ò¿ª²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 		{
 			
 			Water_State.ZSignal = OK;
@@ -4269,7 +4296,7 @@ uint8  ShuangPin_Water_Balance_Function(void)
 
 	if(sys_flag.Error_Code == 0)
 		{
-	 		if(IO_Status.Target.water_mid == WATER_LOSE && IO_Status.Target.water_high == WATER_LOSE)//ÖÐË®Î»ÐÅºÅºÍ¸ßË®Î»ÐÅºÅ¶ªÊ§£¬±ØÐë²¹Ë®
+	 		if(IO_Status.Target.water_mid == WATER_LOSE && IO_Status.Target.water_high == WATER_LOSE)//ï¿½ï¿½Ë®Î»ï¿½ÅºÅºÍ¸ï¿½Ë®Î»ï¿½ÅºÅ¶ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ë²¹Ë®
 	 			{
 						Water_State.ZSignal = OK;
 	 			}
@@ -4293,7 +4320,7 @@ uint8  ShuangPin_Water_Balance_Function(void)
 uint8 Double_WaterPump_LogicFunction(void)
 {
 	uint8 State_Index = 0;
-	static uint16 Time_Value = 900 ; //°´ÕÕ700ms¼ÆËã
+	static uint16 Time_Value = 900 ; //ï¿½ï¿½ï¿½ï¿½700msï¿½ï¿½ï¿½ï¿½
 
 
 	 if(sys_data.Data_10H == SYS_MANUAL)
@@ -4307,7 +4334,7 @@ uint8 Double_WaterPump_LogicFunction(void)
 	 	}
 
 	
-	//ÒÔ¿ª»ò¹ØµÄÐÅºÅ×´Ì¬½øÐÐ¼ìË÷
+	//ï¿½Ô¿ï¿½ï¿½ï¿½Øµï¿½ï¿½Åºï¿½×´Ì¬ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
 	if(Water_State.ZSignal == FALSE && Water_State.CSignal == FALSE)
 		State_Index = 0;
 	if(Water_State.ZSignal == OK && Water_State.CSignal == FALSE)
@@ -4320,96 +4347,96 @@ uint8 Double_WaterPump_LogicFunction(void)
 
 	switch (State_Index)
 		{
-			case 0: //Ö÷´Ó¶¼ÊÇ¹ØÇëÇóÐÅºÅ
-					//Ê×ÏÈµÃ¼ì²éË®±ÃÊÇ·ñÎª¿ª×´Ì¬
+			case 0: //ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
+					//ï¿½ï¿½ï¿½ÈµÃ¼ï¿½ï¿½Ë®ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½×´Ì¬
 					if(Switch_Inf.water_switch_flag)
 						{
-							//¸ø³öË®±Ã¹Ø±ÕµÄ¶¯×÷ÐÅºÅ
+							//ï¿½ï¿½ï¿½ï¿½Ë®ï¿½Ã¹Ø±ÕµÄ¶ï¿½ï¿½ï¿½ï¿½Åºï¿½
 							Water_State.Pump_Signal = FALSE;
 							Water_State.PUMP_Close_Time = 0;
 						}
 					Water_State.Pump_Signal = FALSE;
 
-					//Ë®±Ã¹Ø±ÕÊ±¼äµ½£¬¸ù¾ÝÖ÷´Ó¿ª¹ØµÄ×´Ì¬¹Ø±ÕÖ÷´ÓµÄ½øË®µç´Å·§
-					if(Water_State.PUMP_Close_Time >= Time_Value)  //°´ÕÕºÁÃë¼ÆËã
+					//Ë®ï¿½Ã¹Ø±ï¿½Ê±ï¿½äµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½Øµï¿½×´Ì¬ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ÓµÄ½ï¿½Ë®ï¿½ï¿½Å·ï¿½
+					if(Water_State.PUMP_Close_Time >= Time_Value)  //ï¿½ï¿½ï¿½Õºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						{
-							Water_State.ZCommand = FALSE; //¸ø³öÖ÷´Óµç´Å·§¹Ø±ÕÖ¸Áî
+							Water_State.ZCommand = FALSE; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Å·ï¿½ï¿½Ø±ï¿½Ö¸ï¿½ï¿½
 							Water_State.CCommand = FALSE;
 						}
 
 					break;
-			case 1: //Ö÷¿ªÇëÇóÐÅºÅ£¬´Ó¹Ø±ÕÇëÇóÐÅºÅ
-					//ÓÐÏÞ´¦Àí¹Ø±ÕÇëÇóÐÅºÅ£¬È»ºóÔÙ´¦Àí¿ªÐÅºÅ
+			case 1: //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½Ó¹Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
+					//ï¿½ï¿½ï¿½Þ´ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½È»ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 					if(Water_State.Cstate_Flag == OK)
 						{
-							//´ÓÓÐ¹ØµÄÇëÇóÐÅºÅ£¬ÇÒ´ÓµÄµç´Å·§ÊôÓÚ¿ªµÄ×´Ì¬Ê±,ÏÈ¹Ø±ÕË®±Ã
+							//ï¿½ï¿½ï¿½Ð¹Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½Ò´ÓµÄµï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½×´Ì¬Ê±,ï¿½È¹Ø±ï¿½Ë®ï¿½ï¿½
 							if(Switch_Inf.water_switch_flag)
-								Water_State.PUMP_Close_Time = 0;//ÏÈÇå³þÊ±¼ä
+								Water_State.PUMP_Close_Time = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 							Water_State.Pump_Signal = FALSE;
 							if(Water_State.PUMP_Close_Time >= Time_Value)
 								{
 									Water_State.CCommand = FALSE;
-									Water_State.ZC_Open_Time = 0; //¶Ôµç´Å·§¿ªÆôµÄÊ±¼äÖØÐÂ¼ÆËã£¬·ÀÖ¹Ë²¿ªË²¹Ø
+									Water_State.ZC_Open_Time = 0; //ï¿½Ôµï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ã£¬ï¿½ï¿½Ö¹Ë²ï¿½ï¿½Ë²ï¿½ï¿½
 								}
 								
 						}
 					else
 						{
-							//´Ó»úÒÑ¾­¹Ø±Õ£¬Ö÷»úÇëÇó¿ªÆôÐÅºÅ
+							//ï¿½Ó»ï¿½ï¿½Ñ¾ï¿½ï¿½Ø±Õ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 							if(Water_State.Zstate_Flag == OK)
 								{
-									//Ö÷µç´Å·§ÒÑ¾­¿ªÆô
+									//ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 									if(Water_State.ZC_Open_Time >= Time_Value)
-										Water_State.Pump_Signal = OK;//¿ªÆôË®±ÃÐÅºÅ
+										Water_State.Pump_Signal = OK;//ï¿½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½Åºï¿½
 								}
 							else
 								{
-									//µ±Ç°Ö÷»úµÄµç´Å·§»¹Ã»ÓÐ´ò¿ª£¬Ôò´ò¿ª
+									//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Å·ï¿½ï¿½ï¿½Ã»ï¿½Ð´ò¿ª£ï¿½ï¿½ï¿½ï¿½
 									Water_State.ZCommand = OK;
 									Water_State.ZC_Open_Time = 0;
 								}
 						}
 
 					break;
-			case 2: //´Ó»úÓÐ¿ªÆôÐÅºÅ£¬Ö÷»úÊÇ¹Ø±ÕÐÅºÅ
+			case 2: //ï¿½Ó»ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹Ø±ï¿½ï¿½Åºï¿½
 					if(Water_State.Zstate_Flag == OK)
 						{
-							//Ö÷ÓÐ¹ØµÄÇëÇóÐÅºÅ£¬ÇÒÖ÷µÄµç´Å·§ÊôÓÚ¿ªµÄ×´Ì¬Ê±,ÏÈ¹Ø±ÕË®±Ã
+							//ï¿½ï¿½ï¿½Ð¹Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½×´Ì¬Ê±,ï¿½È¹Ø±ï¿½Ë®ï¿½ï¿½
 							if(Switch_Inf.water_switch_flag)
-								Water_State.PUMP_Close_Time = 0;//ÏÈÇå³þÊ±¼ä
+								Water_State.PUMP_Close_Time = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 							Water_State.Pump_Signal = FALSE;
 							if(Water_State.PUMP_Close_Time >= Time_Value)
 								{
 									Water_State.ZCommand = FALSE;
-									Water_State.ZC_Open_Time = 0; //¶Ôµç´Å·§¿ªÆôµÄÊ±¼äÖØÐÂ¼ÆËã£¬·ÀÖ¹Ë²¿ªË²¹Ø
+									Water_State.ZC_Open_Time = 0; //ï¿½Ôµï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ã£¬ï¿½ï¿½Ö¹Ë²ï¿½ï¿½Ë²ï¿½ï¿½
 								}
 								
 						}
 					else
 						{
-							//Ö÷»úÒÑ¾­¹Ø±Õ£¬´Ó»úÇëÇó¿ªÆôÐÅºÅ
+							//ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Ø±Õ£ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 							if(Water_State.Cstate_Flag == OK)
 								{
-									//Ö÷µç´Å·§ÒÑ¾­¿ªÆô
+									//ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 									if(Water_State.ZC_Open_Time >= Time_Value)
-										Water_State.Pump_Signal = OK;//¿ªÆôË®±ÃÐÅºÅ
+										Water_State.Pump_Signal = OK;//ï¿½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½Åºï¿½
 								}
 							else
 								{
-									//µ±Ç°Ö÷»úµÄµç´Å·§»¹Ã»ÓÐ´ò¿ª£¬Ôò´ò¿ª
+									//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Å·ï¿½ï¿½ï¿½Ã»ï¿½Ð´ò¿ª£ï¿½ï¿½ï¿½ï¿½
 									Water_State.CCommand = OK;
 									Water_State.ZC_Open_Time = 0;
 								}
 						}
 
 					break;
-			case 3: //Ö÷»úºÍ´Ó»ú¶¼ÔÚÇëÇó¿ªµÄÐÅºÅ
-					//ÐèÒªÈ·ÈÏË®±ÃÊÇ·ñÒÑ¾­´ò¿ª
-					Water_State.ZCommand = OK; //¸ø³öÖ÷´Óµç´Å·§¿ªÆôÖ¸Áî
+			case 3: //ï¿½ï¿½ï¿½ï¿½ï¿½Í´Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó¿ªµï¿½ï¿½Åºï¿½
+					//ï¿½ï¿½ÒªÈ·ï¿½ï¿½Ë®ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½
+					Water_State.ZCommand = OK; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 					Water_State.CCommand = OK;
 
 					if(Water_State.ZC_Open_Time >= Time_Value)
-							Water_State.Pump_Signal = OK;//¿ªÆôË®±ÃÐÅºÅ
+							Water_State.Pump_Signal = OK;//ï¿½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½Åºï¿½
 				
 					break;
 
@@ -4419,7 +4446,7 @@ uint8 Double_WaterPump_LogicFunction(void)
 		}
 
 
-	//Ö÷»úÇé¿ö
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(sys_flag.Address_Number == 0)
 		{
 			
@@ -4438,7 +4465,7 @@ uint8 Double_WaterPump_LogicFunction(void)
 
 		if(Water_State.CCommand)
 			{
-				//¸ø´Ó»ú·¢ÃüÁî´ò¿ª²¹Ë®µç´Å·§
+				//ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò¿ª²ï¿½Ë®ï¿½ï¿½Å·ï¿½
 				if(Water_State.Cstate_Flag == 0)
 					{
 						Water_State.Cstate_Flag = OK;
@@ -4468,15 +4495,15 @@ uint8  Double_Water_BianPin_Function(void)
 	uint8 buffer = 0;
 	static uint8 Old_State = 0;
 	static uint8 New_Percent = 18;
-	uint8 Max_Percent = 40;  //2023Äê3ÔÂ5ÈÕ10:37:32  ÓÉ32µ÷ÕûÎª 40
+	uint8 Max_Percent = 40;  //2023ï¿½ï¿½3ï¿½ï¿½5ï¿½ï¿½10:37:32  ï¿½ï¿½32ï¿½ï¿½ï¿½ï¿½Îª 40
 	uint8 Min_Percent = 18;
 	uint8 Jump_Index = 0;
 
 	if(Sys_Admin.Water_Max_Percent > 99)
-		Sys_Admin.Water_Max_Percent = 99; //×î´ó¿ª¶ÈÖµ²»ÄÜ³¬¹ý100
+		Sys_Admin.Water_Max_Percent = 99; //ï¿½ï¿½ó¿ª¶ï¿½Öµï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½100
 
 	if(Sys_Admin.Water_Max_Percent < 25)
-		Sys_Admin.Water_Max_Percent = 25; //ÏÞÖÆ×îÐ¡¿ª¶ÈÖµ²»ÄÜµÍÓÚ25
+		Sys_Admin.Water_Max_Percent = 25; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½25
 		
 	Max_Percent = Sys_Admin.Water_Max_Percent;
 	
@@ -4504,13 +4531,13 @@ uint8  Double_Water_BianPin_Function(void)
 				buffer &= 0x07;
 
 
-//Õë¶ÔÔËÐÐ¹ý³ÌÖÐ£¬³¬¸ßË®Î»µÄÌ½Õë¹ÒË®µÄÎÊÌâ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(sys_data.Data_10H == 2)
 			{
-				//Èç¹û¸ßË®Î»Ã»ÓÐÐÅºÅ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»Ã»ï¿½ï¿½ï¿½Åºï¿½
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//½â¾öÔËÐÐÖÐ£¬³¬¸ßË®Î»ÏÔÊ¾²»×¼µÄÎÊÌâ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ë®Î»ï¿½ï¿½Ê¾ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -4520,8 +4547,8 @@ uint8  Double_Water_BianPin_Function(void)
 		lcd_data.Data_15L = buffer;
 		LCD10D.DLCD.Water_State = buffer;
 
-	//½øË®³¬Ê±  ºÍ ±£Ë®³¬Ê±¹ÊÕÏ´¦Àí
-	//±£Ë®³¬Ê±Âß¼­
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±  ï¿½ï¿½ ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
+	//ï¿½ï¿½Ë®ï¿½ï¿½Ê±ï¿½ß¼ï¿½
 	if(sys_flag.Water_Percent > 0)
 		{
 			Water_State.ZSignal = OK;
@@ -4539,11 +4566,11 @@ uint8  Double_Water_BianPin_Function(void)
 		}
 
 
-	//´ý»ú ºÍ ÊÖ¶¯Ä£Ê½ÏÂ£¬²»½øÐÐ²¹Ë®¶¯×÷
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö¶ï¿½Ä£Ê½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 	 if(sys_data.Data_10H == SYS_MANUAL )  
 	 		return 0;
 	
-	//ÔÚÕý³£×´Ì¬ÏÂ¼ì²é½øË®µç´Å·§µÄ¿ªÆô»ò¹Ø±Õ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â¼ï¿½ï¿½ï¿½Ë®ï¿½ï¿½Å·ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 	if(sys_flag.Address_Number == 0)
 		{
 			//if(Water_State.ZCommand)
@@ -4556,7 +4583,7 @@ uint8  Double_Water_BianPin_Function(void)
 
 	
 
-	 if(sys_flag.Error_Code)//Õë¶ÔÈÈ±£¹ÊÕÏºÍË®Î»Âß¼­´íÎó£¬²»²¹Ë®
+	 if(sys_flag.Error_Code)//ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ï¿½ï¿½Ïºï¿½Ë®Î»ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½Ë®
 		{
 			Water_State.ZSignal = FALSE;
 			sys_flag.Water_Percent = 0;
@@ -4565,7 +4592,7 @@ uint8  Double_Water_BianPin_Function(void)
 
 	 if(sys_data.Data_10H == SYS_IDLE)
 	 	{
-	 		//ÔÚºó´µÉ¨¹ý³ÌÖÐ»¹ÐèÒª²¹Ë®
+	 		//ï¿½Úºï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Òªï¿½ï¿½Ë®
 	 		if(sys_flag.last_blow_flag)
 	 			{
 	 				if( IO_Status.Target.water_mid == WATER_LOSE)
@@ -4587,9 +4614,9 @@ uint8  Double_Water_BianPin_Function(void)
 	 	
 
 	
-//È¡ÏûÇ¿ÖÆ²¹Ë®µÄ´ëÊ©
+//È¡ï¿½ï¿½Ç¿ï¿½Æ²ï¿½Ë®ï¿½Ä´ï¿½Ê©
 	
-	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ÖÆ²¹Ë®±êÖ¾£¬ÔòÇ¿ÖÆ´ò¿ª²¹Ë®·§£¬
+	 if(sys_flag.Force_Supple_Water_Flag) //Ç¿ï¿½Æ²ï¿½Ë®ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Æ´ò¿ª²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½
 		{
 			Water_State.ZSignal = OK;
 			sys_flag.Water_Percent = Max_Percent;
@@ -4614,12 +4641,12 @@ uint8  Double_Water_BianPin_Function(void)
 
 	switch (Jump_Index)
 		{
-		case 0://Ã»ÓÐË®Ê±
+		case 0://Ã»ï¿½ï¿½Ë®Ê±
 				sys_flag.Water_Percent = Max_Percent;
 				Old_State = 0;
 
 				break;
-		case 1://µÍË®Î»Ê±
+		case 1://ï¿½ï¿½Ë®Î»Ê±
 				if(Old_State == 2)
 					New_Percent++;
 				sys_flag.Water_Percent = Max_Percent;
@@ -4627,7 +4654,7 @@ uint8  Double_Water_BianPin_Function(void)
 
 				break;
 
-		case 2://ÖÐË®Î»Ê±
+		case 2://ï¿½ï¿½Ë®Î»Ê±
 				if(New_Percent < Min_Percent)
 					New_Percent = Min_Percent;
 
@@ -4640,7 +4667,7 @@ uint8  Double_Water_BianPin_Function(void)
 
 				break;
 
-		case 3://¸ßË®Î»Ê±
+		case 3://ï¿½ï¿½Ë®Î»Ê±
 				if(Old_State == 2)
 					New_Percent--;
 				if(New_Percent < Min_Percent)

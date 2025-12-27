@@ -6,64 +6,64 @@
 
 
   	 
-///////////////////////////////////////USART3 printfÖ§³Ö²¿·Ö//////////////////////////////////
-//´®¿Ú2,u2_printf º¯Êı
-//È·±£Ò»´Î·¢ËÍÊı¾İ²»³¬¹ıUSART3_MAX_SEND_LEN×Ö½Ú
+///////////////////////////////////////USART3 printfÖ§ï¿½Ö²ï¿½ï¿½ï¿½//////////////////////////////////
+//ï¿½ï¿½ï¿½ï¿½2,u2_printf ï¿½ï¿½ï¿½ï¿½
+//È·ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ²ï¿½ï¿½ï¿½ï¿½ï¿½USART3_MAX_SEND_LENï¿½Ö½ï¿½
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void u3_printf(char* fmt,...)  
 {  
   
 }
-///////////////////////////////////////USART2 ³õÊ¼»¯ÅäÖÃ²¿·Ö//////////////////////////////////	    
-//¹¦ÄÜ£º³õÊ¼»¯IO ´®¿Ú2
-//ÊäÈë²ÎÊı
-//bound:²¨ÌØÂÊ
-//Êä³ö²ÎÊı
-//ÎŞ
+///////////////////////////////////////USART2 ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½//////////////////////////////////	    
+//ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½IO ï¿½ï¿½ï¿½ï¿½2
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//bound:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½
 //////////////////////////////////////////////////////////////////////////////////////////////	  
 void uart3_init(u32 bound)
 {  	 		 
-	//GPIO¶Ë¿ÚÉèÖÃ
+	//GPIOï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½
     GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);	//Ê¹ÄÜUSART3
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	//Ê¹ÄÜGPIOBÊ±ÖÓ
-	USART_DeInit(USART3);  //¸´Î»´®¿Ú3
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);	//Ê¹ï¿½ï¿½USART3
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	//Ê¹ï¿½ï¿½GPIOBÊ±ï¿½ï¿½
+	USART_DeInit(USART3);  //ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½3
 
      //USART3_TX   PB.10
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10; //PB.10
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//¸´ÓÃÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     GPIO_Init(GPIOB, &GPIO_InitStructure);
    
     //USART3_RX	  PB.11
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//¸¡¿ÕÊäÈë
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     GPIO_Init(GPIOB, &GPIO_InitStructure);  
 
-    //Usart3 NVIC ÅäÖÃ
+    //Usart3 NVIC ï¿½ï¿½ï¿½ï¿½
     NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 0;//ÇÀÕ¼ÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//×ÓÓÅÏÈ¼¶3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨µÀÊ¹ÄÜ
-	NVIC_Init(&NVIC_InitStructure);	        //¸ù¾İÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯VIC¼Ä´æÆ÷
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority= 0;//ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		//ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨ï¿½ï¿½Ê¹ï¿½ï¿½
+	NVIC_Init(&NVIC_InitStructure);	        //ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½VICï¿½Ä´ï¿½ï¿½ï¿½
   
-    //USART3 ³õÊ¼»¯ÉèÖÃ
-	USART_InitStructure.USART_BaudRate = bound;   //Ò»°ãÉèÖÃÎª9600;
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;  //×Ö³¤Îª8Î»Êı¾İ¸ñÊ½
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;  //Ò»¸öÍ£Ö¹Î»
-	USART_InitStructure.USART_Parity = USART_Parity_No;  //ÎŞÆæÅ¼Ğ£ÑéÎ»
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;  //ÎŞÓ²¼şÊı¾İÁ÷¿ØÖÆ
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	  //ÊÕ·¢Ä£Ê½
+    //USART3 ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	USART_InitStructure.USART_BaudRate = bound;   //Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª9600;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;  //ï¿½Ö³ï¿½Îª8Î»ï¿½ï¿½ï¿½İ¸ï¿½Ê½
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;  //Ò»ï¿½ï¿½Í£Ö¹Î»
+	USART_InitStructure.USART_Parity = USART_Parity_No;  //ï¿½ï¿½ï¿½ï¿½Å¼Ğ£ï¿½ï¿½Î»
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;  //ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	  //ï¿½Õ·ï¿½Ä£Ê½
 
-    USART_Init(USART3, &USART_InitStructure);   //³õÊ¼»¯´®¿Ú
-    USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);  //¿ªÆôÖĞ¶Ï
-    USART_Cmd(USART3, ENABLE);                      //Ê¹ÄÜ´®¿Ú 
+    USART_Init(USART3, &USART_InitStructure);   //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);  //ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
+    USART_Cmd(USART3, ENABLE);                      //Ê¹ï¿½Ü´ï¿½ï¿½ï¿½ 
 	
-//	USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE);    //Ê¹ÄÜ´®¿Ú2µÄDMA·¢ËÍ
-//	UART_DMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)USART2_TX_BUF,1000);  //DMA1Í¨µÀ7,ÍâÉèÎª´®¿Ú2,´æ´¢Æ÷ÎªUSART2_TX_BUF,³¤¶È1000. 										  	
+//	USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE);    //Ê¹ï¿½Ü´ï¿½ï¿½ï¿½2ï¿½ï¿½DMAï¿½ï¿½ï¿½ï¿½
+//	UART_DMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)USART2_TX_BUF,1000);  //DMA1Í¨ï¿½ï¿½7,ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½2,ï¿½æ´¢ï¿½ï¿½ÎªUSART2_TX_BUF,ï¿½ï¿½ï¿½ï¿½1000. 										  	
 }
 
 
@@ -73,12 +73,12 @@ uint8 FuNiSen_Read_WaterDevice_Function(void)
 {
 	static uint8  Jump_Index = 0;
 	static uint8 Jump_Count = 0;
-	uint8 Address = 8; //Ä¬ÈÏ±¾»úÄÚµØÖ·Îª 8 £¬ÓÃÓÚ½øË®µ÷½Ú·§
+	uint8 Address = 8; //Ä¬ï¿½Ï±ï¿½ï¿½ï¿½ï¿½Úµï¿½Ö·Îª 8 ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½Ë®ï¿½ï¿½ï¿½Ú·ï¿½
 	uint16 check_sum = 0;
 	uint16 Percent = 0;
 
 
-	//200msµ÷½ÚÒ»´Î
+	//200msï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 	if(sys_flag.WaterAJ_Flag == 0)
 		return 0 ;
 
@@ -88,7 +88,7 @@ uint8 FuNiSen_Read_WaterDevice_Function(void)
 	if(sys_flag.Water_Percent <= 100)
 		Percent =  sys_flag.Water_Percent * 10;
 	else
-		Percent = 0 ; //Öµ²»¶ÔÔò¹Ø±Õ
+		Percent = 0 ; //Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 
 	Jump_Count ++;
 	if(Jump_Count > 5)
@@ -102,15 +102,15 @@ uint8 FuNiSen_Read_WaterDevice_Function(void)
 	
 	switch (Jump_Index)
 			{
-			case 0: //¶ÁÈ¡ÊµÊ±µÄ¿ª¶ÈÊıÖµ
+			case 0: //ï¿½ï¿½È¡ÊµÊ±ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 					U3_Inf.TX_Data[0] = Address;
 					U3_Inf.TX_Data[1] = 0x03;// 
 					
 					U3_Inf.TX_Data[2] = 0x00;
-					U3_Inf.TX_Data[3] = 0x00;//µØÖ·
+					U3_Inf.TX_Data[3] = 0x00;//ï¿½ï¿½Ö·
 
 					U3_Inf.TX_Data[4] = 0x00;
-					U3_Inf.TX_Data[5] = 0x01;//¶ÁÈ¡Êı¾İ¸öÊı
+					U3_Inf.TX_Data[5] = 0x01;//ï¿½ï¿½È¡ï¿½ï¿½ï¿½İ¸ï¿½ï¿½ï¿½
 				 
 					check_sum  = ModBusCRC16(U3_Inf.TX_Data,8);
 					U3_Inf.TX_Data[6]  = check_sum >> 8 ;
@@ -120,17 +120,17 @@ uint8 FuNiSen_Read_WaterDevice_Function(void)
 				   
 					//Jump_Index = 1;
 					break;
-			case 1://Ğ´Èë¿ª¶ÈµÄÖµ
+			case 1://Ğ´ï¿½ë¿ªï¿½Èµï¿½Öµ
 					//Jump_Index = 0;
 
 					U3_Inf.TX_Data[0] = Address;
 					U3_Inf.TX_Data[1] = 0x06;// 
 					
 					U3_Inf.TX_Data[2] = 0x00;
-					U3_Inf.TX_Data[3] = 0x01;//µØÖ·
+					U3_Inf.TX_Data[3] = 0x01;//ï¿½ï¿½Ö·
 
 					U3_Inf.TX_Data[4] = Percent >> 8;
-					U3_Inf.TX_Data[5] = Percent & 0x00FF;//Ğ´ÈëµÄ¿ª¶ÈÖµ
+					U3_Inf.TX_Data[5] = Percent & 0x00FF;//Ğ´ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Öµ
 				 
 					check_sum  = ModBusCRC16(U3_Inf.TX_Data,8);
 					U3_Inf.TX_Data[6]  = check_sum >> 8 ;
@@ -159,8 +159,8 @@ uint8 FuNiSen_RecData_WaterDevice_Processs(void)
 	
 	if(U3_Inf.Recive_Ok_Flag)
 		{
-			U3_Inf.Recive_Ok_Flag = 0;//²»ÄÜÉÙÅ¶
-			 //¹Ø±ÕÖĞ¶Ï
+			U3_Inf.Recive_Ok_Flag = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶
+			 //ï¿½Ø±ï¿½ï¿½Ğ¶ï¿½
 			USART_ITConfig(USART3, USART_IT_RXNE, DISABLE); 
 			 
 			checksum  = U3_Inf.RX_Data[U3_Inf.RX_Length - 2] * 256 + U3_Inf.RX_Data[U3_Inf.RX_Length - 1];
@@ -177,12 +177,12 @@ uint8 FuNiSen_RecData_WaterDevice_Processs(void)
 					 sys_flag.waterSend_Count = 0;
 					if(command == 0x03 && Length == 0x02)
 						{
-						   //¶ÁÈ¡µ±Ç°·§µÄ×´Ì¬
+						   //ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½×´Ì¬
 						  
 						   
 							Value_Buffer = U3_Inf.RX_Data[3] * 256 + U3_Inf.RX_Data[4];
 							if(Value_Buffer == 0xEA)
-								sys_flag.Water_Error_Code = OK; //¹ÊÕÏ×´Ì¬
+								sys_flag.Water_Error_Code = OK; //ï¿½ï¿½ï¿½ï¿½×´Ì¬
 							else
 							   sys_flag.Water_Error_Code = 0;
 
@@ -194,11 +194,11 @@ uint8 FuNiSen_RecData_WaterDevice_Processs(void)
 				}
 				
 
-		//¶Ô½ÓÊÕ»º³åÆ÷ÇåÁã
+		//ï¿½Ô½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			for( i = 0; i < 100;i++ )
 				U3_Inf.RX_Data[i] = 0x00;
 		
-		//ÖØĞÂ¿ªÆôÖĞ¶Ï
+		//ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
 			USART_ITConfig(USART3, USART_IT_RXNE, ENABLE); 
 			
 		}
@@ -223,21 +223,21 @@ void ModBus_Uart3_LocalRX_Communication(void)
 		
 		if(sys_flag.Address_Number == 0)
 			{
-				//Ö÷»ú¼ì²é¸÷·Ö»úÊÇ·ñÔÚÏß
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
 				for(i = 1; i < 13; i++)
 					{
-						if(SlaveG[i].Send_Flag > 30)//·¢ËÍ6´ÎÎ´»ØÓ¦£¬ÔòÊ§Áª
+						if(SlaveG[i].Send_Flag > 30)//ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½Î´ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 							{
 								SlaveG[i].Alive_Flag = FALSE;
 								LCD10JZ[i].DLCD.Device_State = 0;   
-								memset(&LCD10JZ[i].Datas,0,sizeof(LCD10JZ[i].Datas)); //È»ºó¶ÔÊı¾İÇåÁã
+								memset(&LCD10JZ[i].Datas,0,sizeof(LCD10JZ[i].Datas)); //È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							}
 					}
 
 				if(SlaveG[2].Alive_Flag == 0)
 					{
 						 Water_State.Cstate_Flag = 0;
-						Water_State.CSignal = 0 ;  //½øË®·§ ÇëÇó×´Ì¬
+						Water_State.CSignal = 0 ;  //ï¿½ï¿½Ë®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½×´Ì¬
 					}
 
 				
@@ -257,9 +257,20 @@ void ModBus_Uart3_LocalRX_Communication(void)
 		
 		if(U3_Inf.Recive_Ok_Flag)
 			{
-				U3_Inf.Recive_Ok_Flag = 0;//²»ÄÜÉÙÅ¶
-				 //¹Ø±ÕÖĞ¶Ï
+				U3_Inf.Recive_Ok_Flag = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶
+				 //ï¿½Ø±ï¿½ï¿½Ğ¶ï¿½
 				USART_ITConfig(USART3, USART_IT_RXNE, DISABLE); 
+
+				// #region agent log
+				// è®°å½•â€œçŸ­å¸§/å¼‚å¸¸å¸§â€ç°è±¡ï¼ˆç”¨äºéªŒè¯H2/H4ï¼šæˆªæ–­/æ‹¼åŒ…/å¹²æ‰°å¯¼è‡´è¯¯è§£æï¼‰
+				if(U3_Inf.RX_Length < 8)
+				{
+					U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H2\",\"location\":\"usart3.c:ModBus_Uart3_LocalRX_Communication\",\"message\":\"u3 rxLen too small\",\"data\":{\"boardAddr\":%d,\"rxLen\":%d},\"timestamp\":%lu}\r\n",
+					          sys_flag.Address_Number,
+					          U3_Inf.RX_Length,
+					          (unsigned long)sys_time_inf.sec * 1000UL);
+				}
+				// #endregion
 				 
 				checksum  = U3_Inf.RX_Data[U3_Inf.RX_Length - 2] * 256 + U3_Inf.RX_Data[U3_Inf.RX_Length - 1];
 				command = U3_Inf.RX_Data[1];
@@ -269,9 +280,50 @@ void ModBus_Uart3_LocalRX_Communication(void)
 				if(checksum == ModBusCRC16(U3_Inf.RX_Data,U3_Inf.RX_Length))
 					{
 						Target_Address = U3_Inf.RX_Data[0];
+
+						// #region agent log
+						// åªåœ¨â€œå¯èƒ½å¯¼è‡´è¯¯æŠ¥ç /è¯¯åœæœºâ€çš„åœºæ™¯è¾“å‡ºå…³é”®å¸§ä¿¡æ¯ï¼ˆç”¨äºéªŒè¯H1/H2/H4ï¼‰
+						{
+							uint8 errByte = 0xFF;
+							uint8 flameByte = 0xFF;
+							uint16 expLen = 0;
+							uint16 crcCalc = 0;
+
+							if(U3_Inf.RX_Length > 18)
+							{
+								errByte = U3_Inf.RX_Data[16];
+								flameByte = U3_Inf.RX_Data[18];
+							}
+							if(command == 0x03)
+							{
+								expLen = (uint16)3 + (uint16)Length + (uint16)2;
+							}
+							if(U3_Inf.RX_Length >= 2)
+							{
+								crcCalc = ModBusCRC16(U3_Inf.RX_Data, U3_Inf.RX_Length);
+							}
+
+							if((command == 0x03 && expLen != 0 && expLen != U3_Inf.RX_Length) || (errByte == 12))
+							{
+								U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H2\",\"location\":\"usart3.c:ModBus_Uart3_LocalRX_Communication\",\"message\":\"u3 frame anomaly\",\"data\":{\"boardAddr\":%d,\"rxLen\":%d,\"targetAddr\":%d,\"cmd\":%d,\"byteCount\":%d,\"expLen\":%d,\"errByte\":%d,\"flameByte\":%d,\"crcRx\":%u,\"crcCalc\":%u},\"timestamp\":%lu}\r\n",
+								          sys_flag.Address_Number,
+								          U3_Inf.RX_Length,
+								          Target_Address,
+								          command,
+								          Length,
+								          expLen,
+								          errByte,
+								          flameByte,
+								          checksum,
+								          crcCalc,
+								          (unsigned long)sys_time_inf.sec * 1000UL);
+							}
+						}
+						// #endregion
+
 						if(sys_flag.Address_Number == 0)
 							{
-								//±ØĞëÊÇÖ÷»ú²ÅÓĞÈ¨Àû½ÓÊÕ´¦ÀíÊı¾İ
+								//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½Õ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								if(Target_Address < 8)
 								{
 									Modbus3_UnionRx_DataProcess(U3_Inf.RX_Data[1],Target_Address);
@@ -279,16 +331,16 @@ void ModBus_Uart3_LocalRX_Communication(void)
 							}
 						
 
-						if(Target_Address == 8) //±äÆµ½øË®·§
+						if(Target_Address == 8) //ï¿½ï¿½Æµï¿½ï¿½Ë®ï¿½ï¿½
 							{
 								 sys_flag.waterSend_Flag = FALSE;
 								 sys_flag.waterSend_Count = 0;
 									if(command == 0x03 && Length == 0x02)
 										{
-										   //¶ÁÈ¡µ±Ç°·§µÄ×´Ì¬
+										   //ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½×´Ì¬
 											Value_Buffer = U3_Inf.RX_Data[3] * 256 + U3_Inf.RX_Data[4];
 											if(Value_Buffer == 0xEA)
-												sys_flag.Water_Error_Code = OK; //¹ÊÕÏ×´Ì¬
+												sys_flag.Water_Error_Code = OK; //ï¿½ï¿½ï¿½ï¿½×´Ì¬
 											else
 											   sys_flag.Water_Error_Code = 0;
 
@@ -301,33 +353,33 @@ void ModBus_Uart3_LocalRX_Communication(void)
 
 
 
-						if(Target_Address == 10) //Á½Â·4-20mAÀ©Õ¹Ä£¿é
+						if(Target_Address == 10) //ï¿½ï¿½Â·4-20mAï¿½ï¿½Õ¹Ä£ï¿½ï¿½
 							{
 								 
 									if(U3_Inf.RX_Data[1] == 0x04 )
 										{
-										   //¶ÁÈ¡µ±Ç°·§µÄ×´Ì¬
+										   //ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½×´Ì¬
 										   
 											Value_Buffer = U3_Inf.RX_Data[3] * 256 + U3_Inf.RX_Data[4];
 
 											if(Value_Buffer >= 819)
 												{
 													//Value_Buffer  = Value_Buffer - 819;  //4mA  = 819  20mA = 4095
-													Value20mA = (float)Value_Buffer * 20 /4095 - 4;  //»»Ëã³ÉÊµ¼ÊµÄmAÖµ
+													Value20mA = (float)Value_Buffer * 20 /4095 - 4;  //ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Êµï¿½mAÖµ
 												}
 										   
 											if(Value_Buffer > 0 )
 												{
-													sys_flag.ChaYaWater_Value = Value20mA * 1500 / 16;  // 20 = 20mA , 75 = 1500Á¿³Ì/ 16mA
+													sys_flag.ChaYaWater_Value = Value20mA * 1500 / 16;  // 20 = 20mA , 75 = 1500ï¿½ï¿½ï¿½ï¿½/ 16mA
 													 
 												}
 											else
 												{
 													sys_flag.ChaYaWater_Value = 0;
 												}
-										//	u1_printf("\n* ·µ»ØÖµ = %d\n",Value_Buffer);//126
-										//	u1_printf("\n* ·µ»ØÖµ4-20mA = %f\n",Value20mA);
-										//	u1_printf("\n* ÒºÎ»¸ß¶È = %d\n",sys_flag.ChaYaWater_Value);
+										//	u1_printf("\n* ï¿½ï¿½ï¿½ï¿½Öµ = %d\n",Value_Buffer);//126
+										//	u1_printf("\n* ï¿½ï¿½ï¿½ï¿½Öµ4-20mA = %f\n",Value20mA);
+										//	u1_printf("\n* ÒºÎ»ï¿½ß¶ï¿½ = %d\n",sys_flag.ChaYaWater_Value);
 											
 											
 										}
@@ -340,11 +392,11 @@ void ModBus_Uart3_LocalRX_Communication(void)
 					
 			 
 				
-			//¶Ô½ÓÊÕ»º³åÆ÷ÇåÁã
+			//ï¿½Ô½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				for( i = 0; i < 100;i++ )
 					U3_Inf.RX_Data[i] = 0x00;
 			
-			//ÖØĞÂ¿ªÆôÖĞ¶Ï
+			//ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
 				USART_ITConfig(USART3, USART_IT_RXNE, ENABLE); 
 				
 			}
@@ -356,7 +408,7 @@ uint8 Modbus3_UnionTx_Communication(void)
 	static uint8 Address = 1;
 	uint16 check_sum = 0;
 	//	SlaveG[1].Alive_Flag  
-	//	JiZu[1].Slave_D.Device_State  //ÕâÓÃÓÚ¸úÆÁÊı¾İµÄÍ¬²½
+	//	JiZu[1].Slave_D.Device_State  //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İµï¿½Í¬ï¿½ï¿½
 
 
 	if(Sys_Admin.Device_Style == 0 || Sys_Admin.Device_Style == 1)
@@ -395,7 +447,7 @@ uint8 Modbus3_UnionTx_Communication(void)
 				}
 		}
 
-	//Ã÷È·Éè±¸ÀàĞÍ
+	//ï¿½ï¿½È·ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 	if(Sys_Admin.Device_Style == 2 || Sys_Admin.Device_Style == 3)
 		{
 			
@@ -406,22 +458,22 @@ uint8 Modbus3_UnionTx_Communication(void)
 							SlaveG[1].Send_Flag  = 0;
 							SlaveG[1].UnBack_time = 0;
 							if(sys_flag.Error_Code == 0)
-								SlaveG[1].Ok_Flag = OK;   //¶ÔĞ©ÅĞ¶¨±äÁ¿ÇåÁã
+								SlaveG[1].Ok_Flag = OK;   //ï¿½ï¿½Ğ©ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 							LCD10JZ[1].DLCD.Error_Code = sys_flag.Error_Code;
 							
 							if(SlaveG[1].Startclose_Sendflag)
 								{
-									SlaveG[1].Startclose_Sendflag = 0; //ÏÈÇå³ı±êÖ¾
+									SlaveG[1].Startclose_Sendflag = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 									if(SlaveG[1].Startclose_Data == 0)
 										{
-											//´¦ÓÚÁª¿Ø£¬Òª¹Ø±ÕÉè±¸
+											//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½Òªï¿½Ø±ï¿½ï¿½è±¸
 											if(sys_data.Data_10H == 2)
 												sys_close_cmd();
 										}
 									if(SlaveG[1].Startclose_Data == 1)
 										{
-											//´¦ÓÚÁª¿Ø£¬ÒªÆô¶¯Éè±¸
+											//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 											if(sys_data.Data_10H == 0)
 												sys_start_cmd();
 										}
@@ -446,7 +498,7 @@ uint8 Modbus3_UnionTx_Communication(void)
 							LCD10JZ[1].DLCD.Steam_Pressure  = LCD10D.DLCD.Steam_Pressure;
 							LCD10JZ[1].DLCD.Inside_High_Pressure = LCD10D.DLCD.Inside_High_Pressure;
 
-							//¹æ±Ü´Ó»ú
+							//ï¿½ï¿½Ü´Ó»ï¿½
 							if(sys_flag.Address_Number == 0)
 								{
 									Address++;
@@ -468,7 +520,7 @@ uint8 Modbus3_UnionTx_Communication(void)
 					
 						if(JiZu_ReadAndWrite_Function(Address))
 							{
-								if(Sys_Admin.Water_BianPin_Enabled)//Ö÷»úµÄ±äÆµ¹¦ÄÜ
+								if(Sys_Admin.Water_BianPin_Enabled)//ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Æµï¿½ï¿½ï¿½ï¿½
 									{
 										Address++;
 									}
@@ -507,14 +559,14 @@ uint8 Modbus3_UnionTx_Communication(void)
 								Address = 1;
 								if(Sys_Admin.ChaYa_WaterHigh_Enabled)
 									{
-										U3_Inf.TX_Data[0] = 10; // µØÖ·Ä¬ÈÏÎª10
+										U3_Inf.TX_Data[0] = 10; // ï¿½ï¿½Ö·Ä¬ï¿½ï¿½Îª10
 										U3_Inf.TX_Data[1] = 0x04;// 
 										
 										U3_Inf.TX_Data[2] = 0x00;
-										U3_Inf.TX_Data[3] = 0x00;//µØÖ·
+										U3_Inf.TX_Data[3] = 0x00;//ï¿½ï¿½Ö·
 
 										U3_Inf.TX_Data[4] = 0x00;
-										U3_Inf.TX_Data[5] = 0x02;//¶ÁÈ¡Êı¾İ¸öÊı
+										U3_Inf.TX_Data[5] = 0x02;//ï¿½ï¿½È¡ï¿½ï¿½ï¿½İ¸ï¿½ï¿½ï¿½
 									 
 										check_sum  = ModBusCRC16(U3_Inf.TX_Data,8);
 										U3_Inf.TX_Data[6]  = check_sum >> 8 ;
@@ -559,9 +611,9 @@ uint8 Modbus3_UnionRx_DataProcess(uint8 Cmd,uint8 address)
 		float  Buffer_Float = 0;
 
 		uint16 Value_Buffer = 0;
-	//½ÓÊÕµ½´Ó»úµÄÊı¾İ½øĞĞ´¦Àí
+	//ï¿½ï¿½ï¿½Õµï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ½ï¿½ï¿½Ğ´ï¿½ï¿½ï¿½
 		
-	SlaveG[address].Send_Flag = 0;  //Çå³ş·¢ËÍ±êÖ¾
+	SlaveG[address].Send_Flag = 0;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í±ï¿½Ö¾
 	SlaveG[address].Alive_Flag = OK;
 	if(Cmd == 0x03)
 		{
@@ -569,37 +621,60 @@ uint8 Modbus3_UnionRx_DataProcess(uint8 Cmd,uint8 address)
 
 			if(Data_Length == 36)
 				{
-					if(SlaveG[address].Startclose_Sendflag == 0) //½â¾öÃüÁîÏÂ·¢ºÍÊµ¼Ê²»Ò»ÖÂ£¬µÈ·¢ËÍ´ÎÊıÍê³É
+					// #region agent log
+					// ä»æœºä¸ŠæŠ¥æ•…éšœç å˜åŒ–ï¼ˆé‡ç‚¹å…³æ³¨=12ï¼‰ï¼ˆç”¨äºéªŒè¯H1/H2ï¼šä»æœºçœŸå®ä¸ŠæŠ¥ vs ä¸»æœºè¯¯è§£æï¼‰
+					{
+						uint8 oldErr = LCD10JZ[address].DLCD.Error_Code;
+						uint8 newErr = U3_Inf.RX_Data[16];
+						if(newErr == 12 && oldErr != newErr)
 						{
-						//	if(U3_Inf.RX_Data[4]  == 2)   //Æô¶¯»ò´ı»úµÄ±êÖ¾
+							uint8 flameByte = 0xFF;
+							if(U3_Inf.RX_Length > 18)
+								flameByte = U3_Inf.RX_Data[18];
+
+							U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"usart3.c:Modbus3_UnionRx_DataProcess\",\"message\":\"slave errCode -> 12\",\"data\":{\"boardAddr\":%d,\"slaveAddr\":%d,\"oldErr\":%d,\"newErr\":%d,\"rxLen\":%d,\"flameByte\":%d},\"timestamp\":%lu}\r\n",
+							          sys_flag.Address_Number,
+							          address,
+							          oldErr,
+							          newErr,
+							          U3_Inf.RX_Length,
+							          flameByte,
+							          (unsigned long)sys_time_inf.sec * 1000UL);
+						}
+					}
+					// #endregion
+
+					if(SlaveG[address].Startclose_Sendflag == 0) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½Êµï¿½Ê²ï¿½Ò»ï¿½Â£ï¿½ï¿½È·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						{
+						//	if(U3_Inf.RX_Data[4]  == 2)   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Ö¾
 						//		JiZu[address].Slave_D.StartFlag = OK;  //  ***********************????????????
 						//	else
 						//		JiZu[address].Slave_D.StartFlag = 0;  
 						}
 					
 
-					if(SlaveG[address].Send_Flag > 15)//·¢ËÍ6´ÎÎ´»ØÓ¦£¬ÔòÊ§Áª
+					if(SlaveG[address].Send_Flag > 15)//ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½Î´ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 						{
-							LCD10JZ[address].DLCD.Device_State = 0;   //Ò»»áÒÆÖ²µ½Íâ²¿È¥
+							LCD10JZ[address].DLCD.Device_State = 0;   //Ò»ï¿½ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½â²¿È¥
 						}
 					else
 						{
 							if(U3_Inf.RX_Data[4]  == 2)
-								LCD10JZ[address].DLCD.Device_State = 2;  //ËÄÖÖ×´Ì¬µÄÇĞ»»
+								LCD10JZ[address].DLCD.Device_State = 2;  //ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ğ»ï¿½
 							if(U3_Inf.RX_Data[4]  == 0)
 								LCD10JZ[address].DLCD.Device_State = 1;
 							if(U3_Inf.RX_Data[16])
-								LCD10JZ[address].DLCD.Device_State = 3;  //¹ÊÕÏ×´Ì¬
+								LCD10JZ[address].DLCD.Device_State = 3;  //ï¿½ï¿½ï¿½ï¿½×´Ì¬
 						}
-					LCD10JZ[address].DLCD.Error_Code = U3_Inf.RX_Data[16];  //µÚ2¸ö¡ª¡ª¡ª¡ª ¹ÊÕÏ´úÂë
-					LCD10JZ[address].DLCD.Air_Power = U3_Inf.RX_Data[24];	//µÚ3¸ö¡ª¡ª¡ª¡ª ·ç»ú¹¦ÂÊ
-					LCD10JZ[address].DLCD.Flame_State = U3_Inf.RX_Data[18];	//µÚ4¸ö¡ª¡ª¡ª¡ª »ğÑæ
-					LCD10JZ[address].DLCD.Pump_State = U3_Inf.RX_Data[28];	//µÚ5¸ö¡ª¡ª¡ª¡ª Ë®±ÃµÄ×´Ì¬
-					LCD10JZ[address].DLCD.Water_State = U3_Inf.RX_Data[10];	//µÚ6¸ö¡ª¡ª¡ª¡ª Ë®Î»×´Ì¬
-					LCD10JZ[address].DLCD.Paiwu_State = U3_Inf.RX_Data[30];	//µÚ7¸ö¡ª¡ª¡ª¡ª ÅÅÎÛ·§×´Ì¬
-					LCD10JZ[address].DLCD.Air_State = U3_Inf.RX_Data[26];	//µÚ8¸ö¡ª¡ª¡ª¡ª ·ç»ú×´Ì¬
-					LCD10JZ[address].DLCD.lianxuFa_State = U3_Inf.RX_Data[32];	//µÚ9¸ö¡ª¡ª¡ª¡ª Á¬ĞøÅÅÎÛ·§×´Ì¬
-					LCD10JZ[address].DLCD.Air_Speed = U3_Inf.RX_Data[19] * 256  + U3_Inf.RX_Data[20];	//µÚ9¸ö¡ª¡ª¡ª¡ª ·ç»ú×ªËÙ
+					LCD10JZ[address].DLCD.Error_Code = U3_Inf.RX_Data[16];  //ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
+					LCD10JZ[address].DLCD.Air_Power = U3_Inf.RX_Data[24];	//ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					LCD10JZ[address].DLCD.Flame_State = U3_Inf.RX_Data[18];	//ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+					LCD10JZ[address].DLCD.Pump_State = U3_Inf.RX_Data[28];	//ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ë®ï¿½Ãµï¿½×´Ì¬
+					LCD10JZ[address].DLCD.Water_State = U3_Inf.RX_Data[10];	//ï¿½ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ë®Î»×´Ì¬
+					LCD10JZ[address].DLCD.Paiwu_State = U3_Inf.RX_Data[30];	//ï¿½ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½×´Ì¬
+					LCD10JZ[address].DLCD.Air_State = U3_Inf.RX_Data[26];	//ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½×´Ì¬
+					LCD10JZ[address].DLCD.lianxuFa_State = U3_Inf.RX_Data[32];	//ï¿½ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û·ï¿½×´Ì¬
+					LCD10JZ[address].DLCD.Air_Speed = U3_Inf.RX_Data[19] * 256  + U3_Inf.RX_Data[20];	//ï¿½ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½×ªï¿½ï¿½
 
 					
 					sys_flag.Cong_ChaYaWater_Value = U3_Inf.RX_Data[35] * 256  + U3_Inf.RX_Data[36];// **********************
@@ -613,30 +688,30 @@ uint8 Modbus3_UnionRx_DataProcess(uint8 Cmd,uint8 address)
 					LCD10JZ[address].DLCD.YunXu_Flag = SlaveG[address].Key_Power; 
 					if(address == 2)
 						{
-							//Ö»Õë¶ÔÓÚË«Æ´»úĞÍµÄ²¹Ë®×ö´¦Àí
+							//Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ë«Æ´ï¿½ï¿½ï¿½ÍµÄ²ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 							Water_State.Cstate_Flag = LCD10JZ[address].DLCD.Pump_State;
-							Water_State.CSignal = U3_Inf.RX_Data[34];  //½øË®·§ ÇëÇó×´Ì¬
+							Water_State.CSignal = U3_Inf.RX_Data[34];  //ï¿½ï¿½Ë®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½×´Ì¬
 						}
 					
 					
 
 					Buffer_Float = U3_Inf.RX_Data[5] * 256  + U3_Inf.RX_Data[6];
-					if(Buffer_Float > 0)  //½«Ñ¹Á¦×ª»»Îª¸¡µãÊı
-						LCD10JZ[address].DLCD.Steam_Pressure  = Buffer_Float / 100;   //ÕôÆûÑ¹Á¦
+					if(Buffer_Float > 0)  //ï¿½ï¿½Ñ¹ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						LCD10JZ[address].DLCD.Steam_Pressure  = Buffer_Float / 100;   //ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½
 					else
 						LCD10JZ[address].DLCD.Steam_Pressure = 0;
 
 					Buffer_Float = U3_Inf.RX_Data[21] * 256  + U3_Inf.RX_Data[22];
-					if(Buffer_Float > 0)  //½«Ñ¹Á¦×ª»»Îª¸¡µãÊı
-						LCD10JZ[address].DLCD.Inside_High_Pressure  = Buffer_Float / 100;   //ÄÚ²¿¸ßÑ¹²àÑ¹Á¦
+					if(Buffer_Float > 0)  //ï¿½ï¿½Ñ¹ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						LCD10JZ[address].DLCD.Inside_High_Pressure  = Buffer_Float / 100;   //ï¿½Ú²ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Ñ¹ï¿½ï¿½
 					else
 						LCD10JZ[address].DLCD.Inside_High_Pressure = 0;
 						
 					Buffer_Float = U3_Inf.RX_Data[13] * 256  + U3_Inf.RX_Data[14];
-					LCD10JZ[address].DLCD.LuNei_WenDu = Buffer_Float;              //ÄÚ²¿ÎÂ¶È
+					LCD10JZ[address].DLCD.LuNei_WenDu = Buffer_Float;              //ï¿½Ú²ï¿½ï¿½Â¶ï¿½
 
 					Buffer_Float = U3_Inf.RX_Data[11] * 256  +U3_Inf.RX_Data[12] ;
-					LCD10JZ[address].DLCD.Smoke_WenDu = Buffer_Float;              //ÅÅÑÌÎÂ¶È
+					LCD10JZ[address].DLCD.Smoke_WenDu = Buffer_Float;              //ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
 					
 				}
 
@@ -653,20 +728,20 @@ uint8 Modbus3_UnionRx_DataProcess(uint8 Cmd,uint8 address)
 
 						if(Value_Buffer == 1 || Value_Buffer == 2)
 							{
-								//´ú±í¿ª»úµÄÖ¸Áî·´À¡£¬
-								LCD10JZ[address].DLCD.Device_State = 2; //ËµÃ÷¸Ã»ú×éÒÑ¾­ÊÕµ½Ö¸Áî£¬·´À¡Êı¾İ»¹Ã»¹ıÀ´
+								//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½î·´ï¿½ï¿½ï¿½ï¿½
+								LCD10JZ[address].DLCD.Device_State = 2; //Ëµï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Õµï¿½Ö¸ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ»ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
 							}
 
 						if(Value_Buffer == 0)
 							{
-								//´ú±í¹Ø»úµÄÖ¸Áî·´À¡£¬
-								LCD10JZ[address].DLCD.Device_State = 1; //ËµÃ÷¸Ã»ú×éÒÑ¾­ÊÕµ½Ö¸Áî£¬·´À¡Êı¾İ»¹Ã»¹ıÀ´
+								//ï¿½ï¿½ï¿½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½Ö¸ï¿½î·´ï¿½ï¿½ï¿½ï¿½
+								LCD10JZ[address].DLCD.Device_State = 1; //Ëµï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Õµï¿½Ö¸ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ»ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
 							}
 
 						if(Value_Buffer == 3)
 							{
-								//´ú±íÊÖ¶¯µÄÖ¸Áî·´À¡£¬
-								LCD10JZ[address].DLCD.Device_State = 3; //ËµÃ÷¸Ã»ú×éÒÑ¾­ÊÕµ½Ö¸Áî£¬·´À¡Êı¾İ»¹Ã»¹ıÀ´
+								//ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ö¸ï¿½î·´ï¿½ï¿½ï¿½ï¿½
+								LCD10JZ[address].DLCD.Device_State = 3; //Ëµï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Õµï¿½Ö¸ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ»ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
 							}
 
 						
@@ -677,28 +752,28 @@ uint8 Modbus3_UnionRx_DataProcess(uint8 Cmd,uint8 address)
 						SlaveG[address].ResetError_Flag = 0;
 					}
 
-				if(Data_Address == 111)  //·ç»ú¹¦ÂÊµ÷½ÚÊÖ¶¯²âÊÔ   111¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 111)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½   111ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].AirPower_Flag = 0;
 					}
 
-				if(Data_Address == 112)  //·ç»úÊÖ¶¯²âÊÔ   112¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 112)  //ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½   112ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].AirOpen_Flag = 0;
 					}
-				if(Data_Address == 113)  //Ë®±ÃÊÖ¶¯²âÊÔ   113¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 113)  //Ë®ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½   113ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].PumpOpen_Flag = 0;
 					}
-				if(Data_Address == 114)  //ÅÅÎÛ·§ÊÖ¶¯²âÊÔ   114¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 114)  //ï¿½ï¿½ï¿½Û·ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½   114ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].PaiWuOpen_Flag = 0;
 					}
-				if(Data_Address == 115)  //LianXuÅÅÎÛ²âÊÔ   115¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 115)  //LianXuï¿½ï¿½ï¿½Û²ï¿½ï¿½ï¿½   115ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].LianxuFa_Flag = 0;
 					}
-				if(Data_Address == 117)  //×Ô¶¯´óÅÅÎÛÒ»´Î   117¸ù¾İ´®¿Ú4µÄµØÖ·Ë³Ğò
+				if(Data_Address == 117)  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½   117ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½4ï¿½Äµï¿½Ö·Ë³ï¿½ï¿½
 					{
 						SlaveG[address].Paiwu_Flag = 0;
 					}
@@ -714,59 +789,59 @@ uint8 JiZu_ReadAndWrite_Function(uint8 address)
 {
 		
 		static uint8 index  = 0;
-		uint8 Tx_Index = 0;  //·¢ËÍ·½Ê½µÄÑ¡Ôñ
+		uint8 Tx_Index = 0;  //ï¿½ï¿½ï¿½Í·ï¿½Ê½ï¿½ï¿½Ñ¡ï¿½ï¿½
 		uint8 return_value = 0;
 		 
 
 
 	//	SlaveG[1].Alive_Flag  
-	//	JiZu[1].Slave_D.Device_State  //ÕâÓÃÓÚ¸úÆÁÊı¾İµÄÍ¬²½
+	//	JiZu[1].Slave_D.Device_State  //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İµï¿½Í¬ï¿½ï¿½
 		switch (index)
 			{
 			case 0:
-					Tx_Index = 0; //Ä¬ÈÏÊÇµÈÓÚ0 
+					Tx_Index = 0; //Ä¬ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½0 
 
 					if(SlaveG[address].Startclose_Sendflag)
 						{
-							SlaveG[address].Startclose_Sendflag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].Startclose_Sendflag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 1;
 						}
-					if(SlaveG[address].AirOpen_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].AirOpen_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].AirOpen_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].AirOpen_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 2;
 						}
 
-					if(SlaveG[address].AirPower_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].AirPower_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].AirPower_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].AirPower_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 3;
 						}
-					if(SlaveG[address].PumpOpen_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].PumpOpen_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].PumpOpen_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].PumpOpen_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 4;
 						}
-					if(SlaveG[address].PaiWuOpen_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].PaiWuOpen_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].PaiWuOpen_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].PaiWuOpen_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 5;
 						}
-					if(SlaveG[address].LianxuFa_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].LianxuFa_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].LianxuFa_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].LianxuFa_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 6;
 						}
 
-					if(SlaveG[address].ResetError_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].ResetError_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].ResetError_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].ResetError_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 7;
 						}
 
-					if(SlaveG[address].Paiwu_Flag && Tx_Index == 0)  //Ã¿´ÎÖ»´¦ÀíÒ»ÖÖÍ¨ĞÅ¿ØÖÆ
+					if(SlaveG[address].Paiwu_Flag && Tx_Index == 0)  //Ã¿ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½Å¿ï¿½ï¿½ï¿½
 						{
-							SlaveG[address].Paiwu_Flag--; //¶Ô·¢ËÍ´ÎÊıµİ¼õ
+							SlaveG[address].Paiwu_Flag--; //ï¿½Ô·ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½İ¼ï¿½
 							Tx_Index = 9;
 						}
 
@@ -776,7 +851,7 @@ uint8 JiZu_ReadAndWrite_Function(uint8 address)
 							if(SlaveG[address].Send_Count > 10)
 								{
 									SlaveG[address].Send_Count = 0;
-									Tx_Index = 8;                 //Ğ´Ò»×éÊı¾İ½øÈ¥
+									Tx_Index = 8;                 //Ğ´Ò»ï¿½ï¿½ï¿½ï¿½ï¿½İ½ï¿½È¥
 								}
 						}
 					
@@ -785,36 +860,36 @@ uint8 JiZu_ReadAndWrite_Function(uint8 address)
 						{
 							case 0 :
 									SlaveG[address].Send_Count++;
-									ModBus3_RTU_Read03(address,100,18); //Õâ¸öÊÇÄ¬ÈÏ¶ÁÈ¡Êı¾İµÄÖ¸Áî
+									ModBus3_RTU_Read03(address,100,18); //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï¶ï¿½È¡ï¿½ï¿½ï¿½İµï¿½Ö¸ï¿½ï¿½
 									break;
-							case 1:	  //Æô¶¯»ò¹Ø±Õ»úÆ÷,½øÈëÊÖ¶¯Ä£Ê½µÄÖ¸Áî
+							case 1:	  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ»ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½Ä£Ê½ï¿½ï¿½Ö¸ï¿½ï¿½
 									ModBus3_RTU_Write06(address,100,SlaveG[address].Startclose_Data);
 									break;
-							case 2:  //ÊÖ¶¯¿ªÆô·ç»ú»ò¹Ø±Õ·ç»ú
+							case 2:  //ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õ·ï¿½ï¿½
 									ModBus3_RTU_Write06(address,112,SlaveG[address].AirOpen_Data);	
 									break;
-							case 3: //·ç»ú¹¦ÂÊµÄµ÷½Ú
+							case 3: //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÄµï¿½ï¿½ï¿½
 									ModBus3_RTU_Write06(address,111,SlaveG[address].AirPower_Data);
 									break;
-							case 4:  //ÊÖ¶¯¿ªÆôË®±Ã»ò¹Ø±Õ
+							case 4:  //ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½Ë®ï¿½Ã»ï¿½Ø±ï¿½
 									ModBus3_RTU_Write06(address,113,SlaveG[address].PumpOpen_Data);	
 									break;
-							case 5:  //ÊÖ¶¯¿ªÆôÅÅÎÛ·§»ò¹Ø±Õ
+							case 5:  //ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½Ø±ï¿½
 									ModBus3_RTU_Write06(address,114,SlaveG[address].PaiWuOpen_Data);	
 									break;
-							case 6:  //ÊÖ¶¯¿ªÆôLIANXUÅÅÎÛ·§»ò¹Ø±Õ
+							case 6:  //ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½LIANXUï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½Ø±ï¿½
 									ModBus3_RTU_Write06(address,115,SlaveG[address].LianxuFa_Data);	
 									break;
 
-							case 7:  //¹ÊÕÏ¸´Î»Ö¸Áî
+							case 7:  //ï¿½ï¿½ï¿½Ï¸ï¿½Î»Ö¸ï¿½ï¿½
 									ModBus3_RTU_Write06(address,107,SlaveG[address].ResetError_Data);	
 									break;
 							case 8:
 
-									ModBus3_RTU_Write10(address,150);  //Ğ´Èë18¸öÊı¾İ
+									ModBus3_RTU_Write10(address,150);  //Ğ´ï¿½ï¿½18ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 									break;
 
-							case 9:  //Ö÷»úÃüÁî´Ó»ú¿ªÊ¼×Ô¶¯´óÅÅÎÛÒ»´Î
+							case 9:  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½Ê¼ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 									ModBus3_RTU_Write06(address,117,SlaveG[address].Paiwu_Data);	
 									break;
 							
@@ -826,7 +901,7 @@ uint8 JiZu_ReadAndWrite_Function(uint8 address)
 						}
 
 								
-					SlaveG[address].Send_Flag ++; //¶Ô·¢ËÍ½øĞĞ¼ÆÊı
+					SlaveG[address].Send_Flag ++; //ï¿½Ô·ï¿½ï¿½Í½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½
 					sys_flag.Special_100msFlag = 0;
 					
 					index++;
@@ -910,36 +985,36 @@ uint8 ModBus3_RTU_Write10(uint8 Target_Address,uint16 Data_Address)
 		U3_Inf.TX_Data[3]= Data_Address & 0x00FF;
 
 		U3_Inf.TX_Data[4]=0 ;
-		U3_Inf.TX_Data[5]= 18 ;  //Êı¾İ¸öÊıµÃĞŞ¸Ä
+		U3_Inf.TX_Data[5]= 18 ;  //ï¿½ï¿½ï¿½İ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸ï¿½
 
 		U3_Inf.TX_Data[6]= 36 ; 
 		
 		U3_Inf.TX_Data[7] = sys_config_data.zhuan_huan_temperture_value >> 8;
-		U3_Inf.TX_Data[8] = sys_config_data.zhuan_huan_temperture_value & 0x00FF;// 1Ä¿±êÕôÆûÑ¹Á¦
+		U3_Inf.TX_Data[8] = sys_config_data.zhuan_huan_temperture_value & 0x00FF;// 1Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½
 
 		U3_Inf.TX_Data[9] = sys_config_data.Auto_stop_pressure >> 8;
-		U3_Inf.TX_Data[10] = sys_config_data.Auto_stop_pressure & 0x00FF;  //2 Í£Ö¹Ñ¹Á¦
+		U3_Inf.TX_Data[10] = sys_config_data.Auto_stop_pressure & 0x00FF;  //2 Í£Ö¹Ñ¹ï¿½ï¿½
 
 		U3_Inf.TX_Data[11] = sys_config_data.Auto_start_pressure >> 8;
-		U3_Inf.TX_Data[12] = sys_config_data.Auto_start_pressure & 0x00FF; //3 Æô¶¯Ñ¹Á¦
+		U3_Inf.TX_Data[12] = sys_config_data.Auto_start_pressure & 0x00FF; //3 ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½
 
 		U3_Inf.TX_Data[13] = 0x00;
-		U3_Inf.TX_Data[14] = SlaveG[Target_Address].Fire_Power;//4 µã»ğ¹¦ÂÊ »úÆ÷²»Ò»ÖÂ
+		U3_Inf.TX_Data[14] = SlaveG[Target_Address].Fire_Power;//4 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 		U3_Inf.TX_Data[15] = 0x00;
-		U3_Inf.TX_Data[16] = SlaveG[Target_Address].Max_Power;//5 ×î´óÔËĞĞ¹¦ÂÊ »úÆ÷²»Ò»ÖÂ
+		U3_Inf.TX_Data[16] = SlaveG[Target_Address].Max_Power;//5 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 		U3_Inf.TX_Data[17] = SlaveG[Target_Address].Inside_WenDu_ProtectValue>> 8;
-		U3_Inf.TX_Data[18] = SlaveG[Target_Address].Inside_WenDu_ProtectValue & 0x00FF;//6ÄÚÎÂ±£»¤Öµ£¬»úÆ÷²»Ò»ÖÂ
+		U3_Inf.TX_Data[18] = SlaveG[Target_Address].Inside_WenDu_ProtectValue & 0x00FF;//6ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 		U3_Inf.TX_Data[19] =  0;
-		U3_Inf.TX_Data[20] = SlaveG[Target_Address].Smoke_Protect ;//7ÅÅÑÌÎÂ¶È±¨¾¯Öµ »úÆ÷²»Ò»ÖÂ
+		U3_Inf.TX_Data[20] = SlaveG[Target_Address].Smoke_Protect ;//7ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È±ï¿½ï¿½ï¿½Öµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 		U3_Inf.TX_Data[21] = 0;
-		U3_Inf.TX_Data[22] = Sys_Admin.Water_Max_Percent;//8 ±äÆµ²¹Ë®×î´ó¿ª¶È£¬ËùÓĞ»úÆ÷Ò»ÖÂ
+		U3_Inf.TX_Data[22] = Sys_Admin.Water_Max_Percent;//8 ï¿½ï¿½Æµï¿½ï¿½Ë®ï¿½ï¿½ó¿ª¶È£ï¿½ï¿½ï¿½ï¿½Ğ»ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
-		U3_Inf.TX_Data[23] = Sys_Admin.LianXu_PaiWu_DelayTime;  //Á¬ĞøÅÅÎÛÖÜÆÚ·ÖÖÓ
-		U3_Inf.TX_Data[24] = Sys_Admin.LianXu_PaiWu_OpenSecs;//9Á¬ĞøÅÅÎÛ¿ªÆô¼¸Ãë£¬Õâ¸öËùÓĞ»úÆ÷Ò»ÖÂ
+		U3_Inf.TX_Data[23] = Sys_Admin.LianXu_PaiWu_DelayTime;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½
+		U3_Inf.TX_Data[24] = Sys_Admin.LianXu_PaiWu_OpenSecs;//9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ»ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 
 
@@ -961,17 +1036,17 @@ uint8 ModBus3_RTU_Write10(uint8 Target_Address,uint16 Data_Address)
 		U3_Inf.TX_Data[34] = Sys_Admin.Fan_Speed_Check;//14 
 
 		U3_Inf.TX_Data[35] = 0;
-		U3_Inf.TX_Data[36] = Sys_Admin.Water_BianPin_Enabled;//15  ¸÷ÖÖ¿ª¹ØµÄ±êÖ¾Î»£¬±¾ÌåÎÂ¶È±£»¤£¬±äÆµ²¹Ë®¿ªÆô£¬·çËÙ¼ì²â
+		U3_Inf.TX_Data[36] = Sys_Admin.Water_BianPin_Enabled;//15  ï¿½ï¿½ï¿½Ö¿ï¿½ï¿½ØµÄ±ï¿½Ö¾Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¶È±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¼ï¿½ï¿½
 		
 		
 		U3_Inf.TX_Data[37] = 0;
-		U3_Inf.TX_Data[38] = Sys_Admin.DeviceMaxPressureSet;//16  ¶î¶¨ÕôÆûÑ¹Á¦
+		U3_Inf.TX_Data[38] = Sys_Admin.DeviceMaxPressureSet;//16  ï¿½î¶¨ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½
 		
 		U3_Inf.TX_Data[39] = 0;
-		U3_Inf.TX_Data[40] = Sys_Admin.Device_Style ;//17  Éè±¸ÀàĞÍ
+		U3_Inf.TX_Data[40] = Sys_Admin.Device_Style ;//17  ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 
 		U3_Inf.TX_Data[41] = 0;
-		U3_Inf.TX_Data[42] = sys_config_data.Sys_Lock_Set;//18   Éè±¸Ëø»ú
+		U3_Inf.TX_Data[42] = sys_config_data.Sys_Lock_Set;//18   ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 
 		Check_Sum = ModBusCRC16(U3_Inf.TX_Data,45);
 		U3_Inf.TX_Data[43]= Check_Sum >> 8;
@@ -988,9 +1063,9 @@ uint8 ModBus3_RTU_Write10(uint8 Target_Address,uint16 Data_Address)
 uint8 Union_MuxJiZu_Control_Function(void)
 {
 	uint8 Address = 0;
-	uint8 AliveOk_Numbres = 0;  //ÔÚÏßOKµÄÉè±¸ÊıÁ¿
-	uint8 Already_WorkNumbers = 0; //¶ÔÒÑ¾­ÔÚÔËĞĞµÄÉè±¸½øĞĞÍ³¼Æ
-	uint8 AliveOK[13] = {0};    //¶ÔÔÚÏßÉè±¸µÄµØÖ·½øĞĞÍ³¼Æ,1---10
+	uint8 AliveOk_Numbres = 0;  //ï¿½ï¿½ï¿½ï¿½OKï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+	uint8 Already_WorkNumbers = 0; //ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½
+	uint8 AliveOK[13] = {0};    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Äµï¿½Ö·ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½,1---10
 	
 	uint8 Need_flag = 0;
 	uint8 Loss_flag = 0;
@@ -1016,25 +1091,25 @@ static 	uint16 Period_Check = 0;
 
 
 	
-	if(UnionD.UnionStartFlag == 0 ||  UnionD.UnionStartFlag == 3)  //Áª¿Ø±êÖ¾È¡ÏûÁË£¬ÔòÖ±½Ó·µ»Ø
+	if(UnionD.UnionStartFlag == 0 ||  UnionD.UnionStartFlag == 3)  //ï¿½ï¿½ï¿½Ø±ï¿½Ö¾È¡ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½
 		{
 			Loop_Flag = 0;
 			Loop_time = 0;
 
-			//µÃ5Ãë¼ì²éÒ»´Î£¬Íâ²¿Éè±¸µÄÔËĞĞÇé¿ö£¬·ÀÖ¹Ã»ÓĞ½«Éè±¸¹Øµô
+			//ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î£ï¿½ï¿½â²¿ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Ã»ï¿½Ğ½ï¿½ï¿½è±¸ï¿½Øµï¿½
 			if(UnionD.UnionStartFlag == 0)
 				{
 					if(sys_flag.Union_1A_Sec)
 					{
-						sys_flag.Union_1A_Sec = 0;   //5Ãë¼ì²éÒ»´Î
+						sys_flag.Union_1A_Sec = 0;   //5ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 						
 						for(Address = 2; Address <= 10; Address ++)
 							{
 								if(LCD10JZ[Address].DLCD.Device_State == 2)
 									{
-									 	//Éè±¸ÈÔÈ»ÔÚÔËĞĞ
-									 	SlaveG[Address].Startclose_Sendflag = 3; //Á¬Ğø·¢Èı´Î
-										SlaveG[Address].Startclose_Data = 0;//¹Ø±Õ¸Ã»úÆ÷
+									 	//ï¿½è±¸ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									 	SlaveG[Address].Startclose_Sendflag = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+										SlaveG[Address].Startclose_Data = 0;//ï¿½Ø±Õ¸Ã»ï¿½ï¿½ï¿½
 									}
 							}
 						
@@ -1043,33 +1118,33 @@ static 	uint16 Period_Check = 0;
 				}
 			
 
-			//ÔÚÕâÅĞ¶¨ÔËĞĞ×´Ì¬£¿ ÖØĞÂ·¢ËÍ¿ØÖÆÖ¸Áî£¿   ĞèÒªÑéÖ¤  ¸÷´Ó»ú³¤Ê±¼äÎ´½ÓÊÕµ½Ö¸ÁîÍ¬Ñù¹Ø±ÕÔËĞĞ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ï¿½Í¿ï¿½ï¿½ï¿½Ö¸ï¿½î£¿   ï¿½ï¿½Òªï¿½ï¿½Ö¤  ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Î´ï¿½ï¿½ï¿½Õµï¿½Ö¸ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½
 			
 			return 0;
 		}
 		
 
 	
-  //µÚÒ»²½£» ÕÒµ½ËùÓĞÔÚÏßµÄ»úÆ÷£¬È·¶¨ÔÚÏß»úÆ÷µÄÌ¨Êı
+  //ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ßµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ß»ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½
   if(sys_flag.Union_1_Sec)
   	{
-  		sys_flag.Union_1_Sec = 0; //Ã¿Ãë¼ì²éÒ»´Î
+  		sys_flag.Union_1_Sec = 0; //Ã¿ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 		
 		for(Address = 1; Address <= 10; Address ++)
 				{
-					if(LCD10JZ[Address].DLCD.YunXu_Flag) //È¡Áª¿ØµÄ±êÖ¾
+					if(LCD10JZ[Address].DLCD.YunXu_Flag) //È¡ï¿½ï¿½ï¿½ØµÄ±ï¿½Ö¾
 						{
-							if(SlaveG[Address].Alive_Flag)//Ê×ÏÈÔÚÏß
+							if(SlaveG[Address].Alive_Flag)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 								{
-									if(LCD10JZ[Address].DLCD.Error_Code == 0) //Ã»ÓĞ¹ÊÕÏ
+									if(LCD10JZ[Address].DLCD.Error_Code == 0) //Ã»ï¿½Ğ¹ï¿½ï¿½ï¿½
 										{
 											AliveOk_Numbres ++;
 											AliveOK[AliveOk_Numbres] = Address;
 
-											//ÕÒ³ö´ı»úµÄ£¬Ë­¹¤×÷Ê±¼ä×îÉÙ£¬ÓÃÓÚÏÂ´ÎÆô¶¯Ê¹ÓÃ
+											//ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½Ë­ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ù£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 											if(LCD10JZ[Address].DLCD.Device_State == 1)
 												{
-													if(Min_Address == 0)//³õÊ¼Öµ
+													if(Min_Address == 0)//ï¿½ï¿½Ê¼Öµ
 														{
 															Min_Address = Address;
 															Min_Time= LCD10JZ[Address].DLCD.Work_Time;
@@ -1092,7 +1167,7 @@ static 	uint16 Period_Check = 0;
 										{
 											Already_WorkNumbers ++;
 
-											//¼ì²éÔÚÔËĞĞµÄË­Ê±¼ä×î³¤
+											//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½Ë­Ê±ï¿½ï¿½ï¿½î³¤
 											if(Max_Address == 0)
 												{
 													Max_Address = Address;
@@ -1107,7 +1182,7 @@ static 	uint16 Period_Check = 0;
 														}
 												}
 
-											//¶Ô¹¦ÂÊµÄ±£³ÖÊ±¼ä½øĞĞ¼ÆËã
+											//ï¿½Ô¹ï¿½ï¿½ÊµÄ±ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ğ¼ï¿½ï¿½ï¿½
 											if(LCD10JZ[Address].DLCD.Air_Power >=(LCD10JZ[Address].DLCD.Max_Work_Power ) )
 												{
 													SlaveG[Address].Big_time ++;
@@ -1118,7 +1193,7 @@ static 	uint16 Period_Check = 0;
 
 											if(LCD10JZ[Address].DLCD.Air_Power <= 45 && LCD10JZ[Address].DLCD.Air_Power >=25 )
 												{
-													//¹¦ÂÊĞ¡£¬ÇÒÑ¹Á¦Òª´óÓÚµÈÓÚÉè¶¨Ñ¹Á¦£¬²ÅÄÜ¶ÔĞ¡¹¦ÂÊ¼ÆÊı
+													//ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Òªï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½è¶¨Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¶ï¿½Ğ¡ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½
 													if(Temperature_Data.Pressure_Value >= sys_config_data.zhuan_huan_temperture_value)
 														{
 															SlaveG[Address].Small_time ++;
@@ -1130,20 +1205,20 @@ static 	uint16 Period_Check = 0;
 
 											if(LCD10JZ[Address].DLCD.Air_Power > 45  &&  LCD10JZ[Address].DLCD.Air_Power < LCD10JZ[Address].DLCD.Max_Work_Power )
 												{
-													//´¦ÓÚÖĞ¼äµØ´ø£¬Ôò²»Ëã´ó£¬Ò²²»ËãĞ¡£¬Á½ÕßÒ»ÆğÔËĞĞ
+													//ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¼ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 													
 													SlaveG[Address].Small_time  = 0;
 													SlaveG[Address].Big_time = 0;
 													SlaveG[Address].Zero_time = 0;
 												}
 
-											if(LCD10JZ[Address].DLCD.Air_Power == 0) //³¬Ñ¹Í£Â¯µÄ×´Ì¬
+											if(LCD10JZ[Address].DLCD.Air_Power == 0) //ï¿½ï¿½Ñ¹Í£Â¯ï¿½ï¿½×´Ì¬
 												{
 													SlaveG[Address].Big_time = 0;
 													SlaveG[Address].Small_time = 0;
 													SlaveG[Address].Zero_time ++;
 												}
-											//¼ì²é´ó¹¦ÂÊÔËĞĞµÄÊ±¼ä ,È«Âú¸ººÉ£¬¿Ï¶¨µÃ¿ª£¬ÓĞ2¸öÒÔÉÏµÄĞ¡¸ººÉ£¬¾ÍµÃ¹ØÒ»¸ö
+											//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½Ê±ï¿½ï¿½ ,È«ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½Ï¶ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Ğ¡ï¿½ï¿½ï¿½É£ï¿½ï¿½ÍµÃ¹ï¿½Ò»ï¿½ï¿½
 										}
 								}
 							else
@@ -1152,11 +1227,11 @@ static 	uint16 Period_Check = 0;
 									SlaveG[Address].Big_time = 0;
 									SlaveG[Address].Zero_time = 0;
 									
-									/*µ±È¨ÏŞÔÚÔËĞĞ×´Ì¬Ê±±»È¡Ïû£¬ÔòÖ÷¶¯¹Ø±ÕÏàÓ¦µÄ´Ó»ú*/
+									/*ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬Ê±ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½Ó¦ï¿½Ä´Ó»ï¿½*/
 									if(LCD10JZ[Address].DLCD.Device_State == 2)
 										{
-											SlaveG[Address].Startclose_Sendflag = 3; //Á¬Ğø·¢Èı´Î
-											SlaveG[Address].Startclose_Data = 0;//¹Ø±Õ¸Ã»úÆ÷
+											SlaveG[Address].Startclose_Sendflag = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+											SlaveG[Address].Startclose_Data = 0;//ï¿½Ø±Õ¸Ã»ï¿½ï¿½ï¿½
 										}
 								}
 						}
@@ -1167,8 +1242,8 @@ static 	uint16 Period_Check = 0;
 							SlaveG[Address].Zero_time = 0;
 							if(LCD10JZ[Address].DLCD.Device_State == 2)
 								{
-									SlaveG[Address].Startclose_Sendflag = 3; //Á¬Ğø·¢Èı´Î
-									SlaveG[Address].Startclose_Data = 0;//¹Ø±Õ¸Ã»úÆ÷
+									SlaveG[Address].Startclose_Sendflag = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+									SlaveG[Address].Startclose_Data = 0;//ï¿½Ø±Õ¸Ã»ï¿½ï¿½ï¿½
 								}
 						}
 					
@@ -1178,19 +1253,19 @@ static 	uint16 Period_Check = 0;
 			for(Address = 1; Address <= 10; Address ++)
 				{
 					
-					//ÕÒ³öÔËĞĞÖĞµÄ×î´óÑ¹Á¦Öµ
+					//ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Öµ
 					if(LCD10JZ[Address].DLCD.Steam_Pressure > Max_Pressure)
 						{
-							if(LCD10JZ[Address].DLCD.Steam_Pressure < 9.99)  //·ÀÖ¹Ñ¹Á¦±äËÍÆ÷Òì³££¬ÊıÖµÎŞĞ§
+							if(LCD10JZ[Address].DLCD.Steam_Pressure < 9.99)  //ï¿½ï¿½Ö¹Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Ğ§
 								Max_Pressure = LCD10JZ[Address].DLCD.Steam_Pressure ;
 						}
 						
 				}
 
 			
-			UnionD.Need_Numbers  = 1 ;  //ÖÁÉÙ±£ÁôÒ»Ì¨
+			UnionD.Need_Numbers  = 1 ;  //ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½Ò»Ì¨
 			
-			if(Max_Pressure < 0.35)  //Ñ¹Á¦Ğ¡ÓÚ0.30Mpa,ĞèÒª¿ìËÙÆô¶¯
+			if(Max_Pressure < 0.35)  //Ñ¹ï¿½ï¿½Ğ¡ï¿½ï¿½0.30Mpa,ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				{
 					if(AliveOk_Numbres <= 2)
 						UnionD.Need_Numbers = AliveOk_Numbres;
@@ -1202,7 +1277,7 @@ static 	uint16 Period_Check = 0;
 			else
 				{
 					if(AliveOk_Numbres > 1)
-						UnionD.Need_Numbers = AliveOk_Numbres - 1; //ÈıÌ¨Ôò±ÈĞèÒªµÄÉÙÒ»Ì¨  
+						UnionD.Need_Numbers = AliveOk_Numbres - 1; //ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ò»Ì¨  
 				}
 		
 			
@@ -1211,9 +1286,9 @@ static 	uint16 Period_Check = 0;
 			
 		
 			Period_Check ++;
-			if(Period_Check >= 15)  //15Ãë¼ì²éÒ»´ÎËùÓĞµÄÔËĞĞ×´Ì¬
+			if(Period_Check >= 15)  //15ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 				{
-					Period_Check = 0;//ÖÜÆÚ±êÖ¾ÇåÁã
+					Period_Check = 0;//ï¿½ï¿½ï¿½Ú±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 					Value_Buffer = 0;
 					Value_Buffer2 = 0;
 					for(Address = 1; Address <= 10; Address ++)
@@ -1226,33 +1301,33 @@ static 	uint16 Period_Check = 0;
 								Need_flag = FALSE;
 
 
-							if(SlaveG[Address].Small_time > Sys_Admin.Balance_Small_Time) //Õâ¸öÊ±¼äÒª´óÓÚ´Ó»ú×îÂıÉıËÙµÄÊ±¼ä
+							if(SlaveG[Address].Small_time > Sys_Admin.Balance_Small_Time) //ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Òªï¿½ï¿½ï¿½Ú´Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ùµï¿½Ê±ï¿½ï¿½
 								Value_Buffer++;
 
-							if(SlaveG[Address].Zero_time > 500) //³¬Ñ¹Í£Â¯³¬¹ı8·ÖÖÓ£¬¿¼ÂÇ×Ô¶¯ÅÅÎÛµÄÊ±¼ä
+							if(SlaveG[Address].Zero_time > 500) //ï¿½ï¿½Ñ¹Í£Â¯ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ûµï¿½Ê±ï¿½ï¿½
 								Value_Buffer++;
 							
 						}
 
-					if(Value_Buffer2 == Already_WorkNumbers) //ÔÚÔËĞĞµÄÈ«Âú¸ººÉÁË
+					if(Value_Buffer2 == Already_WorkNumbers) //ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						{
-							if(Already_WorkNumbers < AliveOk_Numbres) //ÈÔÓĞ´ı»úµÄ»úÆ÷
+							if(Already_WorkNumbers < AliveOk_Numbres) //ï¿½ï¿½ï¿½Ğ´ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
 								{
 									
 									Need_flag = OK;
-									//Çå³ı¼ÆÊ±±êÖ¾£¬·ÀÖ¹¶ş´ÎĞèÇó
+									//ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 									for(Address = 1; Address <= 10; Address ++)
 										SlaveG[Address].Big_time = 0;
 										
 								}
 						}
 					
-					if(Value_Buffer >= 2)//ÓĞÁ½Ì¨ÒÔÉÏ´æÔÚĞ¡¹¦ÂÊµÄ×´Ì¬£¬¾Í¼õÉÙ
+					if(Value_Buffer >= 2)//ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½Êµï¿½×´Ì¬ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½
 						{
-							if(Already_WorkNumbers > UnionD.Need_Numbers)//ÒÑ¾­ÔËĞĞµÄ»úÆ÷´óÓÚÕı³£ĞèÒªµÄÊıÁ¿£¬¾Í¼õÉÙ
+							if(Already_WorkNumbers > UnionD.Need_Numbers)//ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ĞµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½
 								{
 									Loss_flag = OK;
-									//Çå³ı¼ÆÊ±±êÖ¾£¬·ÀÖ¹¶ş´ÎĞèÇó
+									//ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 									for(Address = 1; Address <= 10; Address ++)
 										{
 											SlaveG[Address].Small_time = 0;
@@ -1269,20 +1344,20 @@ static 	uint16 Period_Check = 0;
 				}
 
 
-			if(Already_WorkNumbers < UnionD.Need_Numbers)   //Èç¹ûÔÚÔËĞĞµÄÌ¨ÊıĞ¡ÓÚÕı³£ĞèÇóµÄÌ¨Êı
+			if(Already_WorkNumbers < UnionD.Need_Numbers)   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½Ì¨ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½
 				{
 					Need_flag = OK;
 				}
 
 			if(AliveOk_Numbres == 0)
 				{
-					UnionD.UnionStartFlag = 0;  //Ã»ÓĞÒ»Ì¨Õı³£µÄ»úÆ÷£¬Ôò¹Ø±Õ
+					UnionD.UnionStartFlag = 0;  //Ã»ï¿½ï¿½Ò»Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 				}
 			else
 				{
 					if(Already_WorkNumbers == AliveOk_Numbres)
 					{
-						Loop_Flag = FALSE;  //¶¼¹¤×÷ÁË£¬¾ÍÃ»°ì·¨ÂÖĞİ
+						Loop_Flag = FALSE;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ã»ï¿½ì·¨ï¿½ï¿½ï¿½ï¿½
 					}
 				}
 
@@ -1293,41 +1368,41 @@ static 	uint16 Period_Check = 0;
 	
   	
 
-  //¼ì²éÕı³£ĞèÇóµÄÌ¨Êı£¬ºÍÏÖÔÚµÄÔËĞĞ¹¦ÂÊ
+  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½
 	
 
 	
 
-	//¶ÔÔÚÏßµÄ»úÆ÷ÔËĞĞÊ±¼ä£¬´Ó´óµ½Ğ¡½øĞĞÅÅĞò
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ßµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½Ó´ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 		
-		if(Already_WorkNumbers <  AliveOk_Numbres)//¹¤×÷µÄÉè±¸Êı£¬±ÈÔÚÏßÕı³£µÄÉÙ
+		if(Already_WorkNumbers <  AliveOk_Numbres)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				if(Loop_Flag)
 					{
 						Loop_Flag = 0;
-						Need_flag = OK;  //Ôö¼ÓÒ»Ì¨
-						Loss_flag =OK;  //¼õÉÙÒ»Ì¨
+						Need_flag = OK;  //ï¿½ï¿½ï¿½ï¿½Ò»Ì¨
+						Loss_flag =OK;  //ï¿½ï¿½ï¿½ï¿½Ò»Ì¨
 					}
 			}
 	
 		if(Need_flag)
 			{
-				//Ôö¼Ó´ı»úÖĞ£¬»¹Ã»²ÎÓëÔËĞĞµÄÊ±¼ä×î¶Ì»úÆ÷£¬¿ªÆô
+				//ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ì»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Need_flag = FALSE;
 
-				SlaveG[Min_Address].Startclose_Sendflag = 3; //Á¬Ğø·¢Èı´Î
-				SlaveG[Min_Address].Startclose_Data = OK; //Æô¶¯¸Ã»úÆ÷
+				SlaveG[Min_Address].Startclose_Sendflag = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				SlaveG[Min_Address].Startclose_Data = OK; //ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
 
 			}
 		
 
 		if(Loss_flag)
 			{
-				//¼õÉÙ£¬ÕÒË­ÔËĞĞµÄÊ±¼ä×î³¤£¬¹Ø±Õ
+				//ï¿½ï¿½ï¿½Ù£ï¿½ï¿½ï¿½Ë­ï¿½ï¿½ï¿½Ğµï¿½Ê±ï¿½ï¿½ï¿½î³¤ï¿½ï¿½ï¿½Ø±ï¿½
 				Loss_flag = FALSE;
-				SlaveG[Max_Address].Startclose_Sendflag = 3; //Á¬Ğø·¢Èı´Î
-				SlaveG[Max_Address].Startclose_Data = 0;//¹Ø±Õ¸Ã»úÆ÷
+				SlaveG[Max_Address].Startclose_Sendflag = 3; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				SlaveG[Max_Address].Startclose_Data = 0;//ï¿½Ø±Õ¸Ã»ï¿½ï¿½ï¿½
 			}
 
 	

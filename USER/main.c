@@ -151,8 +151,8 @@ const uint16 Soft_Version = 472;/*2025年5月16日17:44:25*/
 
 int main(void)
  { 
-//*****外部晶振12Mhz配置****************//	 
-	HSE_SetSysClk(RCC_PLLMul_9);//本文件外部晶振为8Mhz RCC_PLLMul_6  改变成9 ，那什么f103.h,  文件中晶振Hz也需要修改
+//*****外部晶振8Mhz配置****************//	 
+	HSE_SetSysClk(RCC_PLLMul_9);
 	SysTick_Init();
 //设置NVIC中断分组2:2位抢占优先级，2位响应优先级
 	NVIC_Configuration(); 	 
@@ -178,6 +178,8 @@ int main(void)
 	uart3_init(9600); //优先级2:2	 
 //***************串口4初始化为 联控或者本地通信 ****//
 	uart4_init(9600); //优先级2:2	 
+	// UART5(PC12/PD2) 当前工程未被占用：用于调试输出关键帧/关键状态
+	uart5_init(115200); //优先级2:3
 
 	
 //***配置1ms定时中断,包括全串口接收周期时间配置***//
