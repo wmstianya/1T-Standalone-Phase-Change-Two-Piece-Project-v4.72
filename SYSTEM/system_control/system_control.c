@@ -3,6 +3,7 @@
 #include "error_handler.h"
 #include "ignition.h"
 #include "water_control.h"
+#include "blowdown.h"
 
 
 
@@ -2006,7 +2007,9 @@ void  IDLE_Err_Response_OLD(void)
 * @param   
   * @retval ��
   */
-void System_Idel_Function(void)
+/* System_Idel_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+void System_Idel_Function_OLD(void)
 {
 	//1��	�ùص�ȫ���ص� 
 		
@@ -2019,6 +2022,7 @@ void System_Idel_Function(void)
 	
 		 
 }
+#endif /* System_Idel_Function_OLD */
 
 /**
 * @brief  ϵͳ�ܿس���
@@ -3250,14 +3254,17 @@ uint8 Power_ON_Begin_Check_Function(void)
 	return 0;
 }
 
-uint8 IDLE_Auto_Pai_Wu_Function(void)
+/* IDLE_Auto_Pai_Wu_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+uint8 IDLE_Auto_Pai_Wu_Function_OLD(void)
 {
-	
-	
 	return 0;
 }
+#endif /* IDLE_Auto_Pai_Wu_Function_OLD */
 
-uint8 Auto_Pai_Wu_Function(void)
+/* Auto_Pai_Wu_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+uint8 Auto_Pai_Wu_Function_OLD(void)
 {
 	static uint8 OK_Pressure = 5;
 	static uint8 PaiWu_Count = 0;
@@ -3384,22 +3391,21 @@ uint8 Auto_Pai_Wu_Function(void)
 		
 	return Ok_Value;
 }
+#endif /* Auto_Pai_Wu_Function_OLD */
 
 
-
-uint8 YunXingZhong_TimeAdjustable_PaiWu_Function(void)
+/* YunXingZhong_TimeAdjustable_PaiWu_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+uint8 YunXingZhong_TimeAdjustable_PaiWu_Function_OLD(void)
 {
-	//�豸���й�����ʹ�øù���
 	uint8  set_flag = 0;
-	
-		
-
-
 	return set_flag;
 }
+#endif /* YunXingZhong_TimeAdjustable_PaiWu_Function_OLD */
 
-
-uint8 PaiWu_Warnning_Function(void)
+/* PaiWu_Warnning_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+uint8 PaiWu_Warnning_Function_OLD(void)
 {
 	//���ۼ�ʱ����2E       2F ,30��
 	static uint16 Max_Time = 480 ;  //���ʱ��ʱ8Сʱ
@@ -3463,6 +3469,7 @@ uint8 PaiWu_Warnning_Function(void)
 	
 	return 0;
 }
+#endif /* PaiWu_Warnning_Function_OLD */
 
 /* Special_Water_Supply_Function() 已移动到 SYSTEM/water/water_control.c */
 #if 0
@@ -3733,14 +3740,15 @@ uint8  Water_BianPin_Function_OLD(void)
 }
 #endif /* Water_BianPin_Function_OLD */
 
-
-uint8 LianXu_Paiwu_Control_Function(void)
+/* LianXu_Paiwu_Control_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
+#if 0
+uint8 LianXu_Paiwu_Control_Function_OLD(void)
 {
 	uint32 Dealy_Time = 0;
-	uint16 Open_Time = 0; //�������۷���ʵ�ʿ���ʱ���趨����ȷ��0.1s
+	uint16 Open_Time = 0;
 
 	uint16 Cong_Work_Time = 0;
-	static uint8 Time_Ok = 0;  //����ʱ�䵽�ı�־����̬����
+	static uint8 Time_Ok = 0;
 	
 	//�������ۿ�����־����������ʱ�������������ۿ���ʱ����
 
@@ -3831,14 +3839,12 @@ uint8 LianXu_Paiwu_Control_Function(void)
 
 	return 0;
 }
+#endif /* LianXu_Paiwu_Control_Function_OLD */
 
 
 
 uint8 Auto_StartOrClose_Process_Function(void)
 {
-	
-	
-
 	return 0;
 }
 

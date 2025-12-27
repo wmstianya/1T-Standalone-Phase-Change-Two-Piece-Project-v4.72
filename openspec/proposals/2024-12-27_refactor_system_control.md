@@ -345,6 +345,12 @@ SYSTEM/
 - 迁移 7 个水位控制函数
 - 编译验证通过
 
+### Phase 4: blowdown ✅ 已完成 (2024-12-27)
+- 创建 `SYSTEM/blowdown/blowdown.h`
+- 创建 `SYSTEM/blowdown/blowdown.c`
+- 迁移 6 个排污控制函数
+- 编译验证通过
+
 ---
 
 ## 8. 下一步
