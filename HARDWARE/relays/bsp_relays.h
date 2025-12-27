@@ -1,5 +1,5 @@
-#ifndef __REALYS_H
-#define	__RELAYS_H
+#ifndef __BSP_RELAYS_H
+#define __BSP_RELAYS_H
 
 
 #include "stm32f10x.h"
@@ -10,55 +10,55 @@
 
 
 
-#define RELAY1_GPIO_PORT    	GPIOD		              /* GPIO¶Ë¿Ú */
-#define RELAY1_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY1_GPIO_PORT    	GPIOD		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY1_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY1_GPIO_PIN			GPIO_Pin_2			        /* RELAY1 */
 
 
 
-#define RELAY2_GPIO_PORT    	GPIOD		              /* GPIO¶Ë¿Ú */
-#define RELAY2_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY2_GPIO_PORT    	GPIOD		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY2_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY2_GPIO_PIN			GPIO_Pin_3		        /* RELAY2 */
 
 
-#define RELAY3_GPIO_PORT    	GPIOD		              /* GPIO¶Ë¿Ú */
-#define RELAY3_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY3_GPIO_PORT    	GPIOD		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY3_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY3_GPIO_PIN			GPIO_Pin_1			        /* RELAY3 */
 
 	
-#define RELAY4_GPIO_PORT    	GPIOA		              /* GPIO¶Ë¿Ú */
-#define RELAY4_GPIO_CLK 	    RCC_APB2Periph_GPIOA		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY4_GPIO_PORT    	GPIOA		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY4_GPIO_CLK 	    RCC_APB2Periph_GPIOA		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY4_GPIO_PIN			GPIO_Pin_8			        /* RELAY4  Ô­D13*/
 
 
-#define RELAY5_GPIO_PORT    	GPIOD		              /* GPIO¶Ë¿Ú */
-#define RELAY5_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY5_GPIO_PORT    	GPIOD		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY5_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY5_GPIO_PIN			GPIO_Pin_14			        /* RELAY5 */
 
 
 
-#define RELAY6_GPIO_PORT    	GPIOD		              /* GPIO¶Ë¿Ú */
-#define RELAY6_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY6_GPIO_PORT    	GPIOD		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY6_GPIO_CLK 	    RCC_APB2Periph_GPIOD		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY6_GPIO_PIN			GPIO_Pin_15			        /* RELAY6 */
 
 
-#define RELAY7_GPIO_PORT    	GPIOC		              /* GPIO¶Ë¿Ú */
-#define RELAY7_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY7_GPIO_PORT    	GPIOC		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY7_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY7_GPIO_PIN			GPIO_Pin_6			        /* RELAY7 */
 
 
-#define RELAY8_GPIO_PORT    	GPIOC		              /* GPIO¶Ë¿Ú */
-#define RELAY8_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY8_GPIO_PORT    	GPIOC		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY8_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY8_GPIO_PIN			GPIO_Pin_7			        /* RELAY8 */
 
 
 
-#define RELAY9_GPIO_PORT    	GPIOC		              /* GPIO¶Ë¿Ú */
-#define RELAY9_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY9_GPIO_PORT    	GPIOC		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY9_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY9_GPIO_PIN			GPIO_Pin_8			        /* RELAY9 */
 
-#define RELAY10_GPIO_PORT    	GPIOC		              /* GPIO¶Ë¿Ú */
-#define RELAY10_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIO¶Ë¿ÚÊ±ÖÓ */
+#define RELAY10_GPIO_PORT    	GPIOC		              /* GPIOï¿½Ë¿ï¿½ */
+#define RELAY10_GPIO_CLK 	    RCC_APB2Periph_GPIOC		/* GPIOï¿½Ë¿ï¿½Ê±ï¿½ï¿½ */
 #define RELAY10_GPIO_PIN			GPIO_Pin_9			        /* RELAY10 */
 
 
@@ -72,13 +72,13 @@
 #define OFF 1
 
 
-/* Ö±½Ó²Ù×÷¼Ä´æÆ÷µÄ·½·¨¿ØÖÆIO */
-#define	digitalHi(p,i)		 {p->BSRR=i;}	 //Êä³öÎª¸ßµçÆ½		
-#define digitalLo(p,i)		 {p->BRR=i;}	 //Êä³öµÍµçÆ½
-#define digitalToggle(p,i) {p->ODR ^=i;} //Êä³ö·´×ª×´Ì¬
+/* Ö±ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IO */
+#define	digitalHi(p,i)		 {p->BSRR=i;}	 //ï¿½ï¿½ï¿½Îªï¿½ßµï¿½Æ½		
+#define digitalLo(p,i)		 {p->BRR=i;}	 //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
+#define digitalToggle(p,i) {p->ODR ^=i;} //ï¿½ï¿½ï¿½ï¿½ï¿½×ª×´Ì¬
 
 
-/* ¶¨Òå¿ØÖÆIOµÄºê */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IOï¿½Äºï¿½ */
 
 
 
@@ -121,7 +121,7 @@
 #define RELAY9_TOGGLE		 digitalToggle(RELAY9_GPIO_PORT,RELAY9_GPIO_PIN)
 
 
-//ÓÃÓÚ±¨¾¯¼ÌµçÆ÷Êä³ö
+//ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define RELAY10_OFF		   digitalLo(RELAY10_GPIO_PORT,RELAY10_GPIO_PIN)
 #define RELAY10_ON			   digitalHi(RELAY10_GPIO_PORT,RELAY10_GPIO_PIN)
 #define RELAY10_TOGGLE		 digitalToggle(RELAY10_GPIO_PORT,RELAY10_GPIO_PIN)
@@ -133,24 +133,24 @@
 
 typedef struct _RELAYSF
 {
-	volatile	uint8  dian_huo_flag;  //µã»ð¿ªÆô±êÖ¾
-	volatile	uint8 gas_on_flag; //È¼Æø¿ªÆô±êÖ¾
-	volatile	uint8 air_on_flag; //·ç»ú¿ªÆô±êÖ¾
-	volatile	uint8 pai_wu_flag; //ÅÅÎÛ·§¿ªÆô±êÖ¾
-	volatile	uint8 xun_huan_flag; //Ñ­»·±Ã¿ªÆô±êÖ¾
-	volatile	uint8 water_switch_flag; //²¹Ë®±Ã¼ÌµçÆ÷¿ªÆô±êÖ¾
-	volatile	uint8 Water_Valve_Flag; //²¹Ë®µç´Å·§¼ÌµçÆ÷£¬¶¯×÷±êÖ¾
+	volatile	uint8  dian_huo_flag;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 gas_on_flag; //È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 air_on_flag; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 pai_wu_flag; //ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 xun_huan_flag; //Ñ­ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 water_switch_flag; //ï¿½ï¿½Ë®ï¿½Ã¼Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	volatile	uint8 Water_Valve_Flag; //ï¿½ï¿½Ë®ï¿½ï¿½Å·ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
 	
 
-	volatile	uint8 Normal_MovieFlag; //ÓÃÓÚÖ÷½çÃæÕý³£¶¯»­µÄ²Ù¿Ø±êÖ¾
+	volatile	uint8 Normal_MovieFlag; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²Ù¿Ø±ï¿½Ö¾
 		
 
 	volatile	uint8 Flame_Flag;
-	volatile	uint8 LianXu_PaiWu_flag;  //ÓÃÓÚÁ¬ÐøÅÅÎÛ¼ÌµçÆ÷
+	volatile	uint8 LianXu_PaiWu_flag;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¼Ìµï¿½ï¿½ï¿½
 	volatile	uint8 MingHuo_Flag;
 
-	volatile	uint8 OpenWait_7ms;   //ÑÓ³Ù7ms
-	volatile	uint8 CloseWait_3ms;   //ÑÓ³Ù3ms
+	volatile	uint8 OpenWait_7ms;   //ï¿½Ó³ï¿½7ms
+	volatile	uint8 CloseWait_3ms;   //ï¿½Ó³ï¿½3ms
 		
 }SWITCH_STATUS;
 
@@ -163,7 +163,7 @@ typedef struct _RELAYSF
  
 
  
-//extern unsigned char gas_on_flag;// =1 Ê±£¬È¼Æø·§×é¿ªÆô£¬0Ôò¹Ø±Õ
+//extern unsigned char gas_on_flag;// =1 Ê±ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½é¿ªï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ø±ï¿½
 
 
 extern SWITCH_STATUS Switch_Inf; 
@@ -176,26 +176,26 @@ extern SWITCH_STATUS Switch_Inf;
 
 void RELAYS_GPIO_Config(void);
 
-void	Dian_Huo_Start(void);//¿ØÖÆµã»ð¼ÌµçÆ÷Æô¶¯
-void	Dian_Huo_OFF(void);//¿ØÖÆµã»ð¼ÌµçÆ÷¹Ø±Õ
+void	Dian_Huo_Start(void);//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void	Dian_Huo_OFF(void);//ï¿½ï¿½ï¿½Æµï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 
-void 	Send_Gas_Open(void);  //È¼Æø·§×é¿ªÆô
-void	Send_Gas_Close(void);//È¼Æø·§×é¹Ø±Õ
-
-
-void 	Send_Air_Open(void); //¿ØÖÆ·ç»ú¿ªÆô //È¼Æø·§×é¿ªÆô
-void	Send_Air_Close(void);//¿ØÖÆ·ç»ú¹Ø±Õ //È¼Æø·§×é¹Ø±Õ
-void Feed_First_Level(void); //ËÍÁÏµç»ú£¬ËÙ¶È1£¬Ð¡»ðÁ¿µ÷½Ú
-uint8  Dian_Huo_Air_Level(void);//µã»ð·çÁ¿¿ØÖÆ
+void 	Send_Gas_Open(void);  //È¼ï¿½ï¿½ï¿½ï¿½ï¿½é¿ªï¿½ï¿½
+void	Send_Gas_Close(void);//È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
 
 
-void Feed_test_begin(void);//ÊÖ¶¯Ä£Ê½²âÊÔ·ç»ú
-void Feed_test_over(void);//Í£Ö¹·ç»ú²âÊÔ
+void 	Send_Air_Open(void); //ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ //È¼ï¿½ï¿½ï¿½ï¿½ï¿½é¿ªï¿½ï¿½
+void	Send_Air_Close(void);//ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½Ø±ï¿½ //È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+void Feed_First_Level(void); //ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½1ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8  Dian_Huo_Air_Level(void);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+
+void Feed_test_begin(void);//ï¿½Ö¶ï¿½Ä£Ê½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½
+void Feed_test_over(void);//Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 
-uint8  Feed_Main_Pump_ON(void);//´ò¿ª²¹Ë®±Ã
-uint8  Feed_Main_Pump_OFF(void); //¹Ø±Õ²¹Ë®±Ã
+uint8  Feed_Main_Pump_ON(void);//ï¿½ò¿ª²ï¿½Ë®ï¿½ï¿½
+uint8  Feed_Main_Pump_OFF(void); //ï¿½Ø±Õ²ï¿½Ë®ï¿½ï¿½
 
 uint8  Second_Water_Valve_Open(void);
 uint8  Second_Water_Valve_Close(void);
@@ -228,7 +228,7 @@ uint8 Logic_Pump_OFF(void);
 
 
 
-#endif /* __RELAYS_H */
+#endif /* __BSP_RELAYS_H */
 
 
 

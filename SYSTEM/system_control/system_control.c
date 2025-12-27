@@ -1,6 +1,7 @@
 ﻿
 #include "main.h"
 #include "error_handler.h"
+#include "ignition.h"
 
 
 
@@ -249,13 +250,9 @@ void Get_IO_Inf_OLD(void)
 
 
 
-/**
-  * @brief  �������ǰ�����׼������
-  * @param  sys_flag.before_ignition_index
-  * @retval ׼���÷���1�����򷵻�0
-  */
-
-uint8 Before_Ignition_Prepare(void)
+/* Before_Ignition_Prepare() 已移动到 SYSTEM/ignition/ignition.c */
+#if 0
+uint8 Before_Ignition_Prepare_OLD(void)
 {
 		//1��ˮλ�źű�����                2�������źű�����
 		//sys_flag.before_ignition_index
@@ -329,6 +326,7 @@ uint8 Before_Ignition_Prepare(void)
 
 		return func_state ;//���ǰ׼����׼�����ˣ�����1
 }
+#endif /* Before_Ignition_Prepare_OLD */
 
 
 
@@ -344,12 +342,9 @@ uint8 Before_Ignition_Prepare(void)
 }
 #endif
 
-/**
-  * @brief  ϵͳ������
-* @param   �����ɷ���1�����򷵻�0
-  * @retval ��
-  */
-uint8  Sys_Ignition_Fun(void)
+/* Sys_Ignition_Fun() 已移动到 SYSTEM/ignition/ignition.c */
+#if 0
+uint8  Sys_Ignition_Fun_OLD(void)
 {
 		
 		sys_data.Data_12H = 0x00; //�������У�û�ж��쳣���м��
@@ -881,6 +876,7 @@ uint8  Sys_Ignition_Fun(void)
 		return 0;
 		
 }
+#endif /* Sys_Ignition_Fun_OLD */
 
 
 
@@ -1002,10 +998,11 @@ void Auto_Check_Fun_OLD(void)
 * @param  ���������¯�峬��,���Է���
   * @retval ��
   */
-void Ignition_Check_Fun(void)
+/* Ignition_Check_Fun() 已移动到 SYSTEM/ignition/ignition.c */
+#if 0
+void Ignition_Check_Fun_OLD(void)
 {
-		
-		Get_IO_Inf(); //��ȡIO��Ϣ
+		Get_IO_Inf();
 
 		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
@@ -1029,10 +1026,7 @@ void Ignition_Check_Fun(void)
 	
 
 }
-	
-	
-
-		
+#endif /* Ignition_Check_Fun_OLD */
 
 /* Idel_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
 #if 0
@@ -1729,12 +1723,9 @@ void  Abnormal_Events_Response_OLD(void)
 }
 #endif /* Abnormal_Events_Response_OLD */
 
-/**
-  * @brief  ϵͳ���г���
-* @param   Sys_Launch_Index�������л�ϵͳ���в���
-  * @retval ��
-  */
-void Sys_Launch_Function(void)
+/* Sys_Launch_Function() 已移动到 SYSTEM/ignition/ignition.c */
+#if 0
+void Sys_Launch_Function_OLD(void)
 {
 		switch(Sys_Launch_Index)
 		{
@@ -1804,6 +1795,7 @@ void Sys_Launch_Function(void)
 					break;
 		}	
 }
+#endif /* Sys_Launch_Function_OLD */
 
 
 
