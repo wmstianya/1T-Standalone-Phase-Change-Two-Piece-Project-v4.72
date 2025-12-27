@@ -5,6 +5,7 @@
 #include "water_control.h"
 #include "blowdown.h"
 #include "pressure_ctrl.h"
+#include "sys_config.h"
 
 
 
@@ -2222,10 +2223,11 @@ void System_All_Control()
  
 
 
-uint8   sys_work_time_function(void)
+/* sys_work_time_function() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+uint8 sys_work_time_function_OLD(void)
 {
-//ϵͳ�ۼ�����ʱ��,��¯����ʱ��
-	 uint16  data = 0;
+	uint16  data = 0;
 	static uint8 Work_State = 0;
 	static uint8 Main_secs = 0;
 	
@@ -2279,24 +2281,19 @@ uint8   sys_work_time_function(void)
 
 
 	 return 0;
-			
-
 }
+#endif /* sys_work_time_function_OLD */
 
 
 void copy_to_lcd(void)
 {
-	
-	
-	
 }
 
 
-
-void sys_control_config_function(void)
+/* sys_control_config_function() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+void sys_control_config_function_OLD(void)
 {
-
-//���ÿ���ϵͳĬ�ϲ�������
 	uint16  data_temp = 0;
 	uint8 temp = 0;
 
@@ -2526,14 +2523,11 @@ void sys_control_config_function(void)
 
 	 
 
-  //���գ������ݷ���LCDչʾ
-	
-	
 }
+#endif /* sys_control_config_function_OLD */
 
 
 
-//��������Ϣ������ת��Ϊbit,��������ˢ��lcd������
 uint8  byte_to_bit(void)
 {
 	 
@@ -2975,13 +2969,14 @@ uint8 Manual_Realys_Function(void)
 	return 0;
 }
 
-void Check_Config_Data_Function(void)
+/* Check_Config_Data_Function() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+void Check_Config_Data_Function_OLD(void)
 {
 	float ResData = 0;
 	
-	//1�� ǰ��ɨ���30--120s
-	Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ԥ��ɨʱ��
-	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000) //��������趨��Χ����ֵ׷��
+	Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);
+	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000)
 		Sys_Admin.First_Blow_Time =30000 ;
 	
 	//2�� ��ɨ���30--120s	
@@ -3123,8 +3118,8 @@ void Check_Config_Data_Function(void)
 
 	LCD10JZ[2].DLCD.YunXu_Flag = SlaveG[2].Key_Power;
 	LCD10JZ[1].DLCD.YunXu_Flag = SlaveG[1].Key_Power;
-	
 }
+#endif /* Check_Config_Data_Function_OLD */
 
 
 
@@ -3175,19 +3170,17 @@ void Fan_Speed_Check_Function(void)
 
 
 /*���ھ����̹����������������е�ʱ��*/
-uint8 Admin_Work_Time_Function(void)
+/* Admin_Work_Time_Function() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+uint8 Admin_Work_Time_Function_OLD(void)
 {
-	//�漰���ı�����Flash_Data.Admin_Work_Time��systmtime
-	
 	uint16 Now_Year = 0;
 	uint16 Now_Month = 0;
 	uint16 Now_Day = 0;
-
 	uint16 Set_Year = 0;
 	uint16 Set_Month = 0;
 	uint16 Set_Day = 0;
-	
-	uint8 Set_Function = 0;  //�û����õ�����
+	uint8 Set_Function = 0;
 
 	Set_Function = *(uint32 *)(ADMIN_WORK_DAY_ADDRESS); 
 
@@ -3229,9 +3222,7 @@ uint8 Admin_Work_Time_Function(void)
 	
 	return 0 ;
 }
-
-
-
+#endif /* Admin_Work_Time_Function_OLD */
 
 
 
@@ -3922,21 +3913,20 @@ uint8 Speed_Pressure_Function_OLD(void)
 }
 #endif /* Speed_Pressure_Function_OLD */
 
-uint8 Wifi_Lock_Time_Function(void)
+/* Wifi_Lock_Time_Function() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+uint8 Wifi_Lock_Time_Function_OLD(void)
 {
-	//�漰���ı�����Flash_Data.Admin_Work_Time��systmtime
 	Date Now;
 	Date Set;
 
-	
-
 	Now.iYear = LCD10D.DLCD.Year;
 	Now.iMonth = LCD10D.DLCD.Month;
-	Now.iDay = LCD10D.DLCD.Day;     //�������Ļ��ʱ��
+	Now.iDay = LCD10D.DLCD.Day;
 
-	Set.iYear= *(uint32 *)(WIFI_LOCK_YEAR_ADDRESS); 
-	Set.iMonth = *(uint32 *)(WIFI_LOCK_MONTH_ADDRESS); 
-	Set.iDay =  *(uint32 *)(WIFI_LOCK_DAY_ADDRESS); 
+	Set.iYear = *(uint32 *)(WIFI_LOCK_YEAR_ADDRESS);
+	Set.iMonth = *(uint32 *)(WIFI_LOCK_MONTH_ADDRESS);
+	Set.iDay = *(uint32 *)(WIFI_LOCK_DAY_ADDRESS); 
 
 	if(Set.iYear == 0 || Set.iMonth == 0 || Set.iDay == 0)
 		{
@@ -3970,13 +3960,15 @@ uint8 Wifi_Lock_Time_Function(void)
 	
 	return 0 ;
 }
+#endif /* Wifi_Lock_Time_Function_OLD */
 
-uint8 XiangBian_Steam_AddFunction(void)
+/* XiangBian_Steam_AddFunction() 已移动到 SYSTEM/config/sys_config.c */
+#if 0
+uint8 XiangBian_Steam_AddFunction_OLD(void)
 {
-
-	uint16 Protect_Pressure = 150;  //1.5Mpa
+	uint16 Protect_Pressure = 150;
 	
-	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)  //��������������
+	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 		{
 			if(sys_data.Data_10H == 2)
 				{
@@ -4122,6 +4114,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 
 	return 0;	
 }
+#endif /* XiangBian_Steam_AddFunction_OLD */
 
 
 uint8 GetOut_Mannual_Function(void)
