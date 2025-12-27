@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\HARDWARE\LED;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\STM32F10x_FWLib\inc;..\CORE;..\HARDWARE\DHT11;..\HARDWARE\timers;..\HARDWARE\24CXX;..\HARDWARE\FLASH;..\HARDWARE\RTC;..\HARDWARE\tm1638;..\HARDWARE\ADC;..\HARDWARE\USART2;..\HARDWARE\USART3;..\HARDWARE\relays;.\rcc;.\systick;..\HARDWARE\USART4;..\HARDWARE\USR_C210;..\HARDWARE\Parallel_Serial;..\SYSTEM\system_control;..\SYSTEM\error;..\SYSTEM\ignition;..\SYSTEM\water;..\SYSTEM\blowdown;..\SYSTEM\pressure;..\SYSTEM\config;..\SYSTEM\sys_cmd;..\SYSTEM\rtc;..\SYSTEM\in_flash;..\HARDWARE\PWM;..\SYSTEM\iwdg;..\SYSTEM\activate_key;..\HARDWARE\USART5;..\SYSTEM\out_flash;..\HARDWARE\ADS1220</IncludePath>
+              <IncludePath>..\HARDWARE\LED;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\STM32F10x_FWLib\inc;..\CORE;..\HARDWARE\DHT11;..\HARDWARE\timers;..\HARDWARE\24CXX;..\HARDWARE\FLASH;..\HARDWARE\RTC;..\HARDWARE\tm1638;..\HARDWARE\ADC;..\HARDWARE\USART2;..\HARDWARE\USART3;..\HARDWARE\relays;.\rcc;.\systick;..\HARDWARE\USART4;..\HARDWARE\USR_C210;..\HARDWARE\Parallel_Serial;..\SYSTEM\system_control;..\SYSTEM\error;..\SYSTEM\ignition;..\SYSTEM\water;..\SYSTEM\blowdown;..\SYSTEM\pressure;..\SYSTEM\config;..\SYSTEM\sys_cmd;..\SYSTEM\fan;..\SYSTEM\rtc;..\SYSTEM\in_flash;..\HARDWARE\PWM;..\SYSTEM\iwdg;..\SYSTEM\activate_key;..\HARDWARE\USART5;..\SYSTEM\out_flash;..\HARDWARE\ADS1220</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -492,6 +492,11 @@
               <FileName>sys_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\sys_cmd\sys_cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>fan_speed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\fan\fan_speed.c</FilePath>
             </File>
           </Files>
         </Group>

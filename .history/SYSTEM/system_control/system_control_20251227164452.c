@@ -3123,34 +3123,50 @@ void Check_Config_Data_Function_OLD(void)
 
 
 
-/* Fan_Speed_Check_Function() 已移动到 SYSTEM/fan/fan_speed.c */
-/* 注意：新版本增加了软件消抖和滑动平均滤波功能 */
-#if 0
-void Fan_Speed_Check_Function_OLD(void)
+void Fan_Speed_Check_Function(void)
 {
-	static uint8 Pulse = 3;
-	uint32 All_Fan_counts = 0;
 	
-	if(sys_flag.Rpm_1_Sec)
-	{
-		sys_flag.Rpm_1_Sec = FALSE;
+	//Fan_Rpm = (1000/(2* fan_count)) / 3(ÿ������3ת) *60�� = 100000 / sys_flag.Fan_count
+
+
+		 
+		static uint8 Pulse = 3;    //���ַ��ÿת5������
+		 
+		uint32 All_Fan_counts = 0;
+			
 		
-		if(Sys_Admin.Fan_Pulse_Rpm >= 10 || Sys_Admin.Fan_Pulse_Rpm == 0)
-			Sys_Admin.Fan_Pulse_Rpm = 3;
-		
-		if(sys_flag.Fan_count > 0)
-		{
-			sys_flag.Fan_Rpm = sys_flag.Fan_count * 60 / Sys_Admin.Fan_Pulse_Rpm;
-			sys_flag.Fan_count = 0;
-		}
-		else
-		{
-			sys_flag.Fan_count = 0;
-			sys_flag.Fan_Rpm = 0;
-		}
-	}
+			//G1G170   0.5T���	ÿת3�����壬  Ametek  0.5T��� ÿת2������
+			//G3G250   1T����Ĳ��� ÿת3������
+			//G3G315   2T����Ĳ���  ÿת 5������
+			if(sys_flag.Rpm_1_Sec)
+				{
+					sys_flag.Rpm_1_Sec = FALSE;
+
+			
+
+					//����PB0�������жϣ�����
+					if(Sys_Admin.Fan_Pulse_Rpm >=  10  || Sys_Admin.Fan_Pulse_Rpm == 0)
+							Sys_Admin.Fan_Pulse_Rpm = 3; //�������������
+
+					if(sys_flag.Fan_count > 0 )
+						{
+							sys_flag.Fan_Rpm = sys_flag.Fan_count * 60 / Sys_Admin.Fan_Pulse_Rpm;
+							sys_flag.Fan_count = 0;
+							
+						}
+						  //��������/5��  *60	��60��ָ60�룬����5 ��3��ÿת5������
+					else
+						{
+							sys_flag.Fan_count = 0;
+							sys_flag.Fan_Rpm = 0;
+						}
+						
+				
+				}
+
+
+	
 }
-#endif /* Fan_Speed_Check_Function_OLD */
 
 
 /*���ھ����̹����������������е�ʱ��*/
