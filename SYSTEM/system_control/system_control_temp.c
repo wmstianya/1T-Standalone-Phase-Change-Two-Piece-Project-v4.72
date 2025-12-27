@@ -1,25 +1,23 @@
-﻿
+
 #include "main.h"
 #include "error_handler.h"
-#include "ignition.h"
-#include "water_control.h"
 
 
 
 uint32	sys_control_time = 0;  //��ʱ����ʱ��
- uint8	   sys_time_up	   = false ;   //�����־
- uint8	   sys_time_start = false;	//��������ʱ���־ 0 = not ,1 = yes
+ uint8	   sys_time_up	   = false ;   //������?
+ uint8	   sys_time_start = false;	//��������ʱ����?0 = not ,1 = yes
 
  
 uint8 target_percent = 0; //�����趨Ŀ��������
 uint8 now_percent = 0; //�����趨���ڵ�ʵʱ����
 
-uint8 adc_sample_flag = 0; //adc ����ʱ���־
+uint8 adc_sample_flag = 0; //adc ����ʱ����?
 
 uint8 T_PERCENT = 0;
-uint32_t BJ_TimeVar;//����ʱ�������
+uint32_t BJ_TimeVar;//����ʱ�������?
 
-/*ʱ��ṹ�壬Ĭ��ʱ��2000-01-01 00:00:00*/
+/*ʱ��ṹ�壬Ĭ��ʱ��?000-01-01 00:00:00*/
 struct rtc_time systmtime=
 {
 	0,0,0,1,1,2000,0
@@ -44,11 +42,11 @@ LCD_MEM lcd_data;
 
 
 Lcd_Read_Data read_lcd_data;//���ڼ�¼�˹����õ�ϵͳ����
-SYS_WORK_TIME sys_time_inf;//��¯ϵͳ�ۼ�����ʱ�����
-SYS_WORK_TIME Start_End_Time; //���ڼ�¼������ͣ������ʱ�����������������
+SYS_WORK_TIME sys_time_inf;//��¯ϵͳ�ۼ�����ʱ�����?
+SYS_WORK_TIME Start_End_Time; //���ڼ�¼������ͣ������ʱ�����������������?
 
 SYS_WORK_TIME big_time_inf;//��¯С��������ʱ��
-SYS_WORK_TIME small_time_inf;//��¯���������ʱ��
+SYS_WORK_TIME small_time_inf;//��¯���������ʱ��?
 
 sys_flags sys_flag; //ϵͳ��Ҫʹ�õı�־������
 
@@ -70,13 +68,13 @@ ERR_LCD  Err_Lcd_Code;//����ˢ��lcd��������
 LCD_FLASH_STRUCT  Lcd_FlashD;
 
 
-LCD_E_M  Err_Lcd_Memory[8];//���ڼ�¼8��������Ϣ��ʱ��͹���ԭ��
+LCD_E_M  Err_Lcd_Memory[8];//���ڼ�¼8��������Ϣ��ʱ��͹���ԭ��?
 ERROR_DATE_STRUCT SPI_Error_Data;
 
 
 
 IO_DATA IO_Status;
- Login_TT Login_D; //�����¼��Ϣ�����ṹ��
+ Login_TT Login_D; //�����¼��Ϣ�����ṹ��?
 
  Logic_Water Water_State;
 
@@ -134,7 +132,7 @@ void Get_IO_Inf_OLD(void)
 	uint8  Error16_Time = 8;
 	
 	uint8  Error_Buffer = 0;
-		//�̶�һֱ����źţ� ȼ��ѹ������еʽѹ���������ź�
+		//�̶�һֱ����źţ�?ȼ��ѹ������еʽѹ���������ź�
 	
 		Error_Buffer = FALSE ;
 		if (IO_Status.Target.water_high== WATER_OK)
@@ -165,11 +163,11 @@ void Get_IO_Inf_OLD(void)
 			}
 		else
 			{
-				sys_flag.Force_Flag = FALSE; // 22.07.12����û�м�ʱ���ǿ�Ʋ�ˮ����
+				sys_flag.Force_Flag = FALSE; // 22.07.12����û�м�ʱ���ǿ�Ʋ�ˮ����?
 				sys_flag.Error16_Flag = 0;
 				sys_flag.Error16_Count = 0;
 			}
-		//ǿ�Ʋ�ˮ12�룬Ȼ�����ǿ�Ʋ�ˮ�ı�־
+		//ǿ�Ʋ�ˮ12�룬Ȼ�����ǿ�Ʋ�ˮ�ı��?
 		if(sys_flag.Force_Count >= 5)
 			{
 				 sys_flag.Force_Supple_Water_Flag = 0;
@@ -201,7 +199,7 @@ void Get_IO_Inf_OLD(void)
 				sys_flag.Error16_Count = 0;
 			}
 
-	//�̶�һֱ����źţ� ȼ��ѹ������еʽѹ���������ź�
+	//�̶�һֱ����źţ�?ȼ��ѹ������еʽѹ���������ź�
 		 
 		if(IO_Status.Target.hot_protect == THERMAL_BAD)
 			{
@@ -224,7 +222,7 @@ void Get_IO_Inf_OLD(void)
 			}
 
 		
-		//��еʽѹ������ź�	
+		//��еʽѹ������ź�?
 		if(IO_Status.Target.hpressure_signal == PRESSURE_ERROR)
 			{
 				if(sys_flag.Error1_Flag == 0)
@@ -251,9 +249,13 @@ void Get_IO_Inf_OLD(void)
 
 
 
-/* Before_Ignition_Prepare() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-uint8 Before_Ignition_Prepare_OLD(void)
+/**
+  * @brief  �������ǰ�����׼������
+  * @param  sys_flag.before_ignition_index
+  * @retval ׼���÷���1�����򷵻�0
+  */
+
+uint8 Before_Ignition_Prepare(void)
 {
 		//1��ˮλ�źű�����                2�������źű�����
 		//sys_flag.before_ignition_index
@@ -264,9 +266,9 @@ uint8 Before_Ignition_Prepare_OLD(void)
 			{
 				case 0 :
 						//������ŷ���ѭ���ã�sys_flag.Pai_Wu_Already���ˮλ�źž����Ƿ�����������Ʒ�
-							 Send_Air_Open();  //�򿪷��ǰ��ɨ	
+							 Send_Air_Open();  //�򿪷��ǰ���?
 							 
-							 PWM_Adjust(0); //�ȴ�5�����
+							 PWM_Adjust(0); //�ȴ�5�����?
 							 Pai_Wu_Door_Close();
 							 delay_sys_sec(12000);
 							 if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
@@ -325,9 +327,8 @@ uint8 Before_Ignition_Prepare_OLD(void)
 
 		
 
-		return func_state ;//���ǰ׼����׼�����ˣ�����1
+		return func_state ;//���ǰ׼����׼�����ˣ�����?
 }
-#endif /* Before_Ignition_Prepare_OLD */
 
 
 
@@ -343,23 +344,26 @@ uint8 Before_Ignition_Prepare_OLD(void)
 }
 #endif
 
-/* Sys_Ignition_Fun() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-uint8  Sys_Ignition_Fun_OLD(void)
+/**
+  * @brief  ϵͳ������
+* @param   �����ɷ���1�����򷵻�0
+  * @retval ��
+  */
+uint8  Sys_Ignition_Fun(void)
 {
 		
-		sys_data.Data_12H = 0x00; //�������У�û�ж��쳣���м��
+		sys_data.Data_12H = 0x00; //�������У�û�ж��쳣���м��?
 		Abnormal_Events.target_complete_event = 0;
 		switch(Ignition_Index)
 		{
 			case 0 : //  
 						sys_flag.Ignition_Count = 0;
-						sys_flag.FlameRecover_Time = 0; //�Ը�λʱ���������
+						sys_flag.FlameRecover_Time = 0; //�Ը�λʱ���������?
 						sys_flag.LianxuWorkTime = 0;  //�Ա��׶ι���ʱ������
 						WTS_Gas_One_Close();
 					
 						/*******************PWM����*һ��������ɨ***********************************/
-						Send_Air_Open();  //���ǰ��ɨ			
+						Send_Air_Open();  //���ǰ���?		
 						//Feed_First_Level();
 
 						delay_sys_sec(10000);
@@ -420,7 +424,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 								}
 						}
 					
-					//ʱ�䵽��Ҳ�����ִ�г���
+					//ʱ�䵽��Ҳ�����ִ�г���?
 					if(sys_time_start == 0)
 						{
 							sys_time_up = 1;
@@ -435,7 +439,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 						
 							delay_sys_sec(Sys_Admin.First_Blow_Time);  //��ʽ��ɨʱ�� 
 
-							Ignition_Index = 20; //�л����̣�,����е�����
+							Ignition_Index = 20; //�л����̣�,����е�����?
 						}
 					else
 						{
@@ -447,7 +451,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 		case 20:
 					Send_Air_Open();
-					/*2024��11��28��09:26:13 �����ǰ��ɨ�����У�δ�ж�����ˮλ����ǿ�Ʋ�ˮ������*/
+					/*2024��11��28��09:26:13 �����ǰ��ɨ�����У�δ�ж�����ˮλ����ǿ�Ʋ�ˮ������?/
 					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 						{
 							if(IO_Status.Target.water_mid == WATER_OK)
@@ -501,7 +505,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 							
 							
-							Ignition_Index = 2; //�л����̣�,����е�����
+							Ignition_Index = 2; //�л����̣�,����е�����?
 						}
 					else
 						{
@@ -514,9 +518,9 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 		
 		 
-		case 2://���з����л�,����������任��ע���鳬ѹͣ¯����
+		case 2://���з����л�,����������任��ע���鳬ѹͣ¯����?
 					Send_Air_Open();
-					Send_Gas_Close();//ȼ������رգ��رգ��ر�
+					Send_Gas_Close();//ȼ������رգ��رգ��ر�?
 					Feed_First_Level();//���ʰٷ�֮60
 					
 					if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
@@ -570,7 +574,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 							
 								
-							PWM_Adjust(30);//��⹦��
+							PWM_Adjust(30);//��⹦��?
 							if(Sys_Admin.Fan_Speed_Check)
 								delay_sys_sec(20000);  //�ȴ����ٱ仯ʱ�䣬��ʱ�򱨾�
 							else
@@ -582,12 +586,12 @@ uint8  Sys_Ignition_Fun_OLD(void)
 					break;
 						
 	case 3://��ʽ��ʼ��𣬵�����ȿ�1.5s
-					Send_Air_Open();  //���ű����
-					Send_Gas_Close();//ȼ������رգ��رգ��ر�
-					PWM_Adjust(30);//��⹦��
+					Send_Air_Open();  //���ű����?
+					Send_Gas_Close();//ȼ������رգ��رգ��ر�?
+					PWM_Adjust(30);//��⹦��?
 					Dian_Huo_OFF();  //�رյ��̵���
 					sys_flag.Force_Supple_Water_Flag = FALSE;
-					//���ǰȷ�ϣ�
+					//���ǰȷ�ϣ�?
 					if (IO_Status.Target.water_protect== WATER_LOSE)
  						{
 							sys_flag.Error_Code  = Error5_LowWater;
@@ -624,7 +628,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 								//NOP
 								}
 						}
-					else  //�������з��ټ��
+					else  //�������з��ټ��?
 						{
 							if(sys_time_start == 0)
 								{
@@ -652,8 +656,8 @@ uint8  Sys_Ignition_Fun_OLD(void)
 					break;
 
 	case 4:
-					Send_Air_Open();  //���ű����
-					Send_Gas_Close();//ȼ������رգ��رգ��ر�
+					Send_Air_Open();  //���ű����?
+					Send_Gas_Close();//ȼ������رգ��رգ��ر�?
 					Dian_Huo_Air_Level();//���Ƶ����ٳ���
 					Dian_Huo_OFF();  //�رյ��̵���
 		
@@ -670,7 +674,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 							sys_time_up = 0;
 							
 							
-							Dian_Huo_Start();//�������
+							Dian_Huo_Start();//�������?
 							delay_sys_sec(1500);// 
 							Ignition_Index = 5;
 						}
@@ -681,7 +685,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 					
 					break;
 	case 5://��ȼ��2.5s
-					Send_Air_Open();  //���ű����
+					Send_Air_Open();  //���ű����?
 					Dian_Huo_Air_Level();//���Ƶ����ٳ���
 				
 					if(sys_time_start == 0)
@@ -709,8 +713,8 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 				break;
 					 
-	case 6: //�����رգ��ȴ�3��������޻��棬��Ӳ���ӳ�
-					Send_Air_Open();  //���ű����
+	case 6: //�����رգ��ȴ�3��������޻��棬��Ӳ���ӳ�?
+					Send_Air_Open();  //���ű����?
 					Dian_Huo_Air_Level();//���Ƶ����ٳ���
 					 
 					 
@@ -729,7 +733,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 
 							//Dian_Huo_OFF(); //2023��10��17��12:21:58 ע�͵����д���
 							Send_Gas_Open();
-							delay_sys_sec(4800);  //�޸� ��1���Ϊ1.5��
+							delay_sys_sec(4800);  //�޸� ��1����?.5��
 							Ignition_Index = 7;
 						}
 					else
@@ -756,7 +760,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 							 
 							if(sys_flag.flame_state == FLAME_OK )  //�л���
 							{
-								 //���ɹ����������ԭ״̬���ȴ������ȶ�
+								 //���ɹ����������ԭ״̬���ȴ������ȶ�?
 								  delay_sys_sec(Sys_Admin.Wen_Huo_Time);  //�趨�ȶ�����ʱ��10sec��
 								 Ignition_Index = 8;//�л����̣����ɹ�������ϵͳ��������״̬	
  
@@ -768,13 +772,13 @@ uint8  Sys_Ignition_Fun_OLD(void)
 								Send_Gas_Close();//�ر�ȼ������
 								WTS_Gas_One_Close();
 								
-								Dian_Huo_OFF();  //�رյ��̵������������ͼ��תΪ��ɫ
+								Dian_Huo_OFF();  //�رյ��̵������������ͼ��תΪ���?
 								if(sys_flag.Ignition_Count < Max_Ignition_Times)
 									{
-										//ִ�еڶ��ε��
+										//ִ�еڶ��ε��?
 										Ignition_Index = 9;
 										Feed_First_Level();//
-										delay_sys_sec(Sys_Admin.First_Blow_Time);  //�趨�´ε��ʱ����Ϊ20sec + 10������٣�
+										delay_sys_sec(Sys_Admin.First_Blow_Time);  //�趨�´ε��ʱ�����?0sec + 10������٣�?
 				  					}
 								else
 									{
@@ -797,18 +801,18 @@ uint8  Sys_Ignition_Fun_OLD(void)
 					Dian_Huo_OFF();
 					sys_flag.Force_UnSupply_Water_Flag = FALSE ;  //���Բ�ˮ
 					 //��ֹû����ˮλ���ٿ�һ��
-					if(sys_flag.flame_state == FLAME_OUT)//�Ȼ���̻���Ϩ��
+					if(sys_flag.flame_state == FLAME_OUT)//�Ȼ���̻���Ϩ��?
 						{ 
 							sys_flag.Ignition_Count ++;
 								Send_Gas_Close();//�ر�ȼ������
 								WTS_Gas_One_Close();
-								Dian_Huo_OFF();  //�رյ��̵������������ͼ��תΪ��ɫ
+								Dian_Huo_OFF();  //�رյ��̵������������ͼ��תΪ���?
 								if(sys_flag.Ignition_Count < Max_Ignition_Times)
 									{
-										//ִ�еڶ��ε��
+										//ִ�еڶ��ε��?
 										Ignition_Index = 9;
 										Feed_First_Level();//
-										delay_sys_sec(Sys_Admin.First_Blow_Time);  //�趨�´ε��ʱ����Ϊ20sec + 10������٣�
+										delay_sys_sec(Sys_Admin.First_Blow_Time);  //�趨�´ε��ʱ�����?0sec + 10������٣�?
 									}
 								else
 									{
@@ -844,7 +848,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 				
 					break;
 
-			case 9://���ʧ�ܣ��л���������
+			case 9://���ʧ�ܣ��л���������?
 					Send_Gas_Close();//�ر�ȼ������
 					Dian_Huo_OFF();
 					WTS_Gas_One_Close();
@@ -862,8 +866,8 @@ uint8  Sys_Ignition_Fun_OLD(void)
 						{
 							sys_time_up = 0;
 							Dian_Huo_Air_Level();//���Ƶ����ٳ���
-							delay_sys_sec(6000);  //�趨�´ε��ʱ��Ϊ15sec��
-							Ignition_Index =4;//�л����̣�׼���ٴε��,�����ͣ
+							delay_sys_sec(6000);  //�趨�´ε��ʱ���?5sec��
+							Ignition_Index =4;//�л����̣�׼���ٴε��?������?
 						}  
 
 					break;
@@ -877,13 +881,12 @@ uint8  Sys_Ignition_Fun_OLD(void)
 		return 0;
 		
 }
-#endif /* Sys_Ignition_Fun_OLD */
 
 
 
 
 /**
-* @brief  �������ʱ������״̬������δ�����л��棬���Է��ţ�ȼ�ջ��ȱ�����¯�峬�µȽ��ǣ��쳣�������쳣������������
+* @brief  �������ʱ������״̬������δ�����л��棬���Է��ţ�ȼ�ջ��ȱ�����¯�峬�µȽ��ǣ��쳣�������쳣������������?
 * @param   �����Ϻ��쳣���з��룬ȼ��ѹ����ϵͳ���к͵���м��
   * @retval ��
   */
@@ -909,7 +912,7 @@ void Auto_Check_Fun_OLD(void)
 					sys_flag.Error_Code  = Error3_LowGas; //ȼ��ѹ���͹��ϱ���
 			}
 		
-//��⼫��ˮλ����
+//��⼫��ˮλ����?
 		if (IO_Status.Target.water_protect== WATER_LOSE)
  			{
 					Error_Buffer = OK;		
@@ -935,18 +938,18 @@ void Auto_Check_Fun_OLD(void)
 				sys_flag.Error5_Count = 0;
 			}
 								
-//����̽�������
+//����̽�������?
 
 		if(sys_flag.flame_state == FLAME_OUT) //����0ʱ�����޻����ź�
 			{
-					Send_Gas_Close();//ȼ������ر�
+					Send_Gas_Close();//ȼ������ر�?
 
 					sys_flag.FlameOut_Count++;
 					if(sys_flag.FlameOut_Count >= 3)
 						{
 							sys_flag.Error_Code  = Error12_FlameLose;
 							// #region agent log
-							// 设备自身触发“运行中火焰熄灭(12)”（用于验证H1/H3：是真检测到无火焰，还是数据被覆盖导致误触发）
+							// 设备自身触发“运行中火焰熄灭(12)”（用于验证H1/H3：是真检测到无火焰，还是数据被覆盖导致误触发�?
 							U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:Auto_Check_Fun\",\"message\":\"Error12_FlameLose set\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"flameSignal\":%d,\"flameState\":%d,\"flameFilter\":%d,\"flameOutCount\":%d},\"timestamp\":%lu}\r\n",
 							          sys_flag.Address_Number,
 							          (int)Sys_Admin.Device_Style,
@@ -995,15 +998,14 @@ void Auto_Check_Fun_OLD(void)
 
 	
 /**
-* @brief  �����ʱ������״̬����ȼ�ջ��ȱ�����ȼ��ѹ��״̬���Ƚ��ǹ��ϣ����뱨����ʾ��
-* @param  ���������¯�峬��,���Է���
+* @brief  �����ʱ������״̬����ȼ�ջ��ȱ�����ȼ��ѹ��״̬���Ƚ��ǹ��ϣ����뱨����ʾ��?
+* @param  ���������¯�峬��?���Է���
   * @retval ��
   */
-/* Ignition_Check_Fun() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-void Ignition_Check_Fun_OLD(void)
+void Ignition_Check_Fun(void)
 {
-		Get_IO_Inf();
+		
+		Get_IO_Inf(); //��ȡIO��Ϣ
 
 		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
@@ -1011,7 +1013,7 @@ void Ignition_Check_Fun_OLD(void)
 				sys_flag.Error_Code  = Error16_SmokeValueHigh;//�����¶ȳ���
 		}
 
-	 	//ȼ��ѹ��״̬���
+	 	//ȼ��ѹ��״̬���?
 		if(IO_Status.Target.gas_low_pressure == GAS_OUT)
 		{
 				
@@ -1027,7 +1029,10 @@ void Ignition_Check_Fun_OLD(void)
 	
 
 }
-#endif /* Ignition_Check_Fun_OLD */
+	
+	
+
+		
 
 /* Idel_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
 #if 0
@@ -1058,8 +1063,8 @@ uint8 System_Pressure_Balance_Function(void)
 		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ����ϵͳȫ�ֱ������û��ɵ���,����ʾ�¶�ʱ��300 = 30.0��
 		static  uint8 	air_min = 0;//��С����
 		static  uint8   air_max = 0;//������
-		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ�¼ 
-		uint8  Tp_value = 0; //���ڷ�������м�ֵ
+		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ��?
+		uint8  Tp_value = 0; //���ڷ�������м��?
 
 /*************************����������**************************************************/
 		uint16 Real_Pressure = 0;
@@ -1068,7 +1073,7 @@ uint8 System_Pressure_Balance_Function(void)
 /******************************************************************************************/
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
-			//�����������ѹ�������Ǹ����û����趨ѹ��������
+			//�����������ѹ�������Ǹ����û����趨ѹ��������?
 			
 			Yacha_Value = 65;
 			
@@ -1082,7 +1087,7 @@ uint8 System_Pressure_Balance_Function(void)
 		}
 
 	
-		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//ȡ�����Ϊ��С���й���
+		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//ȡ�����Ϊ��С���й���?
 
 		air_max = Sys_Admin.Max_Work_Power;  //���������й��ʽ��б߽籣��
 		if(air_max >= 100)
@@ -1107,14 +1112,14 @@ uint8 System_Pressure_Balance_Function(void)
 				if(Real_Pressure < Man_Set_Pressure ) 
 					{
 					
-						if(sys_flag.Pressure_ChangeTime > 6) //8�����ϱ仯0.01����0.1Mpa ��Ҫ100������ʱ��̫���� ����仯ʱ��̫�̣�����С��2��仯0.01��
+						if(sys_flag.Pressure_ChangeTime > 6) //8�����ϱ仯0.01����0.1Mpa ��Ҫ100������ʱ��̫���� ����仯ʱ��̫�̣�����С��?���?.01��
 							{
 								sys_flag.get_60_percent_flag = OK; //��Ҫ����
 							}
 		
 						if(sys_flag.Pressure_ChangeTime <= 5)
 							{
-								sys_flag.get_60_percent_flag = 0;  //����仯���ʷ���
+								sys_flag.get_60_percent_flag = 0;  //����仯���ʷ���?
 							} 
 		
 						
@@ -1145,27 +1150,27 @@ uint8 System_Pressure_Balance_Function(void)
 		if(Real_Pressure == Man_Set_Pressure)
 			{
 		
-				if(now_percent > 80)//ǰ���Ǳ������40
+				if(now_percent > 80)//ǰ���Ǳ������?0
 					{
 						Tp_value = 80;
 					}
-			/*��������д����ȱ�ݣ����������С��λ*/	
+			/*��������д����ȱ�ݣ����������С���?/	
 
 				
-				sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������
+				sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������?
 			}
 
 		/********************�������ͣ���ѹ���ⲿѹ������Ҫ�Ƚ��趨ѹ��**********************************************/
 		if(Real_Pressure > Man_Set_Pressure  || Temperature_Data.Pressure_Value > sys_config_data.zhuan_huan_temperture_value)
 			{
-				//˥���ٶ�Ϊÿ���1
+				//˥���ٶ�Ϊÿ���?
 
 				if(Temperature_Data.Pressure_Value > (sys_config_data.zhuan_huan_temperture_value ))
 					{
 						if(Real_Pressure > Man_Set_Pressure)
 							{
 								//�������ߣ�Ҫ������
-								if(now_percent > 80)//ǰ���Ǳ������40
+								if(now_percent > 80)//ǰ���Ǳ������?0
 									{
 										Tp_value = 70;
 									}
@@ -1192,7 +1197,7 @@ uint8 System_Pressure_Balance_Function(void)
 											}
 										else
 											{
-												//���ѹ���Ѿ��߳������ˣ�ֻ�ܽ�����
+												//���ѹ���Ѿ��߳������ˣ�ֻ�ܽ�����?
 												if(sys_flag.Power_1_Sec)
 													{
 														sys_flag.Power_1_Sec = 0;
@@ -1203,7 +1208,7 @@ uint8 System_Pressure_Balance_Function(void)
 									}
 								else
 									{
-										//��ѹ����Է�Χ�ڣ���ѹ�����ڵ����趨ѹ��ҲҪ���͹��� 
+										//��ѹ����Է�Χ�ڣ���ѹ�����ڵ����趨ѹ��ҲҪ���͹���?
 										if(Temperature_Data.Pressure_Value >= (sys_config_data.zhuan_huan_temperture_value + 1 ))
 											{
 												//���ʵ����͹��ʣ���֤��ѹ���ȶ�
@@ -1251,7 +1256,7 @@ uint8 System_Pressure_Balance_Function(void)
 	 
 
 		if(now_percent >= 70)
-			sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������
+			sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������?
 
 		
 		PWM_Adjust(now_percent);
@@ -1259,7 +1264,7 @@ uint8 System_Pressure_Balance_Function(void)
 		
 
 
-		//�������ѹ�������趨ѹ��0.05Mpa���ϣ���ͣ¯
+		//�������ѹ�������趨ѹ��?.05Mpa���ϣ���ͣ¯
 		if(Real_Pressure >= stop_wait_pressure  || Temperature_Data.Pressure_Value >= sys_config_data.Auto_stop_pressure)
 			{
 				sys_data.Data_12H |= Set_Bit_4; // �¶ȸ����û��趨ֵ0.01kg
@@ -1278,8 +1283,8 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		static	uint16  Man_Set_Pressure = 0;  //1kg = 0.1Mpa  ����ϵͳȫ�ֱ������û��ɵ���,����ʾ�¶�ʱ��300 = 30.0��
 		static  uint8 	air_min = 0;//��С����
 		static  uint8   air_max = 0;//������
-		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ�¼ 
-		uint8  Tp_value = 0; //���ڷ�������м�ֵ
+		static	uint16  	stop_wait_pressure = 0; //���ڴﵽĿ���趨ֵʱ��������ʼ��?
+		uint8  Tp_value = 0; //���ڷ�������м��?
 
 /*************************����������**************************************************/
 		uint16 Real_Pressure = 0;
@@ -1288,7 +1293,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 /******************************************************************************************/
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
-			//�����������ѹ�������Ǹ����û����趨ѹ��������
+			//�����������ѹ�������Ǹ����û����趨ѹ��������?
 			
 			Yacha_Value = 65;
 			
@@ -1302,7 +1307,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		}
 
 	
-		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//ȡ�����Ϊ��С���й���
+		air_min = *(uint32 *)(DIAN_HUO_POWER_ADDRESS);//ȡ�����Ϊ��С���й���?
 
 		air_max = Sys_Admin.Max_Work_Power;  //���������й��ʽ��б߽籣��
 		if(air_max >= 100)
@@ -1327,14 +1332,14 @@ uint8 XB_System_Pressure_Balance_Function(void)
 				if(Real_Pressure < Man_Set_Pressure ) 
 					{
 					
-						if(sys_flag.Pressure_ChangeTime > 6) //8�����ϱ仯0.01����0.1Mpa ��Ҫ100������ʱ��̫���� ����仯ʱ��̫�̣�����С��2��仯0.01��
+						if(sys_flag.Pressure_ChangeTime > 6) //8�����ϱ仯0.01����0.1Mpa ��Ҫ100������ʱ��̫���� ����仯ʱ��̫�̣�����С��?���?.01��
 							{
 								sys_flag.get_60_percent_flag = OK; //��Ҫ����
 							}
 		
 						if(sys_flag.Pressure_ChangeTime <= 5)
 							{
-								sys_flag.get_60_percent_flag = 0;  //����仯���ʷ���
+								sys_flag.get_60_percent_flag = 0;  //����仯���ʷ���?
 							} 
 		
 						
@@ -1365,20 +1370,20 @@ uint8 XB_System_Pressure_Balance_Function(void)
 		if(Real_Pressure == Man_Set_Pressure)
 			{
 		
-				if(now_percent > 80)//ǰ���Ǳ������40
+				if(now_percent > 80)//ǰ���Ǳ������?0
 					{
 						Tp_value = 80;
 					}
-			/*��������д����ȱ�ݣ����������С��λ*/	
+			/*��������д����ȱ�ݣ����������С���?/	
 
 				
-				sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������
+				sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������?
 			}
 
 		/********************�������ͣ���ѹ���ⲿѹ������Ҫ�Ƚ��趨ѹ��**********************************************/
 		if(Real_Pressure > Man_Set_Pressure  || Temperature_Data.Pressure_Value >= sys_config_data.zhuan_huan_temperture_value)
 			{
-				//˥���ٶ�Ϊÿ���1
+				//˥���ٶ�Ϊÿ���?
 
 				if(Temperature_Data.Pressure_Value >= (sys_config_data.zhuan_huan_temperture_value ))
 					{
@@ -1386,7 +1391,7 @@ uint8 XB_System_Pressure_Balance_Function(void)
 						if(Real_Pressure > Man_Set_Pressure)
 							{
 								//�������ߣ�Ҫ������
-								if(now_percent > 80)//ǰ���Ǳ������40
+								if(now_percent > 80)//ǰ���Ǳ������?0
 									{
 										Tp_value = 70;
 									}
@@ -1454,12 +1459,12 @@ uint8 XB_System_Pressure_Balance_Function(void)
 	 
 
 		if(now_percent >= 70)
-			sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������
+			sys_flag.get_60_percent_flag = 1;//ȼ��Ԥ�������?
 
 		
 		PWM_Adjust(now_percent);
 
-		//�������ѹ�������趨ѹ��0.05Mpa���ϣ���ͣ¯
+		//�������ѹ�������趨ѹ��?.05Mpa���ϣ���ͣ¯
 		if(Real_Pressure >= stop_wait_pressure  || Temperature_Data.Pressure_Value >= sys_config_data.Auto_stop_pressure)
 			{
 				sys_data.Data_12H |= Set_Bit_4; // �¶ȸ����û��趨ֵ0.01kg
@@ -1479,7 +1484,7 @@ void  Abnormal_Events_Response_OLD(void)
 {
 		
 	
-//�������쳣ʱ����һ����ִ�йر�ȼ�����飬�����ʱ��ɨ����ɨʱ�䣬�û��ɵ�
+//�������쳣ʱ����һ����ִ�йر�ȼ�����飬�����ʱ��ɨ����ɨʱ�䣬�û��ɵ�?
 	 
 		
 		if (sys_data.Data_12H)
@@ -1493,7 +1498,7 @@ void  Abnormal_Events_Response_OLD(void)
 
 						   if(sys_flag.LianxuWorkTime < 600) //С��10���ӣ���������
 						   	{
-						   		sys_flag.get_60_percent_flag = 0;  //���Ż��С��������
+						   		sys_flag.get_60_percent_flag = 0;  //���Ż��С��������?
 						   	}
 						   
 						   delay_sys_sec(1000);//ִ�к�ɨ��ʱ5��
@@ -1572,7 +1577,7 @@ void  Abnormal_Events_Response_OLD(void)
 									sys_flag.Force_Supple_Water_Flag = 0;
 									/*2023��11��27��11:59:34*/
 							
-									/*��鼫��ˮλ��״��*/
+									/*��鼫��ˮλ��״��?/
 									if (IO_Status.Target.water_protect== WATER_LOSE)
 										{
 											sys_flag.Error_Code  = Error5_LowWater;
@@ -1616,7 +1621,7 @@ void  Abnormal_Events_Response_OLD(void)
 								{
 									sys_time_up = 0;
 									 //��ת����
-									//Send_Air_Close();//�رշ��	
+									//Send_Air_Close();//�رշ��?
 									 if(sys_data.Data_12H == 3)
 									 		ab_index = 10;//��ת�Զ����۳���
 									 else
@@ -1628,16 +1633,16 @@ void  Abnormal_Events_Response_OLD(void)
 													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//���쳣�ṹ������
 											 
 													ab_index = 0;  //��index��ʼ���������´ν���
-													//���������ָʾҳ�棬�Ӷ������û���ϵͳ������ȴ
-													//�ָ���ز�������������
+													//���������ָʾҳ�棬�Ӷ������û���ϵͳ�������?
+													//�ָ���ز�������������?
 													sys_data.Data_10H = SYS_WORK;// ���빤��״̬
 													Sys_Staus = 2; //ϵͳ������2�׶Σ���������
 													Sys_Launch_Index = 1; //���е��ǰ���
 													
 													Ignition_Index = 0;  //******************************����ǰ��ɨ��ֱ�ӽ��з��ټ�����
-													Send_Air_Open();  //���ǰ��ɨ
+													Send_Air_Open();  //���ǰ���?
 													
-												//	Feed_First_Level();//�������ɨ										
+												//	Feed_First_Level();//��������?									
 													delay_sys_sec(1000);//�ӳ�12s
 													
 													
@@ -1688,21 +1693,21 @@ void  Abnormal_Events_Response_OLD(void)
 													memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//���쳣�ṹ������
 											 
 													ab_index = 0;  //��index��ʼ���������´ν���
-													//���������ָʾҳ�棬�Ӷ������û���ϵͳ������ȴ
-													//�ָ���ز�������������
+													//���������ָʾҳ�棬�Ӷ������û���ϵͳ�������?
+													//�ָ���ز�������������?
 													sys_data.Data_10H = SYS_WORK;// ���빤��״̬
 													Sys_Staus = 2; //ϵͳ������2�׶Σ���������
 													Sys_Launch_Index = 1; //���е��ǰ���
 													
-													Ignition_Index = 0;  //������ת��ַ�����ǰһ�׶�
-													Send_Air_Open();  //���ǰ��ɨ 
-													//Feed_First_Level();//�������ɨ										
+													Ignition_Index = 0;  //������ת��ַ�����ǰһ�׶�?
+													Send_Air_Open();  //���ǰ���?
+													//Feed_First_Level();//��������?									
 													delay_sys_sec(1000);//�ӳ�12s
 													
 												}
 											else
 												{
-													Send_Air_Close();//�رշ��
+													Send_Air_Close();//�رշ��?
 												}
 
 									}
@@ -1724,14 +1729,17 @@ void  Abnormal_Events_Response_OLD(void)
 }
 #endif /* Abnormal_Events_Response_OLD */
 
-/* Sys_Launch_Function() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-void Sys_Launch_Function_OLD(void)
+/**
+  * @brief  ϵͳ���г���
+* @param   Sys_Launch_Index�������л�ϵͳ���в���
+  * @retval ��
+  */
+void Sys_Launch_Function(void)
 {
 		switch(Sys_Launch_Index)
 		{
 			case  0: //ϵͳ�Լ�
-						Self_Check_Function();//���ȼ��ѹ���ͻ�еʽѹ��������
+						Self_Check_Function();//���ȼ��ѹ���ͻ�еʽѹ��������?
 						
 						if(Before_Ignition_Prepare())
 						{
@@ -1774,19 +1782,19 @@ void Sys_Launch_Function_OLD(void)
 								
 					    if(sys_data.Data_12H == 0)
 					    	{
-					    		Auto_Check_Fun();  //��û���쳣ʱ��ִ��IO�͸��������
+					    		Auto_Check_Fun();  //��û���쳣ʱ��ִ��IO�͸��������?
 				   				System_Pressure_Balance_Function();
 								
 								
 								if(sys_flag.Paiwu_Flag)
 									sys_data.Data_12H = 3 ;//��Ҫ�������۵ı�־
 					    	}
-						else//�쳣״̬��һЩ״̬���ļ��
+						else//�쳣״̬��һЩ״̬���ļ��?
 							{
 								Abnormal_Check_Fun();
 							}
 	
-						Abnormal_Events_Response(); //�쳣���
+						Abnormal_Events_Response(); //�쳣���?
 						
 					break;
 			
@@ -1796,7 +1804,6 @@ void Sys_Launch_Function_OLD(void)
 					break;
 		}	
 }
-#endif /* Sys_Launch_Function_OLD */
 
 
 
@@ -1847,7 +1854,7 @@ void Lcd_Err_Read_OLD(void) {}
 void  Err_Response_OLD(void)
 {
 	static uint8 Old_Error = 0;
-	//����й��ϱ�����ͣ¯��14H��15HΪ��������
+	//����й��ϱ�����ͣ¯��?4H��15HΪ��������
 	  if(sys_flag.Error_Code == 0)
 	  	{
 	  		if(sys_flag.Lock_Error)
@@ -1855,7 +1862,7 @@ void  Err_Response_OLD(void)
 				
 	  			sys_flag.Error_Code = 0;
 	  			sys_flag.Lock_Error = 0;//�Թ��Ͻ���
-				Beep_Data.beep_start_flag = 0;	//�����������
+				Beep_Data.beep_start_flag = 0;	//�����������?
 					
 	  	}
 
@@ -1919,7 +1926,7 @@ void  Err_Response_OLD(void)
 void  IDLE_Err_Response_OLD(void)
 {
 	static uint8 Old_Error = 0;
-	//����й��ϱ�����ͣ¯��
+	//����й��ϱ�����ͣ¯��?
 	  if(sys_flag.Error_Code == 0)
 	  	{
 	  		if(sys_flag.Lock_Error)
@@ -1927,7 +1934,7 @@ void  IDLE_Err_Response_OLD(void)
 
 			sys_flag.Error_Code = 0;
 	  			sys_flag.Lock_Error = 0;  //�Թ��Ͻ���
-					Beep_Data.beep_start_flag = 0;	//�����������
+					Beep_Data.beep_start_flag = 0;	//�����������?
 					
 	  	}
 
@@ -1944,7 +1951,7 @@ void  IDLE_Err_Response_OLD(void)
 	  	}
 
 
-		//����й��ϱ�����ͣ¯��
+		//����й��ϱ�����ͣ¯��?
 		 if (sys_flag.Lock_Error == 0)
  		 	{	
 		  		
@@ -1993,11 +2000,7 @@ void  IDLE_Err_Response_OLD(void)
 	
 	
 	  
-}
 #endif /* IDLE_Err_Response_OLD */
-
-
-
 
 
 
@@ -2012,7 +2015,7 @@ void System_Idel_Function(void)
 		
 		Send_Air_Close();
  		Dian_Huo_OFF();//���Ƶ��̵����ر�
-		Send_Gas_Close();//ȼ������ر�
+		Send_Gas_Close();//ȼ������ر�?
 		WTS_Gas_One_Close();
 		
 		Auto_Pai_Wu_Function();
@@ -2071,7 +2074,7 @@ void System_All_Control()
 
 		if(sys_flag.Work_1S_Flag)
 			{
-				//ȡ������������е�ʱ�䣬Ȼ����������ڵ������еĴ�ɨʱ�����
+				//ȡ������������е�ʱ�䣬Ȼ����������ڵ������еĴ�ɨʱ�����?
 				sys_flag.Work_1S_Flag = 0;
 				if(sys_data.Data_1FH > 0)
 					{
@@ -2092,7 +2095,7 @@ void System_All_Control()
 
 						 switch(IDLE_INDEX)
 						 	{
-						 		case  0 : //��������״̬  ,, ע�����״̬ѭ��ˮ�õĿ��������ݻ�ˮ�¶�
+						 		case  0 : //��������״̬  ,, ע�����״̬ѭ��ˮ�õĿ��������ݻ�ˮ�¶�?
 						 				
 						 				sys_flag.Ignition_Count = 0;//����ʱ�Ե���������
 										sys_flag.last_blow_flag = 0;//��ɨ״̬������־
@@ -2106,7 +2109,7 @@ void System_All_Control()
 
 								case  1: //�ȴ���ɨ��ʱ
 									 
-										Send_Gas_Close();//ȼ������ر�
+										Send_Gas_Close();//ȼ������ر�?
 									 	Dian_Huo_OFF();//���Ƶ��̵����ر�
 										sys_data.Data_14H &= Rst_Bit_0;//���״̬���⣬���ű���һ����������ٱ���
 										Get_IO_Inf();
@@ -2127,9 +2130,9 @@ void System_All_Control()
 											Send_Air_Close();
 										}
 										break;
-								case 2: //�ȴ������������£���ֹ���⣬���10������
-									  Send_Air_Close();//�����Դ�ر�
-									  Send_Gas_Close();//ȼ������ر�
+								case 2: //�ȴ������������£���ֹ���⣬���?0������
+									  Send_Air_Close();//�����Դ�ر�?
+									  Send_Gas_Close();//ȼ������ر�?
 									  Dian_Huo_OFF();//���Ƶ��̵����ر�
 									 
 									  Get_IO_Inf();
@@ -2171,7 +2174,7 @@ void System_All_Control()
 								}
 
 		
-							//��еʽѹ������ź�	
+							//��еʽѹ������ź�?
 							if(IO_Status.Target.hpressure_signal == PRESSURE_ERROR)
 								{
 											
@@ -2179,7 +2182,7 @@ void System_All_Control()
 									 if(sys_flag.Error_Code == 0 )
 										sys_flag.Error_Code = Error1_YakongProtect; //����ѹ��������ȫ��Χ����			
 								}
-							Send_Gas_Close();//ȼ������ر�
+							Send_Gas_Close();//ȼ������ر�?
 							
 							IDLE_Err_Response();
 			
@@ -2195,7 +2198,7 @@ void System_All_Control()
 							
 										sys_flag.Error_Code = 0;
 										sys_flag.Lock_Error = 0;  //�Թ��Ͻ���
-										Beep_Data.beep_start_flag = 0;	//�����������	
+										Beep_Data.beep_start_flag = 0;	//�����������?
 
 										//Ҫ����״̬��ת
 									}
@@ -2249,7 +2252,7 @@ uint8   sys_work_time_function(void)
 		Work_State =sys_data.Data_10H;
 
 	
-	//������1��ʱ����ڴ���״̬��ֱ���˳�
+	//������1��ʱ����ڴ���״̬��ֱ���˳�?
 	if(sys_flag.Work_1sec_Flag == FALSE || sys_data.Data_10H == 0)
 		return 0;
 
@@ -2324,7 +2327,7 @@ void sys_control_config_function(void)
 			
  			
 
-			Sys_Admin.Device_Style  = 0;  //0 ���ǳ��浥��1��������1�������������
+			Sys_Admin.Device_Style  = 0;  //0 ���ǳ��浥��1��������1�������������?
 		
 			
 			Sys_Admin.LianXu_PaiWu_DelayTime = 10; //Ĭ��15���Ӷ���һ�Σ�ÿ��3��
@@ -2356,9 +2359,9 @@ void sys_control_config_function(void)
 			Sys_Admin.Last_Blow_Time = 30 *1000;//��ɨʱ��
 			
 
-			Sys_Admin.Dian_Huo_Power = 30;  //Ĭ�ϵ����Ϊ30% 
+			Sys_Admin.Dian_Huo_Power = 30;  //Ĭ�ϵ�����?0% 
 		
-			Sys_Admin.Max_Work_Power = 85;  //Ĭ�������Ϊ100
+			Sys_Admin.Max_Work_Power = 85;  //Ĭ��������?00
 			Sys_Admin.Wen_Huo_Time =6 * 1000;  //�ȶ�����ʱ�� 10��
 
 			Sys_Admin.Fan_Speed_Check = 1;  //Ĭ���Ǽ�����	
@@ -2383,7 +2386,7 @@ void sys_control_config_function(void)
 	 		sys_config_data.zhuan_huan_temperture_value = 50; //����Ŀ��ѹ��ֵ0.4Mpa
 	 		
 			
-			Sys_Admin.Admin_Work_Day = 0; //������ʱ�������Ĭ��Ϊ0��Ĭ�ϲ�����
+			Sys_Admin.Admin_Work_Day = 0; //������ʱ�������Ĭ���?��Ĭ�ϲ�����
 			Sys_Admin.Admin_Save_Day = 30;
 			Sys_Admin.Admin_Save_Month = 12;
 			Sys_Admin.Admin_Save_Year = 2025;
@@ -2401,7 +2404,7 @@ void sys_control_config_function(void)
 			
 			
 		}
-	else  //˵���Ѿ�д�������������ڴ������������,�����ڲ�FLASH���ݣ���ֵ����Ӧ�ṹ��
+	else  //˵���Ѿ�д�������������ڴ������������?�����ڲ�FLASH���ݣ���ֵ����Ӧ�ṹ��
 		{
 				
 			Sys_Admin.Fan_Pulse_Rpm = *(uint32 *)(FAN_PULSE_RPM_ADDRESS);
@@ -2461,11 +2464,11 @@ void sys_control_config_function(void)
 			Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//��ɨʱ��
 			
 			
-			Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //�����
+			Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //�����?
 			
 
 
-			Sys_Admin.Max_Work_Power = *(uint32 *)(MAX_WORK_POWER_ADDRESS);  //Ĭ�������Ϊ100
+			Sys_Admin.Max_Work_Power = *(uint32 *)(MAX_WORK_POWER_ADDRESS);  //Ĭ��������?00
 			
 			Sys_Admin.Wen_Huo_Time = *(uint32 *)(WEN_HUO_ADDRESS);  //�ȶ�����ʱ��  
 
@@ -2564,7 +2567,7 @@ void Load_LCD_Data(void)
 void clear_struct_memory(void)
 {
 	uint8 temp = 0;
-		//�Խṹ�������ʼ��	
+		//�Խṹ�������ʼ��?
 	memset(&sys_data,0,sizeof(sys_data));	//��״̬��Ϣ�ṹ������
   	memset(&lcd_data,0,sizeof(lcd_data));	//��״̬��Ϣ�ṹ������
 	memset(&sys_time_inf,0,sizeof(sys_time_inf));	//��״̬��Ϣ�ṹ������
@@ -2593,7 +2596,7 @@ void clear_struct_memory(void)
 void One_Sec_Check(void)
 {
  	 
-	 //�������Ч������֤��������������
+	 //�������Ч������֤��������������?
 	if(sys_flag.Relays_3Secs_Flag)
 		{
 			sys_flag.Relays_3Secs_Flag = 0;
@@ -2679,7 +2682,7 @@ uint8  sys_start_cmd(void)
 			{
 				if(sys_data.Data_10H == 0)
 					{
-						IDLE_INDEX = 0;  //��ֹ�ں�ɨʱ�����
+						IDLE_INDEX = 0;  //��ֹ�ں�ɨʱ�����?
 						Sys_Staus = 2;
 						Sys_Launch_Index = 0;
 						sys_flag.before_ignition_index = 0;
@@ -2692,7 +2695,7 @@ uint8  sys_start_cmd(void)
 						
 						
 	    				sys_time_start = 0; //�������״̬�£����ܴ��ڵ���ʱ�ȴ�����ֹ�����ϵͳ
-					/************�Դ���ѭ���ù���ʱ���������*****************8*/
+					/************�Դ���ѭ���ù���ʱ���������?****************8*/
 						
 						sys_flag.Already_Work_On_Flag = FALSE;
 					
@@ -2717,7 +2720,7 @@ uint8  sys_start_cmd(void)
 void sys_close_cmd(void)
 {
 	// #region agent log
-	// 若因“火焰熄灭(12)”进入停机流程，记录一次（用于确认“从机停机”是否由Error12触发）
+	// 若因“火焰熄�?12)”进入停机流程，记录一次（用于确认“从机停机”是否由Error12触发�?
 	if(sys_flag.Error_Code == Error12_FlameLose)
 	{
 		U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:sys_close_cmd\",\"message\":\"sys_close_cmd with Error12\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"errorCode\":%d,\"flameSignal\":%d,\"flameState\":%d},\"timestamp\":%lu}\r\n",
@@ -2748,13 +2751,13 @@ void sys_close_cmd(void)
 			 
 			sys_flag.tx_hurry_flag = 1;//�����������ݸ�������
 			 
-			Write_Second_Flash(); //��������ʱ���ֵ
+			Write_Second_Flash(); //��������ʱ����?
 		  //���ϴγ����п��ܴ��ڵ��쳣״̬������0
 		memset(&Abnormal_Events,0,sizeof(Abnormal_Events));	//��״̬��Ϣ�ṹ������			
 														
 		//���к�ɨ��ʱ
-		//�򿪷��������ɨ��ʱ
-		//�������״̬1
+		//�򿪷��������ɨ���?
+		//�������״�?
 		//��׼��ת����
 		sys_data.Data_10H = SYS_IDLE; // 
 		Sys_Staus = 0; // 
@@ -2770,7 +2773,7 @@ void sys_close_cmd(void)
 //��ɨ��ʼִ�г���
 void Last_Blow_Start_Fun(void)
 {
-	//ȷ�Ϸ���Ѿ���
+	//ȷ�Ϸ���Ѿ���?
 	Send_Air_Open();
 
 	sys_flag.last_blow_flag = 1;//��ɨ״̬��ʼ��־
@@ -2783,15 +2786,15 @@ void Last_Blow_Start_Fun(void)
 	if(sys_flag.Already_Work_On_Flag)
 		delay_sys_sec(Sys_Admin.Last_Blow_Time);//ִ�к�ɨ��ʱ	
 	else
-		delay_sys_sec(15000);//���û�ɹ����ʹ���15��
+		delay_sys_sec(15000);//���û�ɹ����ʹ���?5��
 }
 
 
-/*�����ɨ������־��  ������������λ�����ʧ�ܹ��ϣ�ȼ������й¶���ϣ�ϵͳ�����л���Ϩ��*/
+/*�����ɨ������־��? ������������λ�����ʧ�ܹ��ϣ�ȼ������й¶���ϣ�ϵͳ�����л���Ϩ��?/
 
 void Last_Blow_End_Fun(void)
 {
-	//ȷ�Ϸ���ر�
+	//ȷ�Ϸ���ر�?
 	
 			Send_Air_Close();
 
@@ -2811,9 +2814,8 @@ void Last_Blow_End_Fun(void)
 
 
 
-/* Water_Balance_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Water_Balance_Function_OLD(void)
+//���ü̵����źſ���������������������ˮλ�ź���,�����ˮλ�߼�����?
+uint8  Water_Balance_Function(void)
 {
 	
 	uint8 buffer = 0;
@@ -2846,10 +2848,10 @@ uint8  Water_Balance_Function_OLD(void)
 //������й����У�����ˮλ��̽���ˮ������
 		if(sys_data.Data_10H == 2)
 			{
-				//�����ˮλû���ź�
+				//�����ˮλû���ź�?
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//��������У�����ˮλ��ʾ��׼������
+						//��������У�����ˮλ��ʾ��׼������?
 						if (IO_Status.Target.water_shigh== WATER_OK)
 							{
 								buffer &= 0x07;
@@ -2866,7 +2868,7 @@ uint8  Water_Balance_Function_OLD(void)
 	//��ˮ��ʱ�߼�
 
 	
-	if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲���ˮ
+	if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲����?
 		{
 			Feed_Main_Pump_OFF();	
 			Second_Water_Valve_Close();
@@ -2927,7 +2929,7 @@ uint8  Water_Balance_Function_OLD(void)
 /**************************************************************/
 	
 	 
-	//������ˮλ������ǲ��ܻ��ģ��������ɿ���
+	//������ˮλ������ǲ��ܻ��ģ��������ɿ���?
 	if(sys_flag.Error_Code == 0)
 		{
 	 		if(IO_Status.Target.water_mid == WATER_LOSE || IO_Status.Target.water_protect == WATER_LOSE)//��ˮλ�źŶ�ʧ�����벹ˮ
@@ -2953,7 +2955,6 @@ uint8  Water_Balance_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Water_Balance_Function_OLD */
 
 
 
@@ -2974,23 +2975,23 @@ void Check_Config_Data_Function(void)
 {
 	float ResData = 0;
 	
-	//1�� ǰ��ɨ���30--120s
+	//1�� ǰ��ɨ���?0--120s
 	Sys_Admin.First_Blow_Time = *(uint32 *)(FIRST_BLOW_ADDRESS);  //Ԥ��ɨʱ��
-	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000) //��������趨��Χ����ֵ׷��
+	if(Sys_Admin.First_Blow_Time > 300000 ||Sys_Admin.First_Blow_Time < 30000) //��������趨��Χ����ֵ׷��?
 		Sys_Admin.First_Blow_Time =30000 ;
 	
-	//2�� ��ɨ���30--120s	
+	//2�� ��ɨ���?0--120s	
 	Sys_Admin.Last_Blow_Time =  *(uint32 *)(LAST_BLOW_ADDRESS);//��ɨʱ��
-	if(Sys_Admin.Last_Blow_Time > 300000 ||Sys_Admin.Last_Blow_Time < 30000) //��������趨��Χ����ֵ׷��
+	if(Sys_Admin.Last_Blow_Time > 300000 ||Sys_Admin.Last_Blow_Time < 30000) //��������趨��Χ����ֵ׷��?
 		Sys_Admin.Last_Blow_Time =30000 ;
 	
-	//3�� �����20--35%
-	Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //�����
-	if(Sys_Admin.Dian_Huo_Power > Max_Dian_Huo_Power ||Sys_Admin.Dian_Huo_Power < Min_Dian_Huo_Power) //��������趨��Χ����ֵ׷��
+	//3�� �����?0--35%
+	Sys_Admin.Dian_Huo_Power =  *(uint32 *)(DIAN_HUO_POWER_ADDRESS);  //�����?
+	if(Sys_Admin.Dian_Huo_Power > Max_Dian_Huo_Power ||Sys_Admin.Dian_Huo_Power < Min_Dian_Huo_Power) //��������趨��Χ����ֵ׷��?
 		Sys_Admin.Dian_Huo_Power =25 ;
 	
 
-	//4�� �������й��ʼ��30--100%
+	//4�� �������й��ʼ��?0--100%
 	if(Sys_Admin.Max_Work_Power > 100 ||Sys_Admin.Max_Work_Power < 20)
 		Sys_Admin.Max_Work_Power = 100;
 
@@ -2998,7 +2999,7 @@ void Check_Config_Data_Function(void)
 		Sys_Admin.Max_Work_Power = Sys_Admin.Dian_Huo_Power;
 
 
-	Sys_Admin.Fan_Speed_Check =  *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //���ټ���Ƿ���
+	Sys_Admin.Fan_Speed_Check =  *(uint32 *)(FAN_SPEED_CHECK_ADDRESS);  //���ټ���Ƿ���?
 	if(Sys_Admin.Fan_Speed_Check > 1)
 		Sys_Admin.Fan_Speed_Check = 1; //Ĭ���Ǽ����ٵ�
 	
@@ -3013,14 +3014,14 @@ void Check_Config_Data_Function(void)
 
 	sys_config_data.zhuan_huan_temperture_value = *(uint32 *)(ZHUAN_HUAN_TEMPERATURE);
 	if(sys_config_data.zhuan_huan_temperture_value < 10|| sys_config_data.zhuan_huan_temperture_value >= Sys_Admin.DeviceMaxPressureSet)
-		sys_config_data.zhuan_huan_temperture_value = 55; //������ޣ�Ĭ��5.5����
+		sys_config_data.zhuan_huan_temperture_value = 55; //������ޣ�Ĭ��?.5����
 
 	if(sys_config_data.Auto_stop_pressure >= Sys_Admin.DeviceMaxPressureSet)
 		sys_config_data.Auto_stop_pressure = Sys_Admin.DeviceMaxPressureSet - 5; //������ޣ�Ĭ����ȶѹ����0.05Mpa
 	
 
 	Sys_Admin.DeviceMaxPressureSet = *(uint32 *)(DEVICE_MAX_PRESSURE_SET_ADDRESS);
-	if(Sys_Admin.DeviceMaxPressureSet > 250) //25�������Ҫ��������
+	if(Sys_Admin.DeviceMaxPressureSet > 250) //25�������Ҫ��������?
 		Sys_Admin.DeviceMaxPressureSet = 80;
 
 	
@@ -3067,7 +3068,7 @@ void Check_Config_Data_Function(void)
 
 	LCD10D.DLCD.Flame_State = sys_flag.flame_state;
 
-	LCD10D.DLCD.Air_Speed  = sys_flag.Fan_Rpm;  //���ת����ʾ
+	LCD10D.DLCD.Air_Speed  = sys_flag.Fan_Rpm;  //���ת�����?
 	LCD10D.DLCD.Air_Power = sys_data.Data_1FH ;
 
 	
@@ -3090,7 +3091,7 @@ void Check_Config_Data_Function(void)
 	LCD10D.DLCD.Paiwu_Flag = sys_flag.Paiwu_Flag ;  //���۱�־ͬ��
 
 	LCD10D.DLCD.Air_State = Switch_Inf.air_on_flag ; 
-	LCD10D.DLCD.lianxuFa_State = Switch_Inf.LianXu_PaiWu_flag;   //������������۷�״̬
+	LCD10D.DLCD.lianxuFa_State = Switch_Inf.LianXu_PaiWu_flag;   //������������۷�״�?
 	
 	LCD10D.DLCD.Water_BianPin_Enabled  = Sys_Admin.Water_BianPin_Enabled ;
 	LCD10D.DLCD.Water_Max_Percent  = Sys_Admin.Water_Max_Percent ;
@@ -3130,14 +3131,14 @@ void Fan_Speed_Check_Function(void)
 
 
 		 
-		static uint8 Pulse = 3;    //���ַ��ÿת5������
+		static uint8 Pulse = 3;    //���ַ��ÿ�?������
 		 
 		uint32 All_Fan_counts = 0;
 			
 		
-			//G1G170   0.5T���	ÿת3�����壬  Ametek  0.5T��� ÿת2������
-			//G3G250   1T����Ĳ��� ÿת3������
-			//G3G315   2T����Ĳ���  ÿת 5������
+			//G1G170   0.5T���?ÿת3�����壬  Ametek  0.5T���?ÿת2������
+			//G3G250   1T����Ĳ���?ÿת3������
+			//G3G315   2T����Ĳ���? ÿת 5������
 			if(sys_flag.Rpm_1_Sec)
 				{
 					sys_flag.Rpm_1_Sec = FALSE;
@@ -3146,7 +3147,7 @@ void Fan_Speed_Check_Function(void)
 
 					//����PB0�������жϣ�����
 					if(Sys_Admin.Fan_Pulse_Rpm >=  10  || Sys_Admin.Fan_Pulse_Rpm == 0)
-							Sys_Admin.Fan_Pulse_Rpm = 3; //�������������
+							Sys_Admin.Fan_Pulse_Rpm = 3; //�������������?
 
 					if(sys_flag.Fan_count > 0 )
 						{
@@ -3189,7 +3190,7 @@ uint8 Admin_Work_Time_Function(void)
 	//lcd_data.Data_40H = Set_Function>> 8;
 	//lcd_data.Data_40L =Set_Function &0x00FF;//������ˢ�¸�LCD
 	
-	sys_flag.Lock_System = 0; //�����������
+	sys_flag.Lock_System = 0; //�����������?
 	if(Set_Function == FALSE )
 		return 0;
 
@@ -3262,7 +3263,7 @@ uint8 Auto_Pai_Wu_Function(void)
 	static uint8 OK_Pressure = 5;
 	static uint8 PaiWu_Count = 0;
 	uint8  Paiwu_Times = 3;  //4�ν�ѹ����
-	//���������ѹ��С�ڰ빫��ʱ���Զ�����һ��
+	//���������ѹ��С�ڰ빫��ʱ���Զ�����һ��?
     
 	uint8  Time = 15;//����ѹ����ˮ30��
 
@@ -3288,7 +3289,7 @@ uint8 Auto_Pai_Wu_Function(void)
 										}
 									else
 										{
-											delay_sys_sec(35000); //��ѹ�������ʱ��
+											delay_sys_sec(35000); //��ѹ�������ʱ��?
 										}
 										sys_flag.Pai_Wu_Idle_Index = 2;
 										
@@ -3402,8 +3403,8 @@ uint8 YunXingZhong_TimeAdjustable_PaiWu_Function(void)
 uint8 PaiWu_Warnning_Function(void)
 {
 	//���ۼ�ʱ����2E       2F ,30��
-	static uint16 Max_Time = 480 ;  //���ʱ��ʱ8Сʱ
-	static uint16 Max_Value = 1439; //�����ʾ��ʱ��Ϊ23:59
+	static uint16 Max_Time = 480 ;  //���ʱ���?Сʱ
+	static uint16 Max_Value = 1439; //�����ʾ��ʱ���?3:59
 	static uint8 Low_Flag = 0;
 
 	if(sys_data.Data_10H == SYS_WORK)
@@ -3427,25 +3428,25 @@ uint8 PaiWu_Warnning_Function(void)
 	if(sys_time_inf.UnPaiwuMinutes > Max_Time)
 		{
 			lcd_data.Data_2EH = 0;
-			lcd_data.Data_2EL = OK; //������ʾͼ���ɫ
+			lcd_data.Data_2EL = OK; //������ʾͼ����?
 			//sys_flag.Paiwu_Alarm_Flag  = OK;
 		}
 	else
 		{
 			lcd_data.Data_2EH = 0;
-			lcd_data.Data_2EL = 0; //������ʾͼ���ɫ
+			lcd_data.Data_2EL = 0; //������ʾͼ����?
 			//sys_flag.Paiwu_Alarm_Flag  = FALSE;
 		}
 
 	
 	if(Low_Flag == 0)
 		sys_flag.Low_Count = 0;
-	if(sys_time_inf.UnPaiwuMinutes > 1) //δ����ʱ�䳬��10���ӣ�ˮλ��ʧ�󣬻������ʱ������
+	if(sys_time_inf.UnPaiwuMinutes > 1) //δ����ʱ�䳬��10���ӣ�ˮλ��ʧ�󣬻������ʱ������?
 		{
 			if (IO_Status.Target.water_protect == WATER_LOSE)
 				{
 					Low_Flag = OK;
-					if(sys_flag.Low_Count >= 3)//�����ˮλ����20����������
+					if(sys_flag.Low_Count >= 3)//�����ˮλ����?0����������
 						{
 							Low_Flag = 0;
 							sys_time_inf.UnPaiwuMinutes = 0;
@@ -3464,16 +3465,15 @@ uint8 PaiWu_Warnning_Function(void)
 	return 0;
 }
 
-/* Special_Water_Supply_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 Special_Water_Supply_Function_OLD(void)
+
+uint8 Special_Water_Supply_Function(void)
 {
 	static uint8 High_Flag = 0;
-	//���½�ˮ��ŷ� ���漰�����»�ˮ��ŷ�
+	//���½�ˮ��ŷ�?���漰�����»�ˮ��ŷ�?
 	 
 
 	if(Sys_Admin.Special_Secs > 50)
- //���ʱ��������
+ //���ʱ��������?
 		Sys_Admin.Special_Secs = 20;
 	
 	if(sys_flag.Error_Code)
@@ -3483,7 +3483,7 @@ uint8 Special_Water_Supply_Function_OLD(void)
 		Special_Water_OFF();
 
 
-	if (IO_Status.Target.water_high== WATER_OK) //�ﵽ��ˮλ����رո��»�ˮ��
+	if (IO_Status.Target.water_high== WATER_OK) //�ﵽ��ˮλ����رո��»�ˮ��?
 		{
 			Special_Water_OFF();
 			sys_flag.High_Lose_Flag = 0;
@@ -3502,7 +3502,7 @@ uint8 Special_Water_Supply_Function_OLD(void)
 			if(sys_flag.High_Lose_Count >= Sys_Admin.Special_Secs) //18��
 				{
 					sys_flag.High_Lose_Count = Sys_Admin.Special_Secs; //��ס
-					Special_Water_Open(); //�򿪸��»�ˮ��ŷ�
+					Special_Water_Open(); //�򿪸��»�ˮ��ŷ�?
 				}
 		}
 
@@ -3510,21 +3510,21 @@ uint8 Special_Water_Supply_Function_OLD(void)
 
 	return 0 ;
 }
-#endif /* Special_Water_Supply_Function_OLD */
 
-/* WaterLevel_Unchange_Check() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 WaterLevel_Unchange_Check_OLD(void)
+
+
+//��ʱ�����ó���Ͷ��ʹ��
+uint8 WaterLevel_Unchange_Check(void)
 {
 	static uint8 LastState = 0;
 	uint8  Water_Buffer = 0;
 
-	//ֻ������״̬���м��
-	if(Sys_Admin.WaterUnchangeMaxTime >= 250) //Ĭ�������رռ��
+	//ֻ������״̬���м��?
+	if(Sys_Admin.WaterUnchangeMaxTime >= 250) //Ĭ�������رռ��?
 		return 0; 
 
-	//�����ܣ������й����У� ���ˮλ����ʱ�䲻�仯���򱨾�
-	Water_Buffer = lcd_data.Data_15L & 0x07; //ȡ�������ˮλ״̬�ļ���
+	//�����ܣ������й����У� ���ˮλ����ʱ�䲻�仯���򱨾�?
+	Water_Buffer = lcd_data.Data_15L & 0x07; //ȡ�������ˮλ״̬�ļ���?
 
 
 	if(LastState != Water_Buffer)
@@ -3544,12 +3544,11 @@ uint8 WaterLevel_Unchange_Check_OLD(void)
 
 	return 0;
 }
-#endif /* WaterLevel_Unchange_Check_OLD */
 
-/* Water_BianPin_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Water_BianPin_Function_OLD(void)
+
+uint8  Water_BianPin_Function(void)
 {
+	
 	uint8 buffer = 0;
 	static uint8 Old_State = 0;
 	static uint8 New_Percent = 18;
@@ -3558,7 +3557,7 @@ uint8  Water_BianPin_Function_OLD(void)
 	uint8 Jump_Index = 0;
 
 	if(Sys_Admin.Water_Max_Percent > 99)
-		Sys_Admin.Water_Max_Percent = 99; //��󿪶�ֵ���ܳ���100
+		Sys_Admin.Water_Max_Percent = 99; //��󿪶�ֵ���ܳ���?00
 
 	if(Sys_Admin.Water_Max_Percent < 25)
 		Sys_Admin.Water_Max_Percent = 25; //������С����ֵ���ܵ���25
@@ -3592,10 +3591,10 @@ uint8  Water_BianPin_Function_OLD(void)
 //������й����У�����ˮλ��̽���ˮ������
 		if(sys_data.Data_10H == 2)
 			{
-				//�����ˮλû���ź�
+				//�����ˮλû���ź�?
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//��������У�����ˮλ��ʾ��׼������
+						//��������У�����ˮλ��ʾ��׼������?
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -3635,7 +3634,7 @@ uint8  Water_BianPin_Function_OLD(void)
 
 	
 
-	 if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲���ˮ
+	 if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲����?
 		{
 			sys_flag.Water_Percent = 0;
 			 return 0;
@@ -3731,7 +3730,6 @@ uint8  Water_BianPin_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Water_BianPin_Function_OLD */
 
 
 uint8 LianXu_Paiwu_Control_Function(void)
@@ -3751,7 +3749,7 @@ uint8 LianXu_Paiwu_Control_Function(void)
 	//Sys_Admin.LianXu_PaiWu_OpenSecs //���ȵ�1s
 
 	//ADouble5[1].True.LianXuTime_H���ӻ���ǰ�Ѿ�������ʱ��
-	//************��Ҫ�������ӻ�ͬʱ���ۣ���ô���������������ӣ��ӻ�����ԭ��ʱ���趨�������ӳ������ӣ�Ҫ��Ҫ������ۣ�
+	//************��Ҫ�������ӻ�ͬʱ���ۣ���ô���������������ӣ��ӻ�����ԭ��ʱ���趨�������ӳ������ӣ�Ҫ��Ҫ������ۣ�?
 	//��Ҫ�Ѵӻ�����������ʱ�䣬ͬ����������
 
 	//������Ҫ��ˮ�ò�ˮ�������ܴ�
@@ -3760,11 +3758,11 @@ uint8 LianXu_Paiwu_Control_Function(void)
 	Dealy_Time = Sys_Admin.LianXu_PaiWu_DelayTime * 1 * 60; //0.1h * min  * 60sec/min
 	
 
-	Open_Time = Sys_Admin.LianXu_PaiWu_OpenSecs * 10; //�����100ms��λ�����㾫׼����ʱ��
+	Open_Time = Sys_Admin.LianXu_PaiWu_OpenSecs * 10; //�����?00ms��λ�����㾫׼����ʱ��
 
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3)
 		{
-			//�����飬�ü̵����������йѹ
+			//�����飬�ü̵����������й�?
 			return 0 ;
 		}
 	
@@ -3778,7 +3776,7 @@ uint8 LianXu_Paiwu_Control_Function(void)
 			if(sys_flag.flame_state)
 				if(sys_flag.LianXu_1sFlag)
 					{
-						sys_flag.LianxuWorkTime ++;//���
+						sys_flag.LianxuWorkTime ++;//���?
 						sys_flag.LianXu_1sFlag = 0;
 					}
 		}
@@ -3786,7 +3784,7 @@ uint8 LianXu_Paiwu_Control_Function(void)
 
 	 
 
-	//��鹤���ĵ�ʱ�䣬��û�дﵽ�趨��ֵ
+	//��鹤���ĵ�ʱ�䣬��û�дﵽ�趨���?
 	if(sys_flag.LianxuWorkTime >= Dealy_Time)
 		{
 			sys_flag.LianxuWorkTime = 0; //��������
@@ -3823,7 +3821,7 @@ uint8 LianXu_Paiwu_Control_Function(void)
 		}
 	else
 		{
-			sys_flag.Lianxu_OpenTime  = 0; //����ϴ�ʹ�õı�����־
+			sys_flag.Lianxu_OpenTime  = 0; //����ϴ�ʹ�õı������?
 			LianXu_Paiwu_Close();
 		}
 	
@@ -3865,7 +3863,7 @@ uint8 Speed_Pressure_Function(void)
 	if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3) 
 		{
 			//������ʹ���ڲ�ѹ����Ϊ׷��Ŀ��
-			New_Pressure = Temperature_Data.Inside_High_Pressure;  //����һ�β��ѹ����ΪĿ��
+			New_Pressure = Temperature_Data.Inside_High_Pressure;  //����һ�β��ѹ����ΪĿ��?
 		}
 	else
 		{
@@ -3925,7 +3923,7 @@ uint8 Wifi_Lock_Time_Function(void)
 
 	Now.iYear = LCD10D.DLCD.Year;
 	Now.iMonth = LCD10D.DLCD.Month;
-	Now.iDay = LCD10D.DLCD.Day;     //�������Ļ��ʱ��
+	Now.iDay = LCD10D.DLCD.Day;     //�������Ļ��ʱ��?
 
 	Set.iYear= *(uint32 *)(WIFI_LOCK_YEAR_ADDRESS); 
 	Set.iMonth = *(uint32 *)(WIFI_LOCK_MONTH_ADDRESS); 
@@ -4054,8 +4052,8 @@ uint8 XiangBian_Steam_AddFunction(void)
 								}
 							else
 								{
-									//�豸������״̬����ֹ�մ������쳣��ˮλ��û�ȶ����������������
-									//�豸��ǰ��ɨ�����У���⵽ȱˮ��Ҳ��ֱ�ӱ���
+									//�豸������״̬����ֹ�մ������쳣��ˮλ��û�ȶ����������������?
+									//�豸��ǰ��ɨ�����У���⵽ȱˮ��Ҳ��ֱ�ӱ���?
 								
 									if(sys_data.Data_12H == 0)
 										{
@@ -4084,7 +4082,7 @@ uint8 XiangBian_Steam_AddFunction(void)
 										}
 									else
 										{
-											//��ѹͣ¯״̬��ֱ�Ӳ����ˮλ������־����
+											//��ѹͣ¯״̬��ֱ�Ӳ����ˮλ������־����?
 											sys_flag.XB_WaterLow_Flag = 0;
 											sys_flag.XB_WaterLow_Count = 0;	
 										}
@@ -4134,10 +4132,9 @@ uint8 GetOut_Mannual_Function(void)
 
 
 
-/* ShuangPin_Water_Balance_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  ShuangPin_Water_Balance_Function_OLD(void)
+uint8  ShuangPin_Water_Balance_Function(void)
 {
+	
 	uint8 buffer = 0;
 
 	lcd_data.Data_15H = 0;
@@ -4167,10 +4164,10 @@ uint8  ShuangPin_Water_Balance_Function_OLD(void)
 		//������й����У�����ˮλ��̽���ˮ������
 		if(sys_data.Data_10H == 2)
 			{
-				//�����ˮλû���ź�
+				//�����ˮλû���ź�?
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//��������У�����ˮλ��ʾ��׼������
+						//��������У�����ˮλ��ʾ��׼������?
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -4191,7 +4188,7 @@ uint8  ShuangPin_Water_Balance_Function_OLD(void)
 	
 	if(sys_flag.Address_Number == 0)
 		{
-			//���������Լ�����ˮ��ŷ����ӻ����ڴ������յ����
+			//���������Լ�����ˮ��ŷ����ӻ����ڴ������յ�����?
 			if(Water_State.ZCommand)
 				Second_Water_Valve_Open();
 			else
@@ -4200,7 +4197,7 @@ uint8  ShuangPin_Water_Balance_Function_OLD(void)
 	
 	 
 
-	if(sys_flag.Error_Code )//����ȱ����Ϻ�ˮλ�߼����󣬲���ˮ
+	if(sys_flag.Error_Code )//����ȱ����Ϻ�ˮλ�߼����󣬲����?
 		{
 			Water_State.ZSignal = FALSE;
 			 return 0;
@@ -4270,14 +4267,11 @@ uint8  ShuangPin_Water_Balance_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* ShuangPin_Water_Balance_Function_OLD */
 
-/* Double_WaterPump_LogicFunction() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 Double_WaterPump_LogicFunction_OLD(void)
+uint8 Double_WaterPump_LogicFunction(void)
 {
 	uint8 State_Index = 0;
-	static uint16 Time_Value = 900;
+	static uint16 Time_Value = 900 ; //����700ms����
 
 
 	 if(sys_data.Data_10H == SYS_MANUAL)
@@ -4291,7 +4285,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 	 	}
 
 	
-	//�Կ���ص��ź�״̬���м���
+	//�Կ���ص��ź�״̬���м���?
 	if(Water_State.ZSignal == FALSE && Water_State.CSignal == FALSE)
 		State_Index = 0;
 	if(Water_State.ZSignal == OK && Water_State.CSignal == FALSE)
@@ -4305,7 +4299,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 	switch (State_Index)
 		{
 			case 0: //���Ӷ��ǹ������ź�
-					//���ȵü��ˮ���Ƿ�Ϊ��״̬
+					//���ȵü��ˮ���Ƿ�Ϊ��״�?
 					if(Switch_Inf.water_switch_flag)
 						{
 							//����ˮ�ùرյĶ����ź�
@@ -4314,10 +4308,10 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 						}
 					Water_State.Pump_Signal = FALSE;
 
-					//ˮ�ùر�ʱ�䵽���������ӿ��ص�״̬�ر����ӵĽ�ˮ��ŷ�
-					if(Water_State.PUMP_Close_Time >= Time_Value)  //���պ������
+					//ˮ�ùر�ʱ�䵽���������ӿ��ص�״̬�ر����ӵĽ�ˮ��ŷ�?
+					if(Water_State.PUMP_Close_Time >= Time_Value)  //���պ������?
 						{
-							Water_State.ZCommand = FALSE; //�������ӵ�ŷ��ر�ָ��
+							Water_State.ZCommand = FALSE; //�������ӵ�ŷ��ر�ָ��?
 							Water_State.CCommand = FALSE;
 						}
 
@@ -4326,14 +4320,14 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 					//���޴����ر������źţ�Ȼ���ٴ������ź�
 					if(Water_State.Cstate_Flag == OK)
 						{
-							//���йص������źţ��Ҵӵĵ�ŷ����ڿ���״̬ʱ,�ȹر�ˮ��
+							//���йص������źţ��Ҵӵĵ�ŷ����ڿ���״̬�?�ȹر�ˮ��
 							if(Switch_Inf.water_switch_flag)
-								Water_State.PUMP_Close_Time = 0;//�����ʱ��
+								Water_State.PUMP_Close_Time = 0;//�����ʱ��?
 							Water_State.Pump_Signal = FALSE;
 							if(Water_State.PUMP_Close_Time >= Time_Value)
 								{
 									Water_State.CCommand = FALSE;
-									Water_State.ZC_Open_Time = 0; //�Ե�ŷ�������ʱ�����¼��㣬��ֹ˲��˲��
+									Water_State.ZC_Open_Time = 0; //�Ե�ŷ�������ʱ�����¼��㣬��ֹ˲��˲��?
 								}
 								
 						}
@@ -4342,7 +4336,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 							//�ӻ��Ѿ��رգ������������ź�
 							if(Water_State.Zstate_Flag == OK)
 								{
-									//����ŷ��Ѿ�����
+									//����ŷ��Ѿ�����?
 									if(Water_State.ZC_Open_Time >= Time_Value)
 										Water_State.Pump_Signal = OK;//����ˮ���ź�
 								}
@@ -4358,14 +4352,14 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 			case 2: //�ӻ��п����źţ������ǹر��ź�
 					if(Water_State.Zstate_Flag == OK)
 						{
-							//���йص������źţ������ĵ�ŷ����ڿ���״̬ʱ,�ȹر�ˮ��
+							//���йص������źţ������ĵ�ŷ����ڿ���״̬�?�ȹر�ˮ��
 							if(Switch_Inf.water_switch_flag)
-								Water_State.PUMP_Close_Time = 0;//�����ʱ��
+								Water_State.PUMP_Close_Time = 0;//�����ʱ��?
 							Water_State.Pump_Signal = FALSE;
 							if(Water_State.PUMP_Close_Time >= Time_Value)
 								{
 									Water_State.ZCommand = FALSE;
-									Water_State.ZC_Open_Time = 0; //�Ե�ŷ�������ʱ�����¼��㣬��ֹ˲��˲��
+									Water_State.ZC_Open_Time = 0; //�Ե�ŷ�������ʱ�����¼��㣬��ֹ˲��˲��?
 								}
 								
 						}
@@ -4374,7 +4368,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 							//�����Ѿ��رգ��ӻ��������ź�
 							if(Water_State.Cstate_Flag == OK)
 								{
-									//����ŷ��Ѿ�����
+									//����ŷ��Ѿ�����?
 									if(Water_State.ZC_Open_Time >= Time_Value)
 										Water_State.Pump_Signal = OK;//����ˮ���ź�
 								}
@@ -4389,7 +4383,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 					break;
 			case 3: //�����ʹӻ��������󿪵��ź�
 					//��Ҫȷ��ˮ���Ƿ��Ѿ���
-					Water_State.ZCommand = OK; //�������ӵ�ŷ�����ָ��
+					Water_State.ZCommand = OK; //�������ӵ�ŷ�����ָ��?
 					Water_State.CCommand = OK;
 
 					if(Water_State.ZC_Open_Time >= Time_Value)
@@ -4403,7 +4397,7 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 		}
 
 
-	//�������
+	//�������?
 	if(sys_flag.Address_Number == 0)
 		{
 			
@@ -4444,12 +4438,11 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 
 	return 0;
 }
-#endif /* Double_WaterPump_LogicFunction_OLD */
 
-/* Double_Water_BianPin_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Double_Water_BianPin_Function_OLD(void)
+
+uint8  Double_Water_BianPin_Function(void)
 {
+	
 	uint8 buffer = 0;
 	static uint8 Old_State = 0;
 	static uint8 New_Percent = 18;
@@ -4458,7 +4451,7 @@ uint8  Double_Water_BianPin_Function_OLD(void)
 	uint8 Jump_Index = 0;
 
 	if(Sys_Admin.Water_Max_Percent > 99)
-		Sys_Admin.Water_Max_Percent = 99; //��󿪶�ֵ���ܳ���100
+		Sys_Admin.Water_Max_Percent = 99; //��󿪶�ֵ���ܳ���?00
 
 	if(Sys_Admin.Water_Max_Percent < 25)
 		Sys_Admin.Water_Max_Percent = 25; //������С����ֵ���ܵ���25
@@ -4492,10 +4485,10 @@ uint8  Double_Water_BianPin_Function_OLD(void)
 //������й����У�����ˮλ��̽���ˮ������
 		if(sys_data.Data_10H == 2)
 			{
-				//�����ˮλû���ź�
+				//�����ˮλû���ź�?
 				if (IO_Status.Target.water_high== WATER_LOSE)
 					{
-						//��������У�����ˮλ��ʾ��׼������
+						//��������У�����ˮλ��ʾ��׼������?
 						if (IO_Status.Target.water_shigh== WATER_OK)
 								buffer &= 0x07;
 					}
@@ -4541,7 +4534,7 @@ uint8  Double_Water_BianPin_Function_OLD(void)
 
 	
 
-	 if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲���ˮ
+	 if(sys_flag.Error_Code)//����ȱ����Ϻ�ˮλ�߼����󣬲����?
 		{
 			Water_State.ZSignal = FALSE;
 			sys_flag.Water_Percent = 0;
@@ -4648,4 +4641,6 @@ uint8  Double_Water_BianPin_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Double_Water_BianPin_Function_OLD */
+
+
+

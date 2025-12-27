@@ -1,8 +1,5 @@
-﻿
+
 #include "main.h"
-#include "error_handler.h"
-#include "ignition.h"
-#include "water_control.h"
 
 
 
@@ -127,9 +124,7 @@ uint8 IDLE_INDEX = 0;
 uint8 cmd_string111[7] = {0x5A,0xA5,0x04,0x80,0x03,0x00,0x4B}; //��ҳָ��л�����76ҳ
 
 
-/* Get_IO_Inf() 已移动到 SYSTEM/error/error_handler.c */
-#if 0  /* 原函数已移动 */
-void Get_IO_Inf_OLD(void)
+void Get_IO_Inf(void)
 {
 	uint8  Error16_Time = 8;
 	
@@ -244,16 +239,19 @@ void Get_IO_Inf_OLD(void)
 				sys_flag.Error1_Count = 0;
 			}
 			
+
 	
-
 }
-#endif  /* Get_IO_Inf_OLD */
 
 
 
-/* Before_Ignition_Prepare() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-uint8 Before_Ignition_Prepare_OLD(void)
+/**
+  * @brief  �������ǰ�����׼������
+  * @param  sys_flag.before_ignition_index
+  * @retval ׼���÷���1�����򷵻�0
+  */
+
+uint8 Before_Ignition_Prepare(void)
 {
 		//1��ˮλ�źű�����                2�������źű�����
 		//sys_flag.before_ignition_index
@@ -327,25 +325,36 @@ uint8 Before_Ignition_Prepare_OLD(void)
 
 		return func_state ;//���ǰ׼����׼�����ˣ�����1
 }
-#endif /* Before_Ignition_Prepare_OLD */
 
 
 
-/* Self_Check_Function() 已移动到 SYSTEM/error/error_handler.c */
-#if 0
- void Self_Check_Function_OLD()
+/**
+  * @brief  ��鲢ת����IO��ˮλ��Ϣ���ȱ�������״̬
+* @param  
+  * @retval ��
+  */
+ void Self_Check_Function()
 {
-	Get_IO_Inf();
-	if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
-	{
-		sys_flag.Error_Code = Error16_SmokeValueHigh;
-	}
-}
-#endif
+	
+	
+	Get_IO_Inf(); //��ȡIO��Ϣ
 
-/* Sys_Ignition_Fun() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-uint8  Sys_Ignition_Fun_OLD(void)
+	
+		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
+		{
+			
+			sys_flag.Error_Code = Error16_SmokeValueHigh;
+		}
+		
+						 
+}
+
+/**
+  * @brief  ϵͳ������
+* @param   �����ɷ���1�����򷵻�0
+  * @retval ��
+  */
+uint8  Sys_Ignition_Fun(void)
 {
 		
 		sys_data.Data_12H = 0x00; //�������У�û�ж��쳣���м��
@@ -877,7 +886,6 @@ uint8  Sys_Ignition_Fun_OLD(void)
 		return 0;
 		
 }
-#endif /* Sys_Ignition_Fun_OLD */
 
 
 
@@ -887,9 +895,7 @@ uint8  Sys_Ignition_Fun_OLD(void)
 * @param   �����Ϻ��쳣���з��룬ȼ��ѹ����ϵͳ���к͵���м��
   * @retval ��
   */
-/* Auto_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
-#if 0
-void Auto_Check_Fun_OLD(void)
+void Auto_Check_Fun(void)
 {
 
 	uint8 Error_Buffer = 0;
@@ -986,12 +992,11 @@ void Auto_Check_Fun_OLD(void)
 	if( Temperature_Data.Pressure_Value >= (Sys_Admin.DeviceMaxPressureSet - 1))
 		{
 			 
-			sys_flag.Error_Code  = Error2_YaBianProtect;
-	}
+				sys_flag.Error_Code  = Error2_YaBianProtect;
+		}
 
 		 
 }
-#endif /* Auto_Check_Fun_OLD */
 
 	
 /**
@@ -999,11 +1004,10 @@ void Auto_Check_Fun_OLD(void)
 * @param  ���������¯�峬��,���Է���
   * @retval ��
   */
-/* Ignition_Check_Fun() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-void Ignition_Check_Fun_OLD(void)
+void Ignition_Check_Fun(void)
 {
-		Get_IO_Inf();
+		
+		Get_IO_Inf(); //��ȡIO��Ϣ
 
 		if(Temperature_Data.Smoke_Tem > Sys_Admin.Danger_Smoke_Value)
 		{
@@ -1027,23 +1031,50 @@ void Ignition_Check_Fun_OLD(void)
 	
 
 }
-#endif /* Ignition_Check_Fun_OLD */
+	
+	
 
-/* Idel_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
-#if 0
-uint8 Idel_Check_Fun_OLD(void)
+		
+
+/**
+  * @brief  ������ʱ������״̬������δ�����л��棬ȼ�ջ��ȱ�����¯�峬�µȽ��ǹ��ϣ����뱨����ʾ
+* @param  �������Է��ź���������
+  * @retval ��
+  */
+uint8 Idel_Check_Fun(void)
 {
-	if(sys_flag.Error_Code) return 0;
-	Get_IO_Inf();
-	if (IDLE_INDEX == 0) {
-		if(sys_flag.flame_state == FLAME_OK) {
-			if(sys_flag.Error_Code == 0)
-				sys_flag.Error_Code = Error7_FlameZiJian;
+	//***********ˮλ�����һֱҪ���*************//
+		
+	 if(sys_flag.Error_Code )
+	 		return 0;//����й��ϣ�ֱ���˳������ٽ��м��
+
+	
+	
+
+	 
+	  Get_IO_Inf(); //��ȡIO��Ϣ
+
+	
+	
+	if (IDLE_INDEX == 0)
+		{
+		 if(sys_flag.flame_state == FLAME_OK)
+			{
+				if(sys_flag.Error_Code == 0 )
+					sys_flag.Error_Code = Error7_FlameZiJian;
+					 //����ʱ���϶�û�л��棬����̽�������ϱ���
+			}
+		
 		}
-	}
-	return 0;
+		
+
+
+	 
+	 
+
+		return 0 ;
+		
 }
-#endif
 
 
 
@@ -1473,9 +1504,15 @@ uint8 XB_System_Pressure_Balance_Function(void)
 
 
 
-/* Abnormal_Events_Response() 已移动到 SYSTEM/error/error_handler.c */
-#if 0
-void  Abnormal_Events_Response_OLD(void)
+/**
+	 * @brief  ϵͳ���й����У��쳣��Ӧ�䴦�����쳣�����������ۼӣ�����Ӧ����������Ϊϵͳ����
+	 * @param    ����ʱ����Ϩ���쳣
+							 ¯�ڳ����쳣
+							 �������رպ��쳣
+							 ȼ�����ȱ��������쳣
+  * @retval ��
+  */
+void  Abnormal_Events_Response(void)
 {
 		
 	
@@ -1721,12 +1758,16 @@ void  Abnormal_Events_Response_OLD(void)
 
 
 		
+	
+	
+	
 }
-#endif /* Abnormal_Events_Response_OLD */
-
-/* Sys_Launch_Function() 已移动到 SYSTEM/ignition/ignition.c */
-#if 0
-void Sys_Launch_Function_OLD(void)
+/**
+  * @brief  ϵͳ���г���
+* @param   Sys_Launch_Index�������л�ϵͳ���в���
+  * @retval ��
+  */
+void Sys_Launch_Function(void)
 {
 		switch(Sys_Launch_Index)
 		{
@@ -1796,16 +1837,14 @@ void Sys_Launch_Function_OLD(void)
 					break;
 		}	
 }
-#endif /* Sys_Launch_Function_OLD */
 
 
 
 
 
-/* Abnormal_Check_Fun() 已移动到 SYSTEM/error/error_handler.c */
-#if 0
-void Abnormal_Check_Fun_OLD(void)
+void Abnormal_Check_Fun(void)
 {
+	//���ȼ��ѹ���Ƿ����������������Ƿ�������¯����ˮ�Ƿ���
 		Get_IO_Inf();
 	
 		
@@ -1834,17 +1873,30 @@ void Abnormal_Check_Fun_OLD(void)
 		{
 			
 
-		sys_flag.Error_Code  = Error2_YaBianProtect;
-	}
+			sys_flag.Error_Code  = Error2_YaBianProtect;
+		}
+
+
+	
+		
 }
-#endif /* Abnormal_Check_Fun_OLD */
 
-/* Lcd_Err_Refresh(), Lcd_Err_Read(), Err_Response() 已移动到 error_handler.c */
-#if 0
-void Lcd_Err_Refresh_OLD(void) {}
-void Lcd_Err_Read_OLD(void) {}
+//ˢ��LCD������Ϣ��¼����
+void Lcd_Err_Refresh(void)
+{
+	
+	
+}
 
-void  Err_Response_OLD(void)
+void Lcd_Err_Read(void)
+{
+	
+	
+}
+
+ 
+
+void  Err_Response(void)
 {
 	static uint8 Old_Error = 0;
 	//����й��ϱ�����ͣ¯��14H��15HΪ��������
@@ -1910,13 +1962,17 @@ void  Err_Response_OLD(void)
 			 				Beep_Data.beep_start_flag = 1;//���Ʒ���������	
 	 					}
 	 			}
+	 		
+	 		
 	 	}
-}
-#endif /* Err_Response_OLD */
 
-/* IDLE_Err_Response() 已移动到 error_handler.c */
-#if 0
-void  IDLE_Err_Response_OLD(void)
+	 	 
+				
+	  
+}
+
+
+void  IDLE_Err_Response(void)
 {
 	static uint8 Old_Error = 0;
 	//����й��ϱ�����ͣ¯��
@@ -1994,10 +2050,6 @@ void  IDLE_Err_Response_OLD(void)
 	
 	  
 }
-#endif /* IDLE_Err_Response_OLD */
-
-
-
 
 
 
@@ -2811,9 +2863,8 @@ void Last_Blow_End_Fun(void)
 
 
 
-/* Water_Balance_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Water_Balance_Function_OLD(void)
+//���ü̵����źſ���������������������ˮλ�ź���,�����ˮλ�߼�����
+uint8  Water_Balance_Function(void)
 {
 	
 	uint8 buffer = 0;
@@ -2953,7 +3004,6 @@ uint8  Water_Balance_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Water_Balance_Function_OLD */
 
 
 
@@ -3464,9 +3514,8 @@ uint8 PaiWu_Warnning_Function(void)
 	return 0;
 }
 
-/* Special_Water_Supply_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 Special_Water_Supply_Function_OLD(void)
+
+uint8 Special_Water_Supply_Function(void)
 {
 	static uint8 High_Flag = 0;
 	//���½�ˮ��ŷ� ���漰�����»�ˮ��ŷ�
@@ -3510,11 +3559,11 @@ uint8 Special_Water_Supply_Function_OLD(void)
 
 	return 0 ;
 }
-#endif /* Special_Water_Supply_Function_OLD */
 
-/* WaterLevel_Unchange_Check() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 WaterLevel_Unchange_Check_OLD(void)
+
+
+//��ʱ�����ó���Ͷ��ʹ��
+uint8 WaterLevel_Unchange_Check(void)
 {
 	static uint8 LastState = 0;
 	uint8  Water_Buffer = 0;
@@ -3544,12 +3593,11 @@ uint8 WaterLevel_Unchange_Check_OLD(void)
 
 	return 0;
 }
-#endif /* WaterLevel_Unchange_Check_OLD */
 
-/* Water_BianPin_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Water_BianPin_Function_OLD(void)
+
+uint8  Water_BianPin_Function(void)
 {
+	
 	uint8 buffer = 0;
 	static uint8 Old_State = 0;
 	static uint8 New_Percent = 18;
@@ -3731,7 +3779,6 @@ uint8  Water_BianPin_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Water_BianPin_Function_OLD */
 
 
 uint8 LianXu_Paiwu_Control_Function(void)
@@ -4134,10 +4181,9 @@ uint8 GetOut_Mannual_Function(void)
 
 
 
-/* ShuangPin_Water_Balance_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  ShuangPin_Water_Balance_Function_OLD(void)
+uint8  ShuangPin_Water_Balance_Function(void)
 {
+	
 	uint8 buffer = 0;
 
 	lcd_data.Data_15H = 0;
@@ -4270,14 +4316,11 @@ uint8  ShuangPin_Water_Balance_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* ShuangPin_Water_Balance_Function_OLD */
 
-/* Double_WaterPump_LogicFunction() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8 Double_WaterPump_LogicFunction_OLD(void)
+uint8 Double_WaterPump_LogicFunction(void)
 {
 	uint8 State_Index = 0;
-	static uint16 Time_Value = 900;
+	static uint16 Time_Value = 900 ; //����700ms����
 
 
 	 if(sys_data.Data_10H == SYS_MANUAL)
@@ -4444,12 +4487,11 @@ uint8 Double_WaterPump_LogicFunction_OLD(void)
 
 	return 0;
 }
-#endif /* Double_WaterPump_LogicFunction_OLD */
 
-/* Double_Water_BianPin_Function() 已移动到 SYSTEM/water/water_control.c */
-#if 0
-uint8  Double_Water_BianPin_Function_OLD(void)
+
+uint8  Double_Water_BianPin_Function(void)
 {
+	
 	uint8 buffer = 0;
 	static uint8 Old_State = 0;
 	static uint8 New_Percent = 18;
@@ -4648,4 +4690,5 @@ uint8  Double_Water_BianPin_Function_OLD(void)
 			
 	return  0;	
 }
-#endif /* Double_Water_BianPin_Function_OLD */
+
+
