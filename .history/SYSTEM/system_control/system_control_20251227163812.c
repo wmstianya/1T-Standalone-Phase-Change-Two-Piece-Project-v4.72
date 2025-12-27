@@ -1,4 +1,4 @@
-
+﻿
 #include "main.h"
 #include "error_handler.h"
 #include "ignition.h"
@@ -3834,13 +3834,10 @@ uint8 LianXu_Paiwu_Control_Function_OLD(void)
 
 
 
-/* Auto_StartOrClose_Process_Function() 已移动到 SYSTEM/sys_cmd/sys_cmd.c */
-#if 0
-uint8 Auto_StartOrClose_Process_Function_OLD(void)
+uint8 Auto_StartOrClose_Process_Function(void)
 {
 	return 0;
 }
-#endif /* Auto_StartOrClose_Process_Function_OLD */
 
 
 void JTAG_Diable(void)

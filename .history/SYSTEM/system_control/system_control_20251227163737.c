@@ -1,4 +1,4 @@
-
+﻿
 #include "main.h"
 #include "error_handler.h"
 #include "ignition.h"
@@ -2646,12 +2646,14 @@ void One_Sec_Check(void)
 
 
 
-/* sys_start_cmd() 已移动到 SYSTEM/sys_cmd/sys_cmd.c */
-#if 0
-uint8 sys_start_cmd_OLD(void)
+uint8  sys_start_cmd(void)
 {
+		
+
 		if(sys_flag.Lock_System)
 			{
+				//��ת�����Ͻ��棬���޹��ϴ�����ʾ
+				
 				return 0 ;
 			}
 		
@@ -2710,16 +2712,15 @@ uint8 sys_start_cmd_OLD(void)
 		
 	return 0;							
 }
-#endif /* sys_start_cmd_OLD */
 
 
-/* sys_close_cmd() 已移动到 SYSTEM/sys_cmd/sys_cmd.c */
-#if 0
-void sys_close_cmd_OLD(void)
+void sys_close_cmd(void)
 {
+	// #region agent log
+	// 若因“火焰熄灭(12)”进入停机流程，记录一次（用于确认“从机停机”是否由Error12触发）
 	if(sys_flag.Error_Code == Error12_FlameLose)
 	{
-		U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:sys_close_cmd\",\"message\":\"sys_close_cmd with Error12\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"errorCode\":%d,\"flameSignal\":%d,\"flameState\":%d},\"timestamp\":%lu}\r\n\",
+		U5_Printf("{\"sessionId\":\"debug-session\",\"runId\":\"run1-pre\",\"hypothesisId\":\"H1\",\"location\":\"system_control.c:sys_close_cmd\",\"message\":\"sys_close_cmd with Error12\",\"data\":{\"boardAddr\":%d,\"deviceStyle\":%d,\"workState\":%d,\"errorCode\":%d,\"flameSignal\":%d,\"flameState\":%d},\"timestamp\":%lu}\r\n",
 		          sys_flag.Address_Number,
 		          (int)Sys_Admin.Device_Style,
 		          (int)sys_data.Data_10H,
@@ -2762,10 +2763,11 @@ void sys_close_cmd_OLD(void)
 		Ignition_Index = 0;
 		IDLE_INDEX = 1;
 		Last_Blow_Start_Fun();
+	
 }
-#endif /* sys_close_cmd_OLD */
 
 
+//��ɨ��ʼִ�г���
 void Last_Blow_Start_Fun(void)
 {
 	//ȷ�Ϸ���Ѿ���
@@ -3834,13 +3836,10 @@ uint8 LianXu_Paiwu_Control_Function_OLD(void)
 
 
 
-/* Auto_StartOrClose_Process_Function() 已移动到 SYSTEM/sys_cmd/sys_cmd.c */
-#if 0
-uint8 Auto_StartOrClose_Process_Function_OLD(void)
+uint8 Auto_StartOrClose_Process_Function(void)
 {
 	return 0;
 }
-#endif /* Auto_StartOrClose_Process_Function_OLD */
 
 
 void JTAG_Diable(void)
