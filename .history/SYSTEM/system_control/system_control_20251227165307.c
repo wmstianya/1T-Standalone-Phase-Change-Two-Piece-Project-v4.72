@@ -2554,32 +2554,37 @@ uint8 byte_to_bit_OLD(void)
 
 
 
-/* Load_LCD_Data() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void Load_LCD_Data_OLD(void)
+//����LCD����MCU������
+void Load_LCD_Data(void)
 {
+	
 }
-#endif /* Load_LCD_Data_OLD */
 
 
 
 
 
-/* clear_struct_memory() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void clear_struct_memory_OLD(void)
+void clear_struct_memory(void)
 {
-	memset(&sys_data,0,sizeof(sys_data));
-	memset(&lcd_data,0,sizeof(lcd_data));
-	memset(&sys_time_inf,0,sizeof(sys_time_inf));
-	memset(&sys_config_data,0,sizeof(sys_config_data));
-	memset(&Switch_Inf,0,sizeof(Switch_Inf));
-	memset(&Abnormal_Events,0,sizeof(Abnormal_Events));
-	memset(&sys_flag,0,sizeof(sys_flag));
+	uint8 temp = 0;
+		//�Խṹ�������ʼ��	
+	memset(&sys_data,0,sizeof(sys_data));	//��״̬��Ϣ�ṹ������
+  	memset(&lcd_data,0,sizeof(lcd_data));	//��״̬��Ϣ�ṹ������
+	memset(&sys_time_inf,0,sizeof(sys_time_inf));	//��״̬��Ϣ�ṹ������
+	
+	memset(&sys_config_data,0,sizeof(sys_config_data));	//��״̬��Ϣ�ṹ������
+	
+	
+	memset(&Switch_Inf,0,sizeof(Switch_Inf));//��ϵͳ��־����������
+	memset(&Abnormal_Events,0,sizeof(Abnormal_Events));//���쳣�ṹ������
+	memset(&sys_flag,0,sizeof(sys_flag));//��ϵͳ��־����
+	
 	memset(&Flash_Data,0,sizeof(Flash_Data));
 	memset(&Temperature_Data,0,sizeof(Temperature_Data));
+	 
+	
+	
 }
-#endif /* clear_struct_memory_OLD */
 
 
 
@@ -2588,20 +2593,59 @@ void clear_struct_memory_OLD(void)
 
 
 
-/* One_Sec_Check() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void One_Sec_Check_OLD(void)
+void One_Sec_Check(void)
 {
+ 	 
+	 //�������Ч������֤��������������
 	if(sys_flag.Relays_3Secs_Flag)
-	{
-		sys_flag.Relays_3Secs_Flag = 0;
-	}
+		{
+			sys_flag.Relays_3Secs_Flag = 0;
+
+	//	u1_printf("\n* ͨ�ŵ�ַ���� = %d\n",Sys_Admin.ChaYa_WaterHigh_Set);
+	//	u1_printf("\n* ��Һλ�߶� = %d\n",Sys_Admin.ChaYa_WaterMid_Set);
+	
+	//		u1_printf("\n* �ӻ�С����ʱ�� = %d\n",SlaveG[2].Small_time);
+	//		u1_printf("\n* Сƽ���趨ʱ�� = %d\n",Sys_Admin.Balance_Small_Time);
+
+		
+		
+
+			
+		}
+	 
+	
+	
+		
+
+
+
+				
+
+
+
+	
+
+	
+//��ӡ������Ϣ
 	if(sys_flag.two_sec_flag)
-	{
-		sys_flag.two_sec_flag = 0;
-	}
+		{
+			sys_flag.two_sec_flag = 0;
+			
+			//sys_flag.LianxuWorkTime
+			//u1_printf("\n* ���õ�ʱ��= %d\n",Sys_Admin.LianXu_PaiWu_DelayTime);
+			//u1_printf("\n* �Ѿ����е�ʱ��= %d\n",sys_flag.LianxuWorkTime);
+			//u1_printf("\n* s���ÿ�����ʱ��= %d\n",Sys_Admin.LianXu_PaiWu_OpenSecs);
+			
+			//u1_printf("\n* ������ʱ��= %d\n",sys_flag.Lianxu_OpenTime);
+		//	u1_printf("\n* ��ˮ�ı�־= %d\n",Switch_Inf.water_switch_flag);
+
+			
+		}
+
+		
+	
+	
 }
-#endif /* One_Sec_Check_OLD */
 
 
 
@@ -2725,9 +2769,7 @@ void sys_close_cmd_OLD(void)
 #endif /* sys_close_cmd_OLD */
 
 
-/* Last_Blow_Start_Fun() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void Last_Blow_Start_Fun_OLD(void)
+void Last_Blow_Start_Fun(void)
 {
 	//ȷ�Ϸ���Ѿ���
 	Send_Air_Open();
@@ -2744,14 +2786,11 @@ void Last_Blow_Start_Fun_OLD(void)
 	else
 		delay_sys_sec(15000);//���û�ɹ����ʹ���15��
 }
-#endif /* Last_Blow_Start_Fun_OLD */
 
 
-/* Last_Blow_End_Fun() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
 /*�����ɨ������־��  ������������λ�����ʧ�ܹ��ϣ�ȼ������й¶���ϣ�ϵͳ�����л���Ϩ��*/
 
-void Last_Blow_End_Fun_OLD(void)
+void Last_Blow_End_Fun(void)
 {
 	//ȷ�Ϸ���ر�
 	
@@ -2763,7 +2802,6 @@ void Last_Blow_End_Fun_OLD(void)
 	 
 	sys_flag.last_blow_flag = 0;//��ɨ״̬������־
 }
-#endif /* Last_Blow_End_Fun_OLD */
 
  
 
@@ -2920,10 +2958,8 @@ uint8  Water_Balance_Function_OLD(void)
 
 
 
-/* Manual_Realys_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
 //�����ֶ�ģʽһЩ���ܵĴ���
-uint8 Manual_Realys_Function_OLD(void)
+uint8 Manual_Realys_Function(void)
 {
 	
 	
@@ -2934,7 +2970,6 @@ uint8 Manual_Realys_Function_OLD(void)
 	
 	return 0;
 }
-#endif /* Manual_Realys_Function_OLD */
 
 /* Check_Config_Data_Function() 已移动到 SYSTEM/config/sys_config.c */
 #if 0
@@ -3180,18 +3215,14 @@ uint8 Admin_Work_Time_Function_OLD(void)
 
 
 
-/* HardWare_Protect_Relays_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void HardWare_Protect_Relays_Function_OLD(void)
+void HardWare_Protect_Relays_Function(void)
 {
  	 
  }
-#endif /* HardWare_Protect_Relays_Function_OLD */
 
 
-/* Power_ON_Begin_Check_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-uint8 Power_ON_Begin_Check_Function_OLD(void)
+
+uint8 Power_ON_Begin_Check_Function(void)
 {
 
 	
@@ -3200,7 +3231,6 @@ uint8 Power_ON_Begin_Check_Function_OLD(void)
 
 	return 0;
 }
-#endif /* Power_ON_Begin_Check_Function_OLD */
 
 /* IDLE_Auto_Pai_Wu_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
 #if 0
@@ -3800,16 +3830,13 @@ uint8 Auto_StartOrClose_Process_Function_OLD(void)
 #endif /* Auto_StartOrClose_Process_Function_OLD */
 
 
-/* JTAG_Diable() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void JTAG_Diable_OLD(void)
+void JTAG_Diable(void)
 {
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO ,ENABLE);
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
 	
 }
-#endif /* JTAG_Diable_OLD */
 
 
 /* Speed_Pressure_Function() 已移动到 SYSTEM/pressure/pressure_ctrl.c */
@@ -4079,9 +4106,7 @@ uint8 XiangBian_Steam_AddFunction_OLD(void)
 #endif /* XiangBian_Steam_AddFunction_OLD */
 
 
-/* GetOut_Mannual_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-uint8 GetOut_Mannual_Function_OLD(void)
+uint8 GetOut_Mannual_Function(void)
 {
 	Feed_Main_Pump_OFF();
 	sys_flag.WaterClose_Time = 2; 
@@ -4095,7 +4120,6 @@ uint8 GetOut_Mannual_Function_OLD(void)
 
 		return 0;
 }
-#endif /* GetOut_Mannual_Function_OLD */
 
 
 

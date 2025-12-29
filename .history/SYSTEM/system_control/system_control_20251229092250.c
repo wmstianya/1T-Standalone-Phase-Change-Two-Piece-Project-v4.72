@@ -4079,9 +4079,7 @@ uint8 XiangBian_Steam_AddFunction_OLD(void)
 #endif /* XiangBian_Steam_AddFunction_OLD */
 
 
-/* GetOut_Mannual_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-uint8 GetOut_Mannual_Function_OLD(void)
+uint8 GetOut_Mannual_Function(void)
 {
 	Feed_Main_Pump_OFF();
 	sys_flag.WaterClose_Time = 2; 
@@ -4095,7 +4093,6 @@ uint8 GetOut_Mannual_Function_OLD(void)
 
 		return 0;
 }
-#endif /* GetOut_Mannual_Function_OLD */
 
 
 

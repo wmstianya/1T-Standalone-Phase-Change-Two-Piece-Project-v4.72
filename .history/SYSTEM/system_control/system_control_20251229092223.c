@@ -3180,18 +3180,14 @@ uint8 Admin_Work_Time_Function_OLD(void)
 
 
 
-/* HardWare_Protect_Relays_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void HardWare_Protect_Relays_Function_OLD(void)
+void HardWare_Protect_Relays_Function(void)
 {
  	 
  }
-#endif /* HardWare_Protect_Relays_Function_OLD */
 
 
-/* Power_ON_Begin_Check_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-uint8 Power_ON_Begin_Check_Function_OLD(void)
+
+uint8 Power_ON_Begin_Check_Function(void)
 {
 
 	
@@ -3200,7 +3196,6 @@ uint8 Power_ON_Begin_Check_Function_OLD(void)
 
 	return 0;
 }
-#endif /* Power_ON_Begin_Check_Function_OLD */
 
 /* IDLE_Auto_Pai_Wu_Function() 已移动到 SYSTEM/blowdown/blowdown.c */
 #if 0
@@ -3800,16 +3795,13 @@ uint8 Auto_StartOrClose_Process_Function_OLD(void)
 #endif /* Auto_StartOrClose_Process_Function_OLD */
 
 
-/* JTAG_Diable() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-void JTAG_Diable_OLD(void)
+void JTAG_Diable(void)
 {
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO ,ENABLE);
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
 	
 }
-#endif /* JTAG_Diable_OLD */
 
 
 /* Speed_Pressure_Function() 已移动到 SYSTEM/pressure/pressure_ctrl.c */
@@ -4079,9 +4071,7 @@ uint8 XiangBian_Steam_AddFunction_OLD(void)
 #endif /* XiangBian_Steam_AddFunction_OLD */
 
 
-/* GetOut_Mannual_Function() 已移动到 SYSTEM/utils/sys_utils.c */
-#if 0
-uint8 GetOut_Mannual_Function_OLD(void)
+uint8 GetOut_Mannual_Function(void)
 {
 	Feed_Main_Pump_OFF();
 	sys_flag.WaterClose_Time = 2; 
@@ -4095,7 +4085,6 @@ uint8 GetOut_Mannual_Function_OLD(void)
 
 		return 0;
 }
-#endif /* GetOut_Mannual_Function_OLD */
 
 
 
