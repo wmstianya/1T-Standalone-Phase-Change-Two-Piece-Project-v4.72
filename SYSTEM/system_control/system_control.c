@@ -23,6 +23,7 @@ uint8 now_percent = 0; //�����趨���ڵ�ʵʱ����
 uint8 adc_sample_flag = 0; //adc ����ʱ���־
 
 uint8 T_PERCENT = 0;
+
 uint32_t BJ_TimeVar;//����ʱ�������
 
 /*ʱ��ṹ�壬Ĭ��ʱ��2000-01-01 00:00:00*/

@@ -484,6 +484,11 @@
               <FilePath>..\SYSTEM\pressure\pressure_ctrl.c</FilePath>
             </File>
             <File>
+              <FileName>pressure_pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\pressure\pressure_pid.c</FilePath>
+            </File>
+            <File>
               <FileName>sys_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\config\sys_config.c</FilePath>
