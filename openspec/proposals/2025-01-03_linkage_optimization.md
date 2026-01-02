@@ -1,0 +1,518 @@
+# 主从机联动优化方案
+
+## 📋 变更请求
+
+**请求日期**: 2025-01-03  
+**变更类型**: 功能优化  
+**影响范围**: `HARDWARE/USART3/usart3.c` - `Union_MuxJiZu_Control_Function()`  
+**状态**: 📝 方案评审中
+
+---
+
+## 🎯 优化目标
+
+| 序号 | 优化方向 | 当前问题 | 目标 |
+|------|----------|----------|------|
+| 1 | 增减载响应速度 | 固定15秒周期+时间阈值，响应慢 | 压力预测，提前响应 |
+| 2 | 运行时间均衡 | 仅增减载时考虑均衡 | 主动轮换，磨损均衡 |
+| 3 | 故障恢复自动重入 | 故障机组恢复后不自动纳入 | 自动检测恢复，重新纳入 |
+
+---
+
+## 📊 方案一：增减载响应速度优化
+
+### 1.1 当前实现分析
+
+```c
+// 当前: 固定15秒周期 + 固定时间阈值
+Period_Check++;
+if(Period_Check >= 15) {  // 15秒周期
+    for(Address = 1; Address <= 10; Address++) {
+        if(SlaveG[Address].Big_time > Sys_Admin.Balance_Big_Time)  // 默认90秒
+            Value_Buffer2++;
+        if(SlaveG[Address].Small_time > Sys_Admin.Balance_Small_Time) // 默认150秒
+            Value_Buffer++;
+    }
+}
+```
+
+**问题**: 
+- 最快响应时间 = 15秒周期 + 90/150秒阈值 ≈ **105-165秒**
+- 无法应对突发负荷变化（如用汽设备突然启动）
+- 压力可能已经过低才开始增载
+
+### 1.2 优化方案A：压力变化率预测
+
+**核心思想**: 根据压力下降/上升速率预测，提前触发增减载
+
+```c
+typedef struct {
+    float pressureHistory[5];   // 最近5秒压力历史
+    uint8_t historyIndex;       // 环形缓冲区索引
+    float pressureRate;         // 压力变化率 (MPa/s)
+    float predictedPressure;    // 预测压力值
+} PressurePredictor;
+
+/* 压力变化率计算 (每秒调用) */
+void Pressure_UpdateRate(PressurePredictor *pred, float currentPressure)
+{
+    pred->pressureHistory[pred->historyIndex] = currentPressure;
+    pred->historyIndex = (pred->historyIndex + 1) % 5;
+    
+    // 计算5秒内的平均变化率
+    float oldestPressure = pred->pressureHistory[pred->historyIndex];
+    pred->pressureRate = (currentPressure - oldestPressure) / 5.0f;
+    
+    // 预测30秒后的压力
+    pred->predictedPressure = currentPressure + pred->pressureRate * 30.0f;
+}
+
+/* 增减载决策增强 */
+uint8_t Linkage_ShouldAddUnit(PressurePredictor *pred, float setpoint)
+{
+    // 条件1: 传统条件 - 所有机组满功率超时
+    if(allUnitsBigTimeExceeded) return 1;
+    
+    // 条件2: 预测条件 - 压力快速下降，预测将低于阈值
+    if(pred->pressureRate < -0.01f &&  // 压力下降速率 > 0.01 MPa/s
+       pred->predictedPressure < setpoint * 0.9f) {
+        return 1;  // 提前增载
+    }
+    
+    return 0;
+}
+```
+
+**优点**:
+- 响应时间从 105秒 → **15-30秒**
+- 压力波动更平稳
+- 适应突发负荷变化
+
+**缺点**:
+- 增加少量计算开销
+- 需要调试预测参数
+
+### 1.3 优化方案B：自适应周期评估
+
+**核心思想**: 根据系统负荷动态调整评估周期
+
+```c
+typedef struct {
+    uint8_t basePeriod;         // 基础周期 (秒)
+    uint8_t currentPeriod;      // 当前周期
+    uint8_t loadLevel;          // 负荷等级: 0=轻载, 1=中载, 2=重载, 3=临界
+} AdaptivePeriod;
+
+/* 自适应周期计算 */
+void Linkage_UpdatePeriod(AdaptivePeriod *ap, uint8_t avgPower, float pressure, float setpoint)
+{
+    // 计算负荷等级
+    float pressureRatio = pressure / setpoint;
+    
+    if(avgPower >= 90 || pressureRatio < 0.85f) {
+        ap->loadLevel = 3;  // 临界: 高功率或低压力
+        ap->currentPeriod = 3;  // 3秒周期
+    }
+    else if(avgPower >= 70 || pressureRatio < 0.95f) {
+        ap->loadLevel = 2;  // 重载
+        ap->currentPeriod = 5;  // 5秒周期
+    }
+    else if(avgPower >= 45) {
+        ap->loadLevel = 1;  // 中载
+        ap->currentPeriod = 10; // 10秒周期
+    }
+    else {
+        ap->loadLevel = 0;  // 轻载
+        ap->currentPeriod = 15; // 15秒周期 (维持原值)
+    }
+}
+```
+
+**优点**:
+- 实现简单，改动小
+- 临界状态响应快，稳态时节省资源
+
+**缺点**:
+- 无预测能力，仍是被动响应
+
+### 1.4 推荐方案
+
+**推荐: 方案A + 方案B 结合**
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  增减载决策流程                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐ │
+│  │ 压力预测器  │───▶│ 自适应周期  │───▶│ 增减载决策  │ │
+│  │ (每秒更新)  │    │ (动态调整)  │    │ (综合判断)  │ │
+│  └─────────────┘    └─────────────┘    └─────────────┘ │
+│        │                  │                  │         │
+│        ▼                  ▼                  ▼         │
+│  pressureRate       currentPeriod      Need_flag       │
+│  predictedPressure  loadLevel          Loss_flag       │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 方案二：运行时间均衡算法改进
+
+### 2.1 当前实现分析
+
+```c
+// 当前: 仅在增载时选择运行时间最短的机组
+if(LCD10JZ[Address].DLCD.Device_State == 1) {  // 待机状态
+    if(Min_Time > LCD10JZ[Address].DLCD.Work_Time) {
+        Min_Time = LCD10JZ[Address].DLCD.Work_Time;
+        Min_Address = Address;  // 选择运行时间最短的
+    }
+}
+
+// 减载时选择运行时间最长的
+if(Max_time < LCD10JZ[Address].DLCD.Work_Time) {
+    Max_Address = Address;
+    Max_time = SlaveG[Address].Work_Time;
+}
+```
+
+**问题**:
+- 只在增减载时考虑均衡，日常运行不轮换
+- 长期运行后，部分机组磨损严重，部分机组闲置
+- 无法保证所有机组得到均衡使用
+
+### 2.2 优化方案A：定时轮换机制
+
+**核心思想**: 周期性强制轮换运行机组
+
+```c
+typedef struct {
+    uint32_t rotationPeriod;    // 轮换周期 (分钟)
+    uint32_t lastRotationTime;  // 上次轮换时间
+    uint8_t rotationEnabled;    // 轮换使能标志
+} RotationConfig;
+
+/* 轮换检查 (每分钟调用) */
+uint8_t Linkage_CheckRotation(RotationConfig *cfg, uint32_t currentMinutes)
+{
+    if(!cfg->rotationEnabled) return 0;
+    
+    // 检查是否到轮换周期 (默认4小时 = 240分钟)
+    if((currentMinutes - cfg->lastRotationTime) >= cfg->rotationPeriod) {
+        cfg->lastRotationTime = currentMinutes;
+        return 1;  // 需要轮换
+    }
+    return 0;
+}
+
+/* 执行轮换 */
+void Linkage_DoRotation(void)
+{
+    uint8_t maxWorkAddr = 0, minWorkAddr = 0;
+    uint32_t maxWorkTime = 0, minWorkTime = 0xFFFFFFFF;
+    
+    // 找出运行中工作时间最长的机组
+    // 找出待机中工作时间最短的机组
+    for(uint8_t i = 1; i <= 10; i++) {
+        if(SlaveG[i].Alive_Flag && LCD10JZ[i].DLCD.YunXu_Flag) {
+            if(LCD10JZ[i].DLCD.Device_State == 2) {  // 运行中
+                if(LCD10JZ[i].DLCD.Work_Time > maxWorkTime) {
+                    maxWorkTime = LCD10JZ[i].DLCD.Work_Time;
+                    maxWorkAddr = i;
+                }
+            }
+            else if(LCD10JZ[i].DLCD.Device_State == 1) {  // 待机
+                if(LCD10JZ[i].DLCD.Work_Time < minWorkTime) {
+                    minWorkTime = LCD10JZ[i].DLCD.Work_Time;
+                    minWorkAddr = i;
+                }
+            }
+        }
+    }
+    
+    // 工作时间差异超过阈值时执行轮换
+    if(maxWorkAddr && minWorkAddr && (maxWorkTime - minWorkTime) > ROTATION_THRESHOLD) {
+        // 关闭运行时间最长的
+        SlaveG[maxWorkAddr].Startclose_Sendflag = 3;
+        SlaveG[maxWorkAddr].Startclose_Data = 0;
+        
+        // 启动运行时间最短的
+        SlaveG[minWorkAddr].Startclose_Sendflag = 3;
+        SlaveG[minWorkAddr].Startclose_Data = 1;
+    }
+}
+```
+
+### 2.3 优化方案B：加权优先级选择
+
+**核心思想**: 综合考虑多因素的优先级算法
+
+```c
+typedef struct {
+    float workTimeWeight;       // 运行时间权重 (默认0.5)
+    float lastRunWeight;        // 上次运行距今时间权重 (默认0.3)
+    float efficiencyWeight;     // 效率权重 (默认0.2)
+} SelectionWeights;
+
+/* 计算机组优先级分数 (分数越高，越优先启动) */
+float Linkage_CalcPriority(uint8_t address, SelectionWeights *w)
+{
+    float score = 0.0f;
+    uint32_t maxWorkTime = GetMaxWorkTime();  // 获取最大运行时间
+    uint32_t myWorkTime = LCD10JZ[address].DLCD.Work_Time;
+    
+    // 运行时间越短，分数越高
+    if(maxWorkTime > 0) {
+        score += w->workTimeWeight * (1.0f - (float)myWorkTime / maxWorkTime);
+    }
+    
+    // 上次运行距今时间越长，分数越高 (避免频繁启停同一机组)
+    uint32_t idleTime = GetIdleTime(address);
+    score += w->lastRunWeight * (idleTime / 3600.0f);  // 每小时0.3分
+    
+    // 可选: 效率因子 (如果有效率数据)
+    // score += w->efficiencyWeight * efficiency[address];
+    
+    return score;
+}
+
+/* 选择最优机组启动 */
+uint8_t Linkage_SelectBestUnit(void)
+{
+    float maxScore = -1.0f;
+    uint8_t bestAddr = 0;
+    SelectionWeights weights = {0.5f, 0.3f, 0.2f};
+    
+    for(uint8_t i = 1; i <= 10; i++) {
+        if(IsUnitAvailable(i) && LCD10JZ[i].DLCD.Device_State == 1) {
+            float score = Linkage_CalcPriority(i, &weights);
+            if(score > maxScore) {
+                maxScore = score;
+                bestAddr = i;
+            }
+        }
+    }
+    
+    return bestAddr;
+}
+```
+
+### 2.4 推荐方案
+
+**推荐: 方案A (定时轮换) + 方案B (加权选择)**
+
+| 场景 | 使用算法 |
+|------|----------|
+| 增载选择 | 加权优先级算法 |
+| 减载选择 | 运行时间最长优先 |
+| 定时轮换 | 周期性强制轮换 |
+
+---
+
+## 📊 方案三：故障恢复自动重入联动
+
+### 3.1 当前实现分析
+
+```c
+// 当前: 故障时标记不可用，但无恢复机制
+if(LCD10JZ[Address].DLCD.Error_Code == 0) {  // 无故障
+    AliveOk_Numbres++;
+    // ... 纳入联动
+}
+// 有故障时直接跳过，无后续处理
+```
+
+**问题**:
+- 故障机组恢复后需要手动复位
+- 无自动检测故障恢复的逻辑
+- 可能导致可用机组减少
+
+### 3.2 优化方案：故障恢复自动检测
+
+```c
+typedef struct {
+    uint8_t lastErrorCode;      // 上一次故障码
+    uint8_t currentErrorCode;   // 当前故障码
+    uint8_t recoverCount;       // 恢复确认计数
+    uint8_t autoResetEnabled;   // 自动复位使能
+    uint32_t faultTime;         // 故障发生时间
+    uint32_t recoverTime;       // 恢复确认时间
+} FaultRecovery;
+
+FaultRecovery faultRecovery[11];  // 1-10号从机
+
+/* 故障恢复检测 (每秒调用) */
+void Linkage_CheckFaultRecovery(uint8_t address)
+{
+    FaultRecovery *fr = &faultRecovery[address];
+    uint8_t currentError = LCD10JZ[address].DLCD.Error_Code;
+    
+    // 状态变化检测
+    if(currentError != fr->lastErrorCode) {
+        if(fr->lastErrorCode != 0 && currentError == 0) {
+            // 从故障→正常: 开始恢复确认
+            fr->recoverCount = 1;
+            fr->recoverTime = GetCurrentSeconds();
+        }
+        else if(currentError != 0) {
+            // 新故障发生
+            fr->faultTime = GetCurrentSeconds();
+            fr->recoverCount = 0;
+        }
+        fr->lastErrorCode = currentError;
+    }
+    
+    // 恢复确认 (连续30秒无故障)
+    if(fr->recoverCount > 0 && currentError == 0) {
+        if((GetCurrentSeconds() - fr->recoverTime) >= 30) {
+            fr->recoverCount = 0;
+            
+            // 自动复位: 重新纳入联动
+            if(fr->autoResetEnabled) {
+                Linkage_ReenableUnit(address);
+                
+                // 可选: 上报恢复事件
+                LogEvent(EVENT_FAULT_RECOVERED, address);
+            }
+        }
+    }
+}
+
+/* 重新纳入联动 */
+void Linkage_ReenableUnit(uint8_t address)
+{
+    // 重置状态
+    SlaveG[address].Big_time = 0;
+    SlaveG[address].Small_time = 0;
+    SlaveG[address].Zero_time = 0;
+    
+    // 确保使能标志有效
+    if(SlaveG[address].Key_Power && SlaveG[address].Alive_Flag) {
+        // 机组已准备好重新加入联动
+        // 下次增载决策时会自动考虑该机组
+        
+        // 可选: 立即触发一次联动评估
+        // Linkage_ForceEvaluate();
+    }
+}
+```
+
+### 3.3 安全考虑
+
+```c
+/* 故障类型分类 */
+typedef enum {
+    FAULT_CLASS_RECOVERABLE,    // 可恢复故障 (如超温、超压)
+    FAULT_CLASS_MANUAL_RESET,   // 需手动复位 (如火焰丢失、点火失败)
+    FAULT_CLASS_CRITICAL        // 严重故障 (需检修)
+} FaultClass;
+
+/* 获取故障分类 */
+FaultClass GetFaultClass(uint8_t errorCode)
+{
+    switch(errorCode) {
+        case ERROR_OVER_TEMP:       // 超温
+        case ERROR_OVER_PRESSURE:   // 超压
+        case ERROR_LOW_WATER:       // 缺水
+            return FAULT_CLASS_RECOVERABLE;
+            
+        case ERROR_FLAME_LOST:      // 火焰丢失
+        case ERROR_IGNITION_FAIL:   // 点火失败
+            return FAULT_CLASS_MANUAL_RESET;
+            
+        case ERROR_SENSOR_FAIL:     // 传感器故障
+        case ERROR_HARDWARE:        // 硬件故障
+            return FAULT_CLASS_CRITICAL;
+            
+        default:
+            return FAULT_CLASS_MANUAL_RESET;
+    }
+}
+
+/* 是否允许自动恢复 */
+uint8_t IsAutoRecoveryAllowed(uint8_t address)
+{
+    uint8_t errorCode = faultRecovery[address].lastErrorCode;
+    FaultClass faultClass = GetFaultClass(errorCode);
+    
+    // 只有可恢复类故障允许自动重入
+    return (faultClass == FAULT_CLASS_RECOVERABLE);
+}
+```
+
+---
+
+## 📋 实施计划
+
+### 阶段一：增减载响应优化 (1-2周)
+
+| 步骤 | 内容 | 工作量 |
+|------|------|--------|
+| 1.1 | 实现压力变化率计算模块 | 0.5天 |
+| 1.2 | 实现自适应周期模块 | 0.5天 |
+| 1.3 | 集成到 Union_MuxJiZu_Control_Function | 1天 |
+| 1.4 | 测试和参数调试 | 2天 |
+
+### 阶段二：运行时间均衡优化 (1周)
+
+| 步骤 | 内容 | 工作量 |
+|------|------|--------|
+| 2.1 | 实现定时轮换模块 | 0.5天 |
+| 2.2 | 实现加权优先级选择 | 0.5天 |
+| 2.3 | 增加LCD配置界面 | 1天 |
+| 2.4 | 测试验证 | 1天 |
+
+### 阶段三：故障恢复自动重入 (1周)
+
+| 步骤 | 内容 | 工作量 |
+|------|------|--------|
+| 3.1 | 实现故障恢复检测模块 | 0.5天 |
+| 3.2 | 实现故障分类逻辑 | 0.5天 |
+| 3.3 | 集成和安全测试 | 1天 |
+| 3.4 | 现场验证 | 1天 |
+
+---
+
+## 📁 涉及文件
+
+| 文件 | 变更类型 | 说明 |
+|------|----------|------|
+| `HARDWARE/USART3/usart3.c` | 修改 | Union_MuxJiZu_Control_Function 主体优化 |
+| `HARDWARE/USART3/usart3.h` | 修改 | 新增数据结构声明 |
+| `SYSTEM/linkage/linkage_ctrl.c` | 新建 | 联动优化模块 (可选独立模块) |
+| `SYSTEM/linkage/linkage_ctrl.h` | 新建 | 联动优化头文件 |
+| `HARDWARE/USART2/usart2.c` | 修改 | LCD配置接口 |
+| `SYSTEM/config/sys_config.c` | 修改 | 新参数初始化 |
+
+---
+
+## ⚠️ 风险评估
+
+| 风险 | 等级 | 缓解措施 |
+|------|------|----------|
+| 预测误差导致误增载 | 中 | 设置预测触发的最小压力差阈值 |
+| 频繁轮换增加磨损 | 低 | 设置最小轮换间隔 (如4小时) |
+| 故障自动恢复安全性 | 高 | 严格故障分类，危险故障不自动恢复 |
+| 参数配置复杂 | 低 | 提供合理默认值，高级参数隐藏 |
+
+---
+
+## 📝 待确认事项
+
+1. [ ] 压力预测的预测时间窗口 (建议30秒)
+2. [ ] 轮换周期默认值 (建议4小时)
+3. [ ] 故障恢复确认时间 (建议30秒)
+4. [ ] 哪些故障允许自动恢复
+5. [ ] 是否需要创建独立的 linkage_ctrl 模块
+
+---
+
+**请确认是否批准该优化方案，或需要进一步讨论具体细节。**
+
+---
+
+*文档创建时间: 2025-01-03*  
+*作者: AI Assistant*
+
