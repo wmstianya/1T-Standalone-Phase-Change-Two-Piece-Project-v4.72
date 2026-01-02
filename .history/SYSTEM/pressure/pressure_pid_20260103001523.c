@@ -230,15 +230,11 @@ void AutoTune_Start(AutoTuner *tuner, float setpoint)
 /**
  * @brief  自整定步进 (每秒调用)
  * @return 1=进行中, 0=完成, -1=失败
- * @note   Bug2修复: 累积所有周期振幅取平均
- *         Bug3修复: 正确测量完整振荡周期
- *         Bug7修复: 添加除零保护
  */
 int8_t AutoTune_Step(AutoTuner *tuner, float measurement, float *output)
 {
     float error;
     float relayAmplitude;
-    float cycleAmplitude;
     
     if (tuner == NULL || output == NULL)
     {
@@ -269,10 +265,9 @@ int8_t AutoTune_Step(AutoTuner *tuner, float measurement, float *output)
                 if (tuner->stableCount > 10)  /* 稳定10秒 */
                 {
                     tuner->state = TUNE_RELAY_HIGH_STATE;
-                    tuner->periodStart = tuner->tuneTime;  /* Bug3: 周期从这里开始 */
-                    tuner->peakHigh = measurement;
-                    tuner->peakLow = measurement;
-                    tuner->halfCycleFlag = 0;
+                    tuner->periodStart = tuner->tuneTime;
+                    tuner->peakHigh = tuner->setpoint;
+                    tuner->peakLow = tuner->setpoint;
                 }
             }
             else
@@ -295,7 +290,6 @@ int8_t AutoTune_Step(AutoTuner *tuner, float measurement, float *output)
             if (error > tuner->hysteresis)
             {
                 tuner->state = TUNE_RELAY_LOW_STATE;
-                tuner->halfCycleFlag = 1;  /* Bug3: 标记已完成高→低半周期 */
             }
             break;
             
@@ -312,34 +306,20 @@ int8_t AutoTune_Step(AutoTuner *tuner, float measurement, float *output)
             /* 压力低于设定值-迟滞，切换到高输出 */
             if (error < -tuner->hysteresis)
             {
-                /* Bug3修复: 只有完成了高→低半周期后，低→高才算完成一个周期 */
-                if (tuner->halfCycleFlag == 1)
+                /* 完成一个周期 */
+                tuner->cycleCount++;
+                tuner->periodSum += (tuner->tuneTime - tuner->periodStart);
+                tuner->periodStart = tuner->tuneTime;
+                
+                if (tuner->cycleCount >= tuner->requiredCycles)
                 {
-                    /* 完成一个完整周期 (高→低→高) */
-                    tuner->cycleCount++;
-                    tuner->periodSum += (tuner->tuneTime - tuner->periodStart);
-                    tuner->periodStart = tuner->tuneTime;  /* 新周期开始 */
-                    
-                    /* Bug2修复: 累积本周期振幅 */
-                    cycleAmplitude = (tuner->peakHigh - tuner->peakLow) / 2.0f;
-                    tuner->amplitudeSum += cycleAmplitude;
-                    
-                    if (tuner->cycleCount >= tuner->requiredCycles)
-                    {
-                        tuner->state = TUNE_CALC;
-                    }
-                    else
-                    {
-                        /* 继续下一个周期，重置峰谷值为当前值 */
-                        tuner->peakHigh = measurement;
-                        tuner->peakLow = measurement;
-                        tuner->halfCycleFlag = 0;
-                        tuner->state = TUNE_RELAY_HIGH_STATE;
-                    }
+                    tuner->state = TUNE_CALC;
                 }
                 else
                 {
-                    /* 还没完成高→低半周期，继续 */
+                    /* 继续下一个周期，重置峰谷值 */
+                    tuner->peakHigh = tuner->setpoint;
+                    tuner->peakLow = tuner->setpoint;
                     tuner->state = TUNE_RELAY_HIGH_STATE;
                 }
             }
@@ -349,28 +329,16 @@ int8_t AutoTune_Step(AutoTuner *tuner, float measurement, float *output)
             /* 计算PI参数 */
             relayAmplitude = (tuner->relayHigh - tuner->relayLow) / 2.0f;
             
-            /* Bug7修复: 除零保护 */
-            if (tuner->cycleCount == 0)
-            {
-                tuner->state = TUNE_FAILED;
-                *output = tuner->relayLow;
-                return -1;
-            }
-            
             /* 计算振荡周期 (平均值) */
             tuner->tuPeriod = (float)tuner->periodSum / (float)tuner->cycleCount;
             
-            /* Bug2修复: 计算平均振幅 */
-            tuner->amplitude = tuner->amplitudeSum / (float)tuner->cycleCount;
+            /* 计算振幅 */
+            tuner->amplitude = (tuner->peakHigh - tuner->peakLow) / 2.0f;
             
             /* 防止除零 */
             if (tuner->amplitude < 0.005f)
             {
                 tuner->amplitude = 0.005f;
-            }
-            if (tuner->tuPeriod < 1.0f)
-            {
-                tuner->tuPeriod = 1.0f;
             }
             
             /* 临界增益 Ku = 4d / (π × a) */

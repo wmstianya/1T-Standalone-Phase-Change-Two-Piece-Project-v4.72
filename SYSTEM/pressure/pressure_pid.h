@@ -96,6 +96,8 @@ typedef struct {
     uint32_t periodStart;   /**< 周期开始时间 */
     uint32_t periodSum;     /**< 周期累加 */
     uint8_t cycleCount;     /**< 振荡次数 */
+    float amplitudeSum;     /**< Bug2修复: 振幅累加 */
+    uint8_t halfCycleFlag;  /**< Bug3修复: 半周期标志 (0=高→低, 1=低→高) */
     
     /* 计算结果 */
     float tuPeriod;         /**< 振荡周期 (秒) */

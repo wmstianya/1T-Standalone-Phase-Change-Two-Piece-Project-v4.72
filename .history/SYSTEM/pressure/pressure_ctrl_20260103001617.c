@@ -109,7 +109,6 @@ int8_t Pressure_CheckAutoTune(void)
 
 /**
  * @brief  应用自整定结果到PI控制器
- * @note   Bug6修复: 自整定后重置PI状态
  */
 void Pressure_ApplyAutoTuneResult(void)
 {
@@ -117,9 +116,6 @@ void Pressure_ApplyAutoTuneResult(void)
     
     AutoTune_GetResult(&gAutoTuner, &kp, &ki);
     Pi_SetParams(&gPressurePi, kp, ki);
-    
-    /* Bug6修复: 自整定后重置PI状态，避免旧的lastError和output影响 */
-    Pi_Reset(&gPressurePi);
     
     gAutoTuneActive = 0;
 }
