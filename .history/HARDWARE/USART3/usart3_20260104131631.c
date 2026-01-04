@@ -1688,23 +1688,15 @@ uint8 Union_MuxJiZu_Control_Function(void)
 					}
 			}
 	
-	if(Need_flag)
-		{
-			/* 从待机中选择没有运行的最短时间机组启动 */
-			Need_flag = FALSE;
+		if(Need_flag)
+			{
+				//���Ӵ����У���û�������е�ʱ����̻���������
+				Need_flag = FALSE;
 
-			/* ========== 联动优化: 使用加权优先级选择最优机组 ========== */
-			bestUnit = Linkage_SelectBestUnit();
-			if(bestUnit > 0 && bestUnit <= 10) {
-				SlaveG[bestUnit].Startclose_Sendflag = 3;  /* 发送启动命令 */
-				SlaveG[bestUnit].Startclose_Data = OK;     /* 启动该机组 */
+				SlaveG[Min_Address].Startclose_Sendflag = 3; //����������
+				SlaveG[Min_Address].Startclose_Data = OK; //�����û���
+
 			}
-			else if(Min_Address > 0 && Min_Address <= 10) {
-				/* 回退: 使用原有逻辑 */
-				SlaveG[Min_Address].Startclose_Sendflag = 3;
-				SlaveG[Min_Address].Startclose_Data = OK;
-			}
-		}
 		
 
 		if(Loss_flag)

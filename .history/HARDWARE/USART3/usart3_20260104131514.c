@@ -1331,9 +1331,9 @@ uint8 ModBus3_RTU_Write10(uint8 Target_Address,uint16 Data_Address)
 uint8 Union_MuxJiZu_Control_Function(void)
 {
 	uint8 Address = 0;
-	uint8 AliveOk_Numbres = 0;  //在线OK的设备数量
-	uint8 Already_WorkNumbers = 0; //已经运行的设备数量统计
-	uint8 AliveOK[13] = {0};    //在线设备地址数组统计,1---10
+	uint8 AliveOk_Numbres = 0;  //����OK���豸����
+	uint8 Already_WorkNumbers = 0; //���Ѿ������е��豸����ͳ��
+	uint8 AliveOK[13] = {0};    //�������豸�ĵ�ַ����ͳ��,1---10
 	
 	uint8 Need_flag = 0;
 	uint8 Loss_flag = 0;
@@ -1349,17 +1349,11 @@ uint8 Union_MuxJiZu_Control_Function(void)
 	uint32 Value_Buffer2 = 0;
 	uint8 index = 0;
 	
-	/* 联动优化: 新增变量 */
-	uint32_t totalPower = 0;
-	uint8_t avgPower = 0;
-	uint8_t bestUnit = 0;
-	float setpointPressure = 0.0f;
-	static uint8_t rotationCheckCounter = 0;  /* 轮换检查计数器 (秒) */
 
 	static uint32 Loop_time = 0;
 	uint8 Loop_Flag = 0;
 
-	static uint16 Period_Check = 0;
+static 	uint16 Period_Check = 0;
 
 
 
@@ -1399,22 +1393,10 @@ uint8 Union_MuxJiZu_Control_Function(void)
 		
 
 	
-  /* 第一步: 找到所有在线的机组，确定在线机组台数 */
+  //��һ���� �ҵ��������ߵĻ�����ȷ�����߻�����̨��
   if(sys_flag.Union_1_Sec)
   	{
-  		sys_flag.Union_1_Sec = 0; //每秒调用一次
-		
-		/* ========== 联动优化: 压力预测器更新 ========== */
-		Linkage_UpdatePressurePredictor(Temperature_Data.Pressure_Value);
-		
-		/* ========== 联动优化: 轮换检查 (每60秒检查一次) ========== */
-		rotationCheckCounter++;
-		if(rotationCheckCounter >= 60) {
-			rotationCheckCounter = 0;
-			if(Linkage_CheckRotation(sys_time_inf.All_Minutes)) {
-				Linkage_DoRotation();
-			}
-		}
+  		sys_flag.Union_1_Sec = 0; //ÿ����һ��
 		
 		for(Address = 1; Address <= 10; Address ++)
 				{
@@ -1536,59 +1518,43 @@ uint8 Union_MuxJiZu_Control_Function(void)
 				}
 
 			
-		for(Address = 1; Address <= 10; Address ++)
-			{
-				
-				//找出运行中的最大压力值
-				if(LCD10JZ[Address].DLCD.Steam_Pressure > Max_Pressure)
-					{
-						if(LCD10JZ[Address].DLCD.Steam_Pressure < 9.99)  //防止压力传感器异常导致值无效
-							Max_Pressure = LCD10JZ[Address].DLCD.Steam_Pressure ;
-					}
-				
-				//累计所有运行机组的功率
-				if(LCD10JZ[Address].DLCD.Device_State == 2) {
-					totalPower += LCD10JZ[Address].DLCD.Air_Power;
+			for(Address = 1; Address <= 10; Address ++)
+				{
+					
+					//�ҳ������е����ѹ��ֵ
+					if(LCD10JZ[Address].DLCD.Steam_Pressure > Max_Pressure)
+						{
+							if(LCD10JZ[Address].DLCD.Steam_Pressure < 9.99)  //��ֹѹ���������쳣����ֵ��Ч
+								Max_Pressure = LCD10JZ[Address].DLCD.Steam_Pressure ;
+						}
+						
 				}
-					
-			}
 
-		/* ========== 联动优化: 计算平均功率和更新自适应周期 ========== */
-		if(Already_WorkNumbers > 0) {
-			avgPower = (uint8_t)(totalPower / Already_WorkNumbers);
-		} else {
-			avgPower = 0;
-		}
-		setpointPressure = sys_config_data.zhuan_huan_temperture_value;  /* 设定压力 */
-		Linkage_UpdateAdaptivePeriod(avgPower, Max_Pressure, setpointPressure);
-		
-		UnionD.Need_Numbers  = 1 ;  //最少保持一台
-		
-		if(Max_Pressure < 0.35)  //压力小于0.30Mpa,需要增加机组
-			{
-				if(AliveOk_Numbres <= 2)
-					UnionD.Need_Numbers = AliveOk_Numbres;
+			
+			UnionD.Need_Numbers  = 1 ;  //���ٱ���һ̨
+			
+			if(Max_Pressure < 0.35)  //ѹ��С��0.30Mpa,��Ҫ��������
+				{
+					if(AliveOk_Numbres <= 2)
+						UnionD.Need_Numbers = AliveOk_Numbres;
 
-				if(AliveOk_Numbres > 2)
-					UnionD.Need_Numbers = AliveOk_Numbres - 1;
-					
-			}
-		else
-			{
-				if(AliveOk_Numbres > 1)
-					UnionD.Need_Numbers = AliveOk_Numbres - 1; //多台机组需要留一台备用  
-			}
-	
-		/* ========== 联动优化: 压力预测增载判断 ========== */
-		if(Already_WorkNumbers < AliveOk_Numbres) {
-			if(Linkage_ShouldAddUnit(setpointPressure)) {
-				Need_flag = OK;  /* 压力预测触发增载 */
-			}
-		}
+					if(AliveOk_Numbres > 2)
+						UnionD.Need_Numbers = AliveOk_Numbres - 1;
+						
+				}
+			else
+				{
+					if(AliveOk_Numbres > 1)
+						UnionD.Need_Numbers = AliveOk_Numbres - 1; //��̨�����Ҫ����һ̨  
+				}
 		
-		/* ========== 联动优化: 使用自适应周期替代固定15秒 ========== */
-		Period_Check ++;
-		if(Period_Check >= gAdaptivePeriod.currentPeriod)  /* 自适应周期评估 */
+			
+			
+			
+			
+		
+			Period_Check ++;
+			if(Period_Check >= 15)  //15����һ�����е�����״̬
 				{
 					Period_Check = 0;//���ڱ�־����
 					Value_Buffer = 0;
@@ -1688,23 +1654,15 @@ uint8 Union_MuxJiZu_Control_Function(void)
 					}
 			}
 	
-	if(Need_flag)
-		{
-			/* 从待机中选择没有运行的最短时间机组启动 */
-			Need_flag = FALSE;
+		if(Need_flag)
+			{
+				//���Ӵ����У���û�������е�ʱ����̻���������
+				Need_flag = FALSE;
 
-			/* ========== 联动优化: 使用加权优先级选择最优机组 ========== */
-			bestUnit = Linkage_SelectBestUnit();
-			if(bestUnit > 0 && bestUnit <= 10) {
-				SlaveG[bestUnit].Startclose_Sendflag = 3;  /* 发送启动命令 */
-				SlaveG[bestUnit].Startclose_Data = OK;     /* 启动该机组 */
+				SlaveG[Min_Address].Startclose_Sendflag = 3; //����������
+				SlaveG[Min_Address].Startclose_Data = OK; //�����û���
+
 			}
-			else if(Min_Address > 0 && Min_Address <= 10) {
-				/* 回退: 使用原有逻辑 */
-				SlaveG[Min_Address].Startclose_Sendflag = 3;
-				SlaveG[Min_Address].Startclose_Data = OK;
-			}
-		}
 		
 
 		if(Loss_flag)
