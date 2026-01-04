@@ -68,12 +68,12 @@ void Linkage_UpdatePressurePredictor(float currentPressure)
     /* 预测30秒后的压力 */
     gPressurePredictor.predictedPressure = currentPressure + gPressurePredictor.pressureRate * PRESSURE_PREDICT_TIME;
     
-    /* Bug fix P2: 使用宏定义限制预测值范围 */
-    if(gPressurePredictor.predictedPressure < PRESSURE_MIN_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MIN_LIMIT;
+    /* 限制预测值范围 */
+    if(gPressurePredictor.predictedPressure < 0.0f) {
+        gPressurePredictor.predictedPressure = 0.0f;
     }
-    if(gPressurePredictor.predictedPressure > PRESSURE_MAX_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MAX_LIMIT;
+    if(gPressurePredictor.predictedPressure > 2.0f) {
+        gPressurePredictor.predictedPressure = 2.0f;
     }
 }
 
@@ -136,23 +136,12 @@ uint8_t Linkage_ShouldAddUnit(float setpoint)
  */
 uint8_t Linkage_CheckRotation(uint32_t currentMinutes)
 {
-    uint32_t elapsed;
-    
     if(!gRotationCtrl.rotationEnabled) {
         return 0;
     }
     
-    /* Bug fix P2: 处理时间回绕 */
-    if(currentMinutes >= gRotationCtrl.lastRotationMinutes) {
-        elapsed = currentMinutes - gRotationCtrl.lastRotationMinutes;
-    } else {
-        /* 时间回绕: 重置并立即触发一次轮换 */
-        gRotationCtrl.lastRotationMinutes = currentMinutes;
-        return 1;
-    }
-    
     /* 检查是否到达轮换周期 */
-    if(elapsed >= ROTATION_PERIOD_MINUTES) {
+    if((currentMinutes - gRotationCtrl.lastRotationMinutes) >= ROTATION_PERIOD_MINUTES) {
         gRotationCtrl.lastRotationMinutes = currentMinutes;
         return 1;
     }
@@ -170,7 +159,6 @@ void Linkage_DoRotation(void)
     uint32_t maxWorkTime = 0;
     uint32_t minWorkTime = 0xFFFFFFFF;
     uint8_t i;
-    uint8_t runningCount = 0;  /* Bug fix P1: 统计运行中机组数 */
     
     /* 找出运行中工作时间最长的机组 */
     /* 找出待机中工作时间最短的机组 */
@@ -179,7 +167,6 @@ void Linkage_DoRotation(void)
            LCD10JZ[i].DLCD.Error_Code == 0) {
             
             if(LCD10JZ[i].DLCD.Device_State == 2) {  /* 运行中 */
-                runningCount++;  /* Bug fix P1: 计数运行机组 */
                 if(LCD10JZ[i].DLCD.Work_Time > maxWorkTime) {
                     maxWorkTime = LCD10JZ[i].DLCD.Work_Time;
                     maxWorkAddr = i;
@@ -192,11 +179,6 @@ void Linkage_DoRotation(void)
                 }
             }
         }
-    }
-    
-    /* Bug fix P1: 至少保持2台运行时才执行轮换，防止供热中断 */
-    if(runningCount < 2) {
-        return;
     }
     
     /* 如果工作时间差异超过阈值，执行轮换 */

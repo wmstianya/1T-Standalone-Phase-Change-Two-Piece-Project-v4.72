@@ -10,8 +10,6 @@
 #define PRESSURE_HISTORY_SIZE   5       /* 压力历史记录数量 (秒) */
 #define PRESSURE_PREDICT_TIME   30      /* 预测时间窗口 (秒) */
 #define PRESSURE_RATE_THRESHOLD 0.01f   /* 压力下降速率阈值 (MPa/s) */
-#define PRESSURE_MIN_LIMIT      0.0f    /* 预测压力最小限制 (MPa) */
-#define PRESSURE_MAX_LIMIT      2.0f    /* 预测压力最大限制 (MPa) */
 
 /* 自适应周期配置 */
 #define PERIOD_CRITICAL   3             /* 临界负荷周期 (秒) */

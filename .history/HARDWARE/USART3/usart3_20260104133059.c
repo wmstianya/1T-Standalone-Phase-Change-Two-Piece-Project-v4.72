@@ -68,12 +68,12 @@ void Linkage_UpdatePressurePredictor(float currentPressure)
     /* 预测30秒后的压力 */
     gPressurePredictor.predictedPressure = currentPressure + gPressurePredictor.pressureRate * PRESSURE_PREDICT_TIME;
     
-    /* Bug fix P2: 使用宏定义限制预测值范围 */
-    if(gPressurePredictor.predictedPressure < PRESSURE_MIN_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MIN_LIMIT;
+    /* 限制预测值范围 */
+    if(gPressurePredictor.predictedPressure < 0.0f) {
+        gPressurePredictor.predictedPressure = 0.0f;
     }
-    if(gPressurePredictor.predictedPressure > PRESSURE_MAX_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MAX_LIMIT;
+    if(gPressurePredictor.predictedPressure > 2.0f) {
+        gPressurePredictor.predictedPressure = 2.0f;
     }
 }
 

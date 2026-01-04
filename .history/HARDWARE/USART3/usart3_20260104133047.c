@@ -68,12 +68,12 @@ void Linkage_UpdatePressurePredictor(float currentPressure)
     /* 预测30秒后的压力 */
     gPressurePredictor.predictedPressure = currentPressure + gPressurePredictor.pressureRate * PRESSURE_PREDICT_TIME;
     
-    /* Bug fix P2: 使用宏定义限制预测值范围 */
-    if(gPressurePredictor.predictedPressure < PRESSURE_MIN_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MIN_LIMIT;
+    /* 限制预测值范围 */
+    if(gPressurePredictor.predictedPressure < 0.0f) {
+        gPressurePredictor.predictedPressure = 0.0f;
     }
-    if(gPressurePredictor.predictedPressure > PRESSURE_MAX_LIMIT) {
-        gPressurePredictor.predictedPressure = PRESSURE_MAX_LIMIT;
+    if(gPressurePredictor.predictedPressure > 2.0f) {
+        gPressurePredictor.predictedPressure = 2.0f;
     }
 }
 
@@ -136,23 +136,12 @@ uint8_t Linkage_ShouldAddUnit(float setpoint)
  */
 uint8_t Linkage_CheckRotation(uint32_t currentMinutes)
 {
-    uint32_t elapsed;
-    
     if(!gRotationCtrl.rotationEnabled) {
         return 0;
     }
     
-    /* Bug fix P2: 处理时间回绕 */
-    if(currentMinutes >= gRotationCtrl.lastRotationMinutes) {
-        elapsed = currentMinutes - gRotationCtrl.lastRotationMinutes;
-    } else {
-        /* 时间回绕: 重置并立即触发一次轮换 */
-        gRotationCtrl.lastRotationMinutes = currentMinutes;
-        return 1;
-    }
-    
     /* 检查是否到达轮换周期 */
-    if(elapsed >= ROTATION_PERIOD_MINUTES) {
+    if((currentMinutes - gRotationCtrl.lastRotationMinutes) >= ROTATION_PERIOD_MINUTES) {
         gRotationCtrl.lastRotationMinutes = currentMinutes;
         return 1;
     }
