@@ -5,14 +5,29 @@
 float ADC_ConvertedValueLocal[NOFCHANEL];
 uint16 ADC_Convert_true[M] = {0,0,0,0};
 
- //Òò4Â·ÎÂ¶È×ª»»Í¨¹ýSET0£¬SET1À´¿ØÖÆ£¬ÐèÒªÒ»¸öÊ±¼äÁ¿½øÐÐÇÐ»»
-extern uint8		re5_time_flag	;	//Ê±¼äÁ¿ÓÉ¶¨Ê±Æ÷4£¬À´¿ØÖÆ£¬10msÇÐ»»Ò»´Î£¬
-//ÇÐ»»¿ª¹ØµÄÍ¬Ê±ÐèÇåÁãADC_ConvertedValueLocalºÍADC_Convert_trueµÄÖµ £¬·ÀÖ¹ÎóÓÃ
+ //ï¿½ï¿½4Â·ï¿½Â¶ï¿½×ªï¿½ï¿½Í¨ï¿½ï¿½SET0ï¿½ï¿½SET1ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ÒªÒ»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½
+extern uint8		re5_time_flag	;	//Ê±ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½Ê±ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½10msï¿½Ð»ï¿½Ò»ï¿½Î£ï¿½
+//ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Øµï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ADC_ConvertedValueLocalï¿½ï¿½ADC_Convert_trueï¿½ï¿½Öµ ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 
 __IO uint16_t ADC_ConvertedValue[N][M];
 
 
 TEM_VALUE Temperature_Data;
+
+/*==============================================================================
+ * ï¿½ï¿½ï¿½ï¿½100Î©ï¿½ï¿½ï¿½ï¿½
+ * ï¿½è®¤ï¿½ï¿½4mA=400mV, 20mA=2000mV, æ»¡ï¿½ï¿½1.6MPa
+ *============================================================================*/
+PressureCalib_t pressureCalib = {
+    .zeroMv = PRESSURE_ZERO_MV,      /* 400mV */
+    .spanMv = PRESSURE_SPAN_MV,      /* 1600mV */
+    .fullScale = 160,                /* 1.6MPa = 160 * 0.01 */
+    .calibValid = 0x5A
+};
+
+/* IIRæ»¤æ³¢ï¿½ï¿½ï¿½ï¿½Q8å®¹ï¿½ï¿½ */
+static uint32 pressureIirState = 0;
+static uint8 pressureIirInit = 0;
 
 
 
@@ -28,258 +43,145 @@ uint8 Channel_Now = 0;
 
 
 
-const uint16 adc_00 = 10000;//Áã¶ÈÎªÍÆ¶ÏÖµ
-	const uint16 adc_01 = 10039;
-	const uint16 adc_02 = 10078;
-	const uint16 adc_03 = 10117;
-	const uint16 adc_04 = 10156;
-	const uint16 adc_05 = 10195;
-	const uint16 adc_06 = 10234;
-	const uint16 adc_07 = 10273;
-	const uint16 adc_08 = 10312;
-	const uint16 adc_09 = 10351;
-	
-	
-const uint16 adc_10 = 10390;
-	const uint16 adc_11 = 10429;
-	const uint16 adc_12 = 10468;
-	const uint16 adc_13 = 10507;
-	const uint16 adc_14 = 10546;
-	const uint16 adc_15 = 10585;
-	const uint16 adc_16 = 10624;
-	const uint16 adc_17 = 10663;
-	const uint16 adc_18 = 10702;
-	const uint16 adc_19 = 10740;
-const uint16 adc_20 = 10779;
-	const uint16 adc_21 = 10818;
-	const uint16 adc_22 = 10857;
-	const uint16 adc_23 = 10896;
-	const uint16 adc_24 = 10935;
-	const uint16 adc_25 = 10973;
-	const uint16 adc_26 = 11012;
-	const uint16 adc_27 = 11051;
-	const uint16 adc_28 = 11090;
-	const uint16 adc_29 = 11129;
-const uint16 adc_30 = 11167;
-	const uint16 adc_31 = 11206;
-	const uint16 adc_32 = 11245;
-	const uint16 adc_33 = 11283;
-	const uint16 adc_34 = 11322;
-	const uint16 adc_35 = 11361;
-	const uint16 adc_36 = 11400;
-	const uint16 adc_37 = 11438;
-	const uint16 adc_38 = 11477;
-	const uint16 adc_39 = 11515;
-const uint16 adc_40 = 11554;
-	const uint16 adc_41 = 11593;
-	const uint16 adc_42 = 11631;
-	const uint16 adc_43 = 11670;
-	const uint16 adc_44 = 11708;
-	const uint16 adc_45 = 11747;
-	const uint16 adc_46 = 11786;
-	const uint16 adc_47 = 11824;
-	const uint16 adc_48 = 11863;
-	const uint16 adc_49 = 11901;
-const uint16 adc_50 = 11940;
-	const uint16 adc_51 = 11978;
-	const uint16 adc_52 = 12017;
-	const uint16 adc_53 = 12055;
-	const uint16 adc_54 = 12094;
-	const uint16 adc_55 = 12132;
-	const uint16 adc_56 = 12171;
-	const uint16 adc_57 = 12209;
-	const uint16 adc_58 = 12247;
-	const uint16 adc_59 = 12286;
-const uint16 adc_60 = 12324;
-	const uint16 adc_61 = 12363;
-	const uint16 adc_62 = 12401;
-	const uint16 adc_63 = 12439;
-	const uint16 adc_64 = 12478;
-	const uint16 adc_65 = 12516;
-	const uint16 adc_66 = 12554;
-	const uint16 adc_67 = 12593;
-	const uint16 adc_68 = 12631;
-	const uint16 adc_69 = 12669;
-const uint16 adc_70 = 12708;
-	const uint16 adc_71 = 12746;
-	const uint16 adc_72 = 12784;
-	const uint16 adc_73 = 12822;
-	const uint16 adc_74 = 12861;
-	const uint16 adc_75 = 12899;
-	const uint16 adc_76 = 12937;
-	const uint16 adc_77 = 12975;
-	const uint16 adc_78 = 13013;
-	const uint16 adc_79 = 13050;
-const uint16 adc_80 = 13090;
-	const uint16 adc_81 = 13128;
-	const uint16 adc_82 = 13166;
-	const uint16 adc_83 = 13204;
-	const uint16 adc_84 = 13242;
-	const uint16 adc_85 = 13280;
-	const uint16 adc_86 = 13318;
-	const uint16 adc_87 = 13357;
-	const uint16 adc_88 = 13395;
-	const uint16 adc_89 = 13433;
-const uint16 adc_90 = 13471;
-	const uint16 adc_91 = 13509;
-	const uint16 adc_92 = 13547;
-	const uint16 adc_93 = 13585;
-	const uint16 adc_94 = 13623;
-	const uint16 adc_95 = 13661;
-	const uint16 adc_96 = 13699;
-	const uint16 adc_97 = 13737;
-	const uint16 adc_98 = 13775;
-	const uint16 adc_99 = 13813;
-const uint16 adc_100 =13851;
-	const uint16 adc_101 = 13888;
-	const uint16 adc_102 = 13926;
-	const uint16 adc_103 = 13964;
-	const uint16 adc_104 = 14002;
-	const uint16 adc_105 = 14040;
-	const uint16 adc_106 = 14078;
-	const uint16 adc_107 = 14116;
-	const uint16 adc_108 = 14154;
-	const uint16 adc_109 = 14191;
-const uint16 adc_110 =14229;
-	const uint16 adc_111 = 14267;
-	const uint16 adc_112 = 14305;
-	const uint16 adc_113 = 14343;
-	const uint16 adc_114 = 14380;
-	const uint16 adc_115 = 14418;
-	const uint16 adc_116 = 14456;
-	const uint16 adc_117 = 14494;
-	const uint16 adc_118 = 14531;
-	const uint16 adc_119 = 14569;
-const uint16 adc_120 =14607;
-	const uint16 adc_121 = 14644;
-	const uint16 adc_122 = 14682;
-	const uint16 adc_123 = 14720;
-	const uint16 adc_124 = 14757;
-	const uint16 adc_125 = 14795;
-	const uint16 adc_126 = 14833;
-	const uint16 adc_127 = 14870;
-	const uint16 adc_128 = 14908;
-	const uint16 adc_129 = 14946;
-const uint16 adc_130 =14983;
-	const uint16 adc_131 = 15021;
-	const uint16 adc_132 = 15058;
-	const uint16 adc_133 = 15096;
-	const uint16 adc_134 = 15133;
-	const uint16 adc_135 = 15171;
-	const uint16 adc_136 = 15208;
-	const uint16 adc_137 = 15246;
-	const uint16 adc_138 = 15283;
-	const uint16 adc_139 = 15321;
-const uint16 adc_140 =15358;
-	const uint16 adc_141 = 15396;
-	const uint16 adc_142 = 15433;
-	const uint16 adc_143 = 15471;
-	const uint16 adc_144 = 15508;
-	const uint16 adc_145 = 15546;
-	const uint16 adc_146 = 15583;
-	const uint16 adc_147 = 15620;
-	const uint16 adc_148 = 15658;
-	const uint16 adc_149 = 15695;
-const uint16 adc_150 =15733;
-	const uint16 adc_151 = 15770;
-	const uint16 adc_152 = 15807;
-	const uint16 adc_153 = 15845;
-	const uint16 adc_154 = 15882;
-	const uint16 adc_155 = 15919;
-	const uint16 adc_156 = 15956;
-	const uint16 adc_157 = 16031;
-	const uint16 adc_158 = 16068;
-	const uint16 adc_159 = 16105;
-const uint16 adc_160 =16105;
-	const uint16 adc_161 = 16143;
-	const uint16 adc_162 = 16180;
-	const uint16 adc_163 = 16217;
-	const uint16 adc_164 = 16254;
-	const uint16 adc_165 = 16291;
-	const uint16 adc_166 = 16329;
-	const uint16 adc_167 = 16366;
-	const uint16 adc_168 = 16403;
-	const uint16 adc_169 = 16440;
-const uint16 adc_170 =16477;
-	const uint16 adc_171 = 16514;
-	const uint16 adc_172 = 16551;
-	const uint16 adc_173 = 16589;
-	const uint16 adc_174 = 16626;
-	const uint16 adc_175 = 16663;
-	const uint16 adc_176 = 16700;
-	const uint16 adc_177 = 16737;
-	const uint16 adc_178 = 16774;
-	const uint16 adc_179 = 16811;
-const uint16 adc_180 =16848;
-	const uint16 adc_181 = 16885;
-	const uint16 adc_182 = 16922;
-	const uint16 adc_183 = 16959;
-	const uint16 adc_184 = 16996;
-	const uint16 adc_185 = 17033;
-	const uint16 adc_186 = 17070;
-	const uint16 adc_187 = 17107;
-	const uint16 adc_188 = 17143;
-	const uint16 adc_189 = 17180;
-const uint16 adc_190 =17217;
-	const uint16 adc_191 = 17254;
-	const uint16 adc_192 = 17291;
-	const uint16 adc_193 = 17328;
-	const uint16 adc_194 = 17365;
-	const uint16 adc_195 = 17402;
-	const uint16 adc_196 = 17438;
-	const uint16 adc_197 = 17475;
-	const uint16 adc_198 = 17512;
-	const uint16 adc_199 = 17549;
+/*==============================================================================
+ * PT1000æ¸©åº¦-é˜»å€¼æŸ¥æ‰¾è¡¨ (0Â°C - 500Â°C)
+ * ç´¢å¼• = æ¸©åº¦(Â°C), å€¼ = ç”µé˜»Ã—10 (å•ä½0.1Î©)
+ * ä¾‹: pt1000Table[100] = 13851 è¡¨ç¤º 100Â°Cæ—¶ç”µé˜»ä¸º1385.1Î©
+ * å…¬å¼: R(t) = R0 Ã— (1 + AÃ—t + BÃ—tÂ²)
+ *       R0=1000Î©, A=3.9083e-3, B=-5.775e-7
+ *============================================================================*/
+#define PT1000_TABLE_SIZE  501
 
-const uint16 adc_200 =17586;
-	const uint16 adc_201 = 17622;
-	const uint16 adc_202 = 17659;
-	const uint16 adc_203 = 17696;
-	const uint16 adc_204 = 17733;
-	const uint16 adc_205 = 17769;
-	const uint16 adc_206 = 17806;
-	const uint16 adc_207 = 17843;
-	const uint16 adc_208 = 17879;
-	const uint16 adc_209 = 17916;
-
-const uint16 adc_210 =17953;
-	const uint16 adc_211 = 17989;
-	const uint16 adc_212 = 18026;
-	const uint16 adc_213 = 18063;
-	const uint16 adc_214 = 18099;
-	const uint16 adc_215 = 18136;
-	const uint16 adc_216 = 18172;
-	const uint16 adc_217 = 18209;
-	const uint16 adc_218 = 18246;
-	const uint16 adc_219 = 18282;
-	
-const uint16 adc_220 =18319;
+static const uint16 pt1000Table[PT1000_TABLE_SIZE] = {
+    /* 0-9Â°C */
+    10000, 10039, 10078, 10117, 10156, 10195, 10234, 10273, 10312, 10351,
+    /* 10-19Â°C */
+    10390, 10429, 10468, 10507, 10546, 10585, 10624, 10663, 10702, 10740,
+    /* 20-29Â°C */
+    10779, 10818, 10857, 10896, 10935, 10973, 11012, 11051, 11090, 11129,
+    /* 30-39Â°C */
+    11167, 11206, 11245, 11283, 11322, 11361, 11400, 11438, 11477, 11515,
+    /* 40-49Â°C */
+    11554, 11593, 11631, 11670, 11708, 11747, 11786, 11824, 11863, 11901,
+    /* 50-59Â°C */
+    11940, 11978, 12017, 12055, 12094, 12132, 12171, 12209, 12247, 12286,
+    /* 60-69Â°C */
+    12324, 12363, 12401, 12439, 12478, 12516, 12554, 12593, 12631, 12669,
+    /* 70-79Â°C */
+    12708, 12746, 12784, 12822, 12861, 12899, 12937, 12975, 13013, 13050,
+    /* 80-89Â°C */
+    13090, 13128, 13166, 13204, 13242, 13280, 13318, 13357, 13395, 13433,
+    /* 90-99Â°C */
+    13471, 13509, 13547, 13585, 13623, 13661, 13699, 13737, 13775, 13813,
+    /* 100-109Â°C */
+    13851, 13888, 13926, 13964, 14002, 14040, 14078, 14116, 14154, 14191,
+    /* 110-119Â°C */
+    14229, 14267, 14305, 14343, 14380, 14418, 14456, 14494, 14531, 14569,
+    /* 120-129Â°C */
+    14607, 14644, 14682, 14720, 14757, 14795, 14833, 14870, 14908, 14946,
+    /* 130-139Â°C */
+    14983, 15021, 15058, 15096, 15133, 15171, 15208, 15246, 15283, 15321,
+    /* 140-149Â°C */
+    15358, 15396, 15433, 15471, 15508, 15546, 15583, 15620, 15658, 15695,
+    /* 150-159Â°C */
+    15733, 15770, 15807, 15845, 15882, 15919, 15956, 15994, 16031, 16068,
+    /* 160-169Â°C */
+    16105, 16143, 16180, 16217, 16254, 16291, 16329, 16366, 16403, 16440,
+    /* 170-179Â°C */
+    16477, 16514, 16551, 16589, 16626, 16663, 16700, 16737, 16774, 16811,
+    /* 180-189Â°C */
+    16848, 16885, 16922, 16959, 16996, 17033, 17070, 17107, 17143, 17180,
+    /* 190-199Â°C */
+    17217, 17254, 17291, 17328, 17365, 17402, 17438, 17475, 17512, 17549,
+    /* 200-209Â°C */
+    17586, 17622, 17659, 17696, 17733, 17769, 17806, 17843, 17879, 17916,
+    /* 210-219Â°C */
+    17953, 17989, 18026, 18063, 18099, 18136, 18172, 18209, 18246, 18282,
+    /* 220-229Â°C */
+    18319, 18355, 18392, 18428, 18465, 18501, 18538, 18574, 18611, 18647,
+    /* 230-239Â°C */
+    18684, 18720, 18756, 18793, 18829, 18866, 18902, 18938, 18975, 19011,
+    /* 240-249Â°C */
+    19047, 19084, 19120, 19156, 19193, 19229, 19265, 19301, 19338, 19374,
+    /* 250-259Â°C */
+    19410, 19446, 19482, 19519, 19555, 19591, 19627, 19663, 19699, 19735,
+    /* 260-269Â°C */
+    19772, 19808, 19844, 19880, 19916, 19952, 19988, 20024, 20060, 20096,
+    /* 270-279Â°C */
+    20132, 20168, 20204, 20240, 20276, 20312, 20347, 20383, 20419, 20455,
+    /* 280-289Â°C */
+    20491, 20527, 20563, 20598, 20634, 20670, 20706, 20742, 20777, 20813,
+    /* 290-299Â°C */
+    20849, 20885, 20920, 20956, 20992, 21027, 21063, 21099, 21134, 21170,
+    /* 300-309Â°C */
+    21206, 21241, 21277, 21312, 21348, 21384, 21419, 21455, 21490, 21526,
+    /* 310-319Â°C */
+    21561, 21597, 21632, 21668, 21703, 21739, 21774, 21810, 21845, 21881,
+    /* 320-329Â°C */
+    21916, 21951, 21987, 22022, 22058, 22093, 22128, 22164, 22199, 22234,
+    /* 330-339Â°C */
+    22270, 22305, 22340, 22376, 22411, 22446, 22481, 22517, 22552, 22587,
+    /* 340-349Â°C */
+    22622, 22658, 22693, 22728, 22763, 22798, 22834, 22869, 22904, 22939,
+    /* 350-359Â°C */
+    22974, 23009, 23044, 23079, 23115, 23150, 23185, 23220, 23255, 23290,
+    /* 360-369Â°C */
+    23325, 23360, 23395, 23430, 23465, 23500, 23535, 23570, 23605, 23640,
+    /* 370-379Â°C */
+    23675, 23710, 23745, 23779, 23814, 23849, 23884, 23919, 23954, 23989,
+    /* 380-389Â°C */
+    24024, 24058, 24093, 24128, 24163, 24198, 24232, 24267, 24302, 24337,
+    /* 390-399Â°C */
+    24371, 24406, 24441, 24476, 24510, 24545, 24580, 24614, 24649, 24684,
+    /* 400-409Â°C */
+    24718, 24753, 24788, 24822, 24857, 24891, 24926, 24961, 24995, 25030,
+    /* 410-419Â°C */
+    25064, 25099, 25133, 25168, 25202, 25237, 25271, 25306, 25340, 25375,
+    /* 420-429Â°C */
+    25409, 25444, 25478, 25513, 25547, 25581, 25616, 25650, 25685, 25719,
+    /* 430-439Â°C */
+    25753, 25788, 25822, 25856, 25891, 25925, 25959, 25994, 26028, 26062,
+    /* 440-449Â°C */
+    26096, 26131, 26165, 26199, 26233, 26268, 26302, 26336, 26370, 26405,
+    /* 450-459Â°C */
+    26439, 26473, 26507, 26541, 26575, 26610, 26644, 26678, 26712, 26746,
+    /* 460-469Â°C */
+    26780, 26814, 26848, 26882, 26916, 26950, 26984, 27018, 27052, 27086,
+    /* 470-479Â°C */
+    27120, 27154, 27188, 27222, 27256, 27290, 27324, 27358, 27392, 27426,
+    /* 480-489Â°C */
+    27460, 27494, 27527, 27561, 27595, 27629, 27663, 27697, 27730, 27764,
+    /* 490-499Â°C */
+    27798, 27832, 27866, 27899, 27933, 27967, 28001, 28034, 28068, 28102,
+    /* 500Â°C */
+    28135
+};
 
 
 /**
-  * @brief  ADC GPIO ³õÊ¼»¯
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  ADC GPIO ï¿½ï¿½Ê¼ï¿½ï¿½
+  * @param  ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 static void ADCx_GPIO_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-//================Á½Â·4-20mA¼ì²â PA0 ,PA1===============================================//
+//================ï¿½ï¿½Â·4-20mAï¿½ï¿½ï¿½ PA0 ,PA1===============================================//
 
-	// ´ò¿ª ADC IO¶Ë¿ÚÊ±ÖÓ
+	// ï¿½ï¿½ ADC IOï¿½Ë¿ï¿½Ê±ï¿½ï¿½
 	ADC_GPIO_APBxClock_FUN ( ADC_GPIO_CLK, ENABLE );
 	
-	// ÅäÖÃ ADC IO Òý½ÅÄ£Ê½
+	// ï¿½ï¿½ï¿½ï¿½ ADC IO ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	GPIO_InitStructure.GPIO_Pin = 	ADC_PIN1 | ADC_PIN2;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 	
-	// ³õÊ¼»¯ ADC IO
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ ADC IO
 	GPIO_Init(ADC_PORT, &GPIO_InitStructure);			
 	
-//================Á½Â·4-20mA¼ì²â PC4£¬PC5===============================================//
-	// ´ò¿ª ADC IO¶Ë¿ÚÊ±ÖÓ
-		/*ÅäÖÃPC0 ºÍ PC1  ÓÃÓÚ¼ì²âADSÓÐÃ»ÓÐÔÚÏßµÄ*/
+//================ï¿½ï¿½Â·4-20mAï¿½ï¿½ï¿½ PC4ï¿½ï¿½PC5===============================================//
+	// ï¿½ï¿½ ADC IOï¿½Ë¿ï¿½Ê±ï¿½ï¿½
+		/*ï¿½ï¿½ï¿½ï¿½PC0 ï¿½ï¿½ PC1  ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ADSï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ßµï¿½*/
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;  
   GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0 | GPIO_Pin_1;
@@ -292,88 +194,88 @@ static void ADCx_GPIO_Config(void)
 }
 
 /**
-  * @brief  ÅäÖÃADC¹¤×÷Ä£Ê½
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  ï¿½ï¿½ï¿½ï¿½ADCï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  * @param  ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 static void ADCx_Mode_Config(void)
 {
 	DMA_InitTypeDef DMA_InitStructure;
 	ADC_InitTypeDef ADC_InitStructure;
 	
-	// ´ò¿ªDMAÊ±ÖÓ
+	// ï¿½ï¿½DMAÊ±ï¿½ï¿½
 	RCC_AHBPeriphClockCmd(ADC_DMA_CLK, ENABLE);
-	// ´ò¿ªADCÊ±ÖÓ
+	// ï¿½ï¿½ADCÊ±ï¿½ï¿½
 	ADC_APBxClock_FUN ( ADC_CLK, ENABLE );
 	
-	// ¸´Î»DMA¿ØÖÆÆ÷
+	// ï¿½ï¿½Î»DMAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	DMA_DeInit(ADC_DMA_CHANNEL);
 	
-	// ÅäÖÃ DMA ³õÊ¼»¯½á¹¹Ìå
-	// ÍâÉè»ùÖ·Îª£ºADC Êý¾Ý¼Ä´æÆ÷µØÖ·
+	// ï¿½ï¿½ï¿½ï¿½ DMA ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ADC ï¿½ï¿½ï¿½Ý¼Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
 	DMA_InitStructure.DMA_PeripheralBaseAddr = ( u32 ) ( & ( ADC_x->DR ) );
 	
-	// ´æ´¢Æ÷µØÖ·
+	// ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½Ö·
 	DMA_InitStructure.DMA_MemoryBaseAddr = (u32)ADC_ConvertedValue;
 	
-	// Êý¾ÝÔ´À´×ÔÍâÉè
+	// ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
 	
-	// »º³åÇø´óÐ¡£¬Ó¦¸ÃµÈÓÚÊý¾ÝÄ¿µÄµØµÄ´óÐ¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Ó¦ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ÄµØµÄ´ï¿½Ð¡
 	DMA_InitStructure.DMA_BufferSize = N*M;
 	
-	// ÍâÉè¼Ä´æÆ÷Ö»ÓÐÒ»¸ö£¬µØÖ·²»ÓÃµÝÔö
+	// ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 
-	// ´æ´¢Æ÷µØÖ·µÝÔö
+	// ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable; 
 	
-	// ÍâÉèÊý¾Ý´óÐ¡Îª°ë×Ö£¬¼´Á½¸ö×Ö½Ú
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Ð¡Îªï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
 	
-	// ÄÚ´æÊý¾Ý´óÐ¡Ò²Îª°ë×Ö£¬¸úÍâÉèÊý¾Ý´óÐ¡ÏàÍ¬
+	// ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Ð¡Ò²Îªï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Ð¡ï¿½ï¿½Í¬
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	
-	// Ñ­»·´«ÊäÄ£Ê½
+	// Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;	
 
-	// DMA ´«ÊäÍ¨µÀÓÅÏÈ¼¶Îª¸ß£¬µ±Ê¹ÓÃÒ»¸öDMAÍ¨µÀÊ±£¬ÓÅÏÈ¼¶ÉèÖÃ²»Ó°Ïì
+	// DMA ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½Îªï¿½ß£ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ò»ï¿½ï¿½DMAÍ¨ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½Ã²ï¿½Ó°ï¿½ï¿½
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
 	
-	// ½ûÖ¹´æ´¢Æ÷µ½´æ´¢Æ÷Ä£Ê½£¬ÒòÎªÊÇ´ÓÍâÉèµ½´æ´¢Æ÷
+	// ï¿½ï¿½Ö¹ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½Îªï¿½Ç´ï¿½ï¿½ï¿½ï¿½èµ½ï¿½æ´¢ï¿½ï¿½
 	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 	
-	// ³õÊ¼»¯DMA
+	// ï¿½ï¿½Ê¼ï¿½ï¿½DMA
 	DMA_Init(ADC_DMA_CHANNEL, &DMA_InitStructure);
 	
-	// Ê¹ÄÜ DMA Í¨µÀ
+	// Ê¹ï¿½ï¿½ DMA Í¨ï¿½ï¿½
 	DMA_Cmd(ADC_DMA_CHANNEL , ENABLE);
 	
-	// ADC Ä£Ê½ÅäÖÃ
-	// Ö»Ê¹ÓÃÒ»¸öADC£¬ÊôÓÚµ¥Ä£Ê½
+	// ADC Ä£Ê½ï¿½ï¿½ï¿½ï¿½
+	// Ö»Ê¹ï¿½ï¿½Ò»ï¿½ï¿½ADCï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ä£Ê½
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
 	
-	// É¨ÃèÄ£Ê½
+	// É¨ï¿½ï¿½Ä£Ê½
 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 
 
-	// Á¬Ðø×ª»»Ä£Ê½
+	// ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ä£Ê½
 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
 
-	// ²»ÓÃÍâ²¿´¥·¢×ª»»£¬Èí¼þ¿ªÆô¼´¿É
+	// ï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
 
-	// ×ª»»½á¹ûÓÒ¶ÔÆë
+	// ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ï¿½ï¿½
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
 	
-	// ×ª»»Í¨µÀ¸öÊý
+	// ×ªï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	ADC_InitStructure.ADC_NbrOfChannel = NOFCHANEL;	
 		
-	// ³õÊ¼»¯ADC
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ADC
 	ADC_Init(ADC_x, &ADC_InitStructure);
 	
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6); 
 	
-	// ÅäÖÃADC Í¨µÀµÄ×ª»»Ë³ÐòºÍ²ÉÑùÊ±¼ä
+	// ï¿½ï¿½ï¿½ï¿½ADC Í¨ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ë³ï¿½ï¿½Í²ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	ADC_RegularChannelConfig(ADC_x, ADC_CHANNEL1, 1, ADC_SampleTime_239Cycles5);
 	ADC_RegularChannelConfig(ADC_x, ADC_CHANNEL2, 2, ADC_SampleTime_239Cycles5);
 	ADC_RegularChannelConfig(ADC_x, ADC_CHANNEL3, 3, ADC_SampleTime_239Cycles5);
@@ -383,30 +285,30 @@ static void ADCx_Mode_Config(void)
  
 	
 	
-	// Ê¹ÄÜADC DMA ÇëÇó
+	// Ê¹ï¿½ï¿½ADC DMA ï¿½ï¿½ï¿½ï¿½
 	ADC_DMACmd(ADC_x, ENABLE);
 	
-	// ¿ªÆôADC £¬²¢¿ªÊ¼×ª»»
+	// ï¿½ï¿½ï¿½ï¿½ADC ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼×ªï¿½ï¿½
 	ADC_Cmd(ADC_x, ENABLE);
 	
-	// ³õÊ¼»¯ADC Ð£×¼¼Ä´æÆ÷  
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ADC Ð£×¼ï¿½Ä´ï¿½ï¿½ï¿½  
 	ADC_ResetCalibration(ADC_x);
-	// µÈ´ýÐ£×¼¼Ä´æÆ÷³õÊ¼»¯Íê³É
+	// ï¿½È´ï¿½Ð£×¼ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	while(ADC_GetResetCalibrationStatus(ADC_x));
 	
-	// ADC¿ªÊ¼Ð£×¼
+	// ADCï¿½ï¿½Ê¼Ð£×¼
 	ADC_StartCalibration(ADC_x);
-	// µÈ´ýÐ£×¼Íê³É
+	// ï¿½È´ï¿½Ð£×¼ï¿½ï¿½ï¿½
 	while(ADC_GetCalibrationStatus(ADC_x));
 	
-	// ÓÉÓÚÃ»ÓÐ²ÉÓÃÍâ²¿´¥·¢£¬ËùÒÔÊ¹ÓÃÈí¼þ´¥·¢ADC×ª»» 
+	// ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð²ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ADC×ªï¿½ï¿½ 
 	ADC_SoftwareStartConvCmd(ADC_x, ENABLE);
 }
 
 /**
-  * @brief  ADC³õÊ¼»¯
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  ADCï¿½ï¿½Ê¼ï¿½ï¿½
+  * @param  ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 void ADCx_Init(void)
 {
@@ -419,106 +321,105 @@ void ADCx_Init(void)
 
 
 
+/**
+ * @brief  4-20mAADCè½¼ï¿½ï¿½ï¿½100Î©ï¿½ï¿½ï¿½ï¿½
+ * @param  advalue: ADCï¿½ï¿½ (0-4095)
+ * @retval ï¿½ï¿½ï¿½0.01MPaï¿½ï¿½160è¡¨ç¤º1.6MPaï¿½
+ * @note   100Î©ï¿½ï¿½ï¿½ï¿½4mA=400mV, 20mA=2000mV
+ *         ï¿½ï¿½
+ */
 uint16 GetVolt(uint16 advalue) 
-
 {
-
+	uint16 voltageMv = 0;
+	int32 pressure = 0;
+	uint16 zeroMv, spanMv, fullScale;
 	
-	uint16 pressure =0;
+	/* ADCï¿½è½¬ï¿½ï¿½(mV): voltage = adc * 3300 / 4096 */
+	voltageMv = (uint16)((uint32)advalue * 3300 / 4096);
+	sys_flag.Value_Buffer = voltageMv;
 	
-	//²Î¿¼µçÑ¹
-	pressure = (uint16)(advalue * 3300 / 4096);//¶ÔADCÖµÀ©´ó1000±¶£¬·½±ãÈ¡Ð¡Êý
-
-	sys_flag.Value_Buffer = pressure;
-	 
-	if(pressure > 380 && pressure < 559)//Õë¶ÔÑ¹Á¦±äËÍÆ÷¿ÉÄÜËð»µ£¬×î´óÎó²î0.03Mpa
-		pressure = 560;
-
-	//ÂúÁ¿³Ì1.60Mpa, = 160,¾«È·µ½0.01Mpa  Õâ¸ö14 =14 = £¨1679 -559£©/ 80
+	/* ä½¿ï¿½ï¿½ï¿½ï¿½ï¿½è®¤ï¿½ */
+	if(pressureCalib.calibValid == 0x5A)
+	{
+		zeroMv = pressureCalib.zeroMv;
+		spanMv = pressureCalib.spanMv;
+		fullScale = pressureCalib.fullScale;
+	}
+	else
+	{
+		/* ï¿½è®¤ï¿½ï¿½100Î©ï¿½ï¿½ */
+		zeroMv = PRESSURE_ZERO_MV;       /* 400mV */
+		spanMv = PRESSURE_SPAN_MV;       /* 1600mV */
+		fullScale = 160;                 /* 1.6MPa */
+	}
 	
-	if(Sys_Admin.DeviceMaxPressureSet <= 160)
-		pressure = (pressure - 559) * 10/140;  //16¹«½ïÒÔÄÚµÄ»»Ëã
-
-	//sys_flag.Pressure_buffer = (pressure - 559) * 100/140;  //¾«È·µ½0.001
-
-	if(Sys_Admin.DeviceMaxPressureSet > 160  && Sys_Admin.DeviceMaxPressureSet <= 250)
-		{
-			pressure = (pressure - 559)* 25/224 ;//25¹«½ïµÄ»»Ëã
-		}
-		
-	  if(pressure > 0x8000)
-	  	{
-	  		pressure = 999;
-			
-	  	}
-			  	
-	return pressure; 
-
+	/* ï¿½ï¿½è®¾ï¿½ï¿½ï¿½æ»¡ï¿½ï¿½ */
+	if(Sys_Admin.DeviceMaxPressureSet > 0 && Sys_Admin.DeviceMaxPressureSet <= 250)
+	{
+		fullScale = Sys_Admin.DeviceMaxPressureSet;
+	}
+	
+	/* çº¿ï¿½ï¿½ï¿½ï¿½ï¿½300mV(ï¿½3mA)è®¤ä¸ºä¼¨ï¿½ */
+	if(voltageMv < PRESSURE_FAULT_LOW_MV)
+	{
+		return 999;  /*  */
+	}
+	
+	/* ï¿½ï¿½ï¿½ï¿½å®¹å·®ï¿½ï¼¥ï¿½ï¿½4mAï¿½å¼ºï¿½ä¸º0 */
+	if(voltageMv >= PRESSURE_FAULT_LOW_MV && voltageMv < zeroMv)
+	{
+		return 0;
+	}
+	
+	/* çº¿ï¿½ï¿½ï¿½: pressure = (voltage - zero) * fullScale / span */
+	pressure = ((int32)voltageMv - zeroMv) * fullScale / spanMv;
+	
+	/* ï¿½ï¿½ */
+	if(pressure < 0)
+	{
+		pressure = 0;
+	}
+	if(pressure > 0x7FFF)
+	{
+		pressure = 999;
+	}
+	
+	return (uint16)pressure;
 }
 
+/**
+ * @brief  25kgï¿½ADCè½¼ï¿½100Î©ï¿½ï¿½ï¿½ï¿½
+ * @param  advalue: ADCï¿½ï¿½ (0-4095)
+ * @retval ï¿½ï¿½ï¿½0.01MPaï¿½ï¿½250è¡¨ç¤º2.5MPaï¿½
+ */
 uint16 Pressure25KG_GetVolt(uint16 advalue) 
-
 {
-	uint16 pressure =0;
+	uint16 voltageMv = 0;
+	int32 pressure = 0;
 	
-	//²Î¿¼µçÑ¹
-	pressure = (uint16)(advalue * 3300 / 4096);//¶ÔADCÖµÀ©´ó1000±¶£¬·½±ãÈ¡Ð¡Êý
-
-	sys_flag.Value_Buffer = pressure;
-	 
-	if(pressure > 380 && pressure < 559)//Õë¶ÔÑ¹Á¦±äËÍÆ÷¿ÉÄÜËð»µ£¬×î´óÎó²î0.03Mpa
-		pressure = 560;
-
-	//ÂúÁ¿³Ì1.60Mpa, = 160,¾«È·µ½0.01Mpa  Õâ¸ö14 =14 = £¨1679 -559£©/ 80
+	/* ADCï¿½è½¬ï¿½ï¿½(mV) */
+	voltageMv = (uint16)((uint32)advalue * 3300 / 4096);
+	sys_flag.Value_Buffer = voltageMv;
 	
+	/* çº¿ï¿½ï¿½ */
+	if(voltageMv < PRESSURE_FAULT_LOW_MV)
+	{
+		return 999;
+	}
 	
-	pressure = (pressure - 559)* 25/224 ;//25¹«½ïµÄ»»Ëã
-			 
-
-	  if(pressure > 0x8000)
-	  	{
-	  		pressure = 999;
-			
-	  	}
-			  	
-	return pressure; 
-
-}
-
-
-uint16 New_GetVolt(uint16 advalue) 
-
-{
-
+	/* ï¿½ï¿½ï¿½å·® */
+	if(voltageMv < PRESSURE_ZERO_MV)
+	{
+		return 0;
+	}
 	
-	uint16 pressure =0;
+	/* 25kgï¿½è®¡ï¿½: pressure = (voltage - 400) * 250 / 1600 */
+	pressure = ((int32)voltageMv - PRESSURE_ZERO_MV) * 250 / PRESSURE_SPAN_MV;
 	
-	//²Î¿¼µçÑ¹
-	pressure = (uint16)(advalue * 3300 / 4096);//¶ÔADCÖµÀ©´ó1000±¶£¬·½±ãÈ¡Ð¡Êý
-
-	//sys_flag.Value_Buffer2 = advalue;
-
+	if(pressure < 0) pressure = 0;
+	if(pressure > 0x7FFF) pressure = 999;
 	
-
-
-	 
-	if(pressure > 550 && pressure < 670)//Õë¶ÔÑ¹Á¦±äËÍÆ÷¿ÉÄÜËð»µ£¬×î´óÎó²î0.03Mpa
-		pressure = 674;
-
-	
-	
-	pressure = (pressure - 673) * 10/138;//ÂúÁ¿³Ì1.60Mpa, = 160,¾«È·µ½0.01Mpa  Õâ¸ö13.8 =13.78 = £¨1776 -673£©/ 80
-
-			  
-
-	  if(pressure > 0x8000)
-	  	{
-	  		pressure = 999;
-			
-	  	}
-			  	
-	return pressure; 
-
+	return (uint16)pressure;
 }
 
 
@@ -541,16 +442,16 @@ void filter(void)
 
 
 /**
-  * @brief  ½«ËÄÂ·ÎÂ¶ÈÊýÖµ·¢ËÍµ½LCD ºÍÊý¾ÝÍ³¼ÆÒ³ÃæÉÏ
-  * @param  ÎÂ¶È±äÁ¿0--1000£¬equ 0-100¶È
-  * @retval ÎÞ
+  * @brief  ï¿½ï¿½ï¿½ï¿½Â·ï¿½Â¶ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Íµï¿½LCD ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
+  * @param  ï¿½Â¶È±ï¿½ï¿½ï¿½0--1000ï¿½ï¿½equ 0-100ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 
 void Send_Adc_Lcd(void)
 {
 
 		uint16  Buffer16 = 0;
-//????????  	  ??????¡À¨ª?????¨²??***************************************
+//????????  	  ??????ï¿½ï¿½ï¿½ï¿½?????ï¿½ï¿½??***************************************
 
 
 	
@@ -628,7 +529,7 @@ uint16 Pressure_Filter_Function(uint16 Pressure)
 	static uint8 Index = 0;
 	uint16 Return_Value = 0;
 	 
-	//µ±Ç°Ñ¹Á¦´óÓÚÍ£Â¯Ñ¹Á¦£¬ Æô¶¯ÂË²¨Á÷³Ì£¬Èô¹û³ÖÐø³¬¹ý1Ãë£¬Ôò½«ÕæÊµµÄÖµ¸³Öµ
+	//ï¿½ï¿½Ç°Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£Â¯Ñ¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Öµï¿½ï¿½Öµ
 	if(Pressure > sys_config_data.Auto_stop_pressure)
 		{
 			
@@ -638,10 +539,10 @@ uint16 Pressure_Filter_Function(uint16 Pressure)
 					sys_flag.Pressure_HCount = 0;
 				}
 
-			if(sys_flag.Pressure_HCount >= 6) //µ¥Î»Îª300ms,1.8Ãë
+			if(sys_flag.Pressure_HCount >= 6) //ï¿½ï¿½Î»Îª300ms,1.8ï¿½ï¿½
 				Return_Value = Pressure;
 			else
-				Return_Value = Temperature_Data.Pressure_Value; //·ÀÖ¹¸øµ±Ç°Ñ¹Á¦¸³ÖµÎª0 
+				Return_Value = Temperature_Data.Pressure_Value; //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½Ç°Ñ¹ï¿½ï¿½ï¿½ï¿½ÖµÎª0 
 			
 				
 				
@@ -651,20 +552,177 @@ uint16 Pressure_Filter_Function(uint16 Pressure)
 			sys_flag.Pressure_HFlag = 0;
 			sys_flag.Pressure_HCount = 0;
 			if(Index > 4)
-				Index = 0;  //¿ØÖÆÒç³ö±ß½ç
+				Index = 0;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½
 				
 			Value_Buffer[Index] = Pressure;
 			Index++;
-			for(kdex = 0; kdex <= 4; kdex++)  //¿ØÖÆÔÚ2ÃëÄÚµÄÆ½»¬ÂË²¨
+			for(kdex = 0; kdex <= 4; kdex++)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½Úµï¿½Æ½ï¿½ï¿½ï¿½Ë²ï¿½
 				Total_Value =  Total_Value + Value_Buffer[kdex];
 
-			Total_Value = Total_Value / 5;  //Òª×¢ÒâADCÆ½¾ùÂÖ»ØÖÜÆÚÊ±¼ä£¬·ÀÖ¹Ãô¸ÐÐÔÌ«²î
+			Total_Value = Total_Value / 5;  //Òª×¢ï¿½ï¿½ADCÆ½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì«ï¿½ï¿½
 			
 			Return_Value = Total_Value;
 		}
 
 
 	return Return_Value;
+}
+
+
+/*==============================================================================
+ * IIRæ»¤æ³¢ï¿½ï¿½ï¿½ï¿½ï¼¿ä»£ï¿½å¹³ï¿½æ»¤æ³¢ï¿½
+ * ï¿½IIRï¿½æ»¤æ³¢ï¿½y[n] = 0.75*y[n-1] + 0.25*x[n]
+ * æ»¤æ³¢ç³»ï¿½ï¿½=0.25ï¼¶ï¿½å¸¸ï¿½çº¦4ä¸·ï¿½ï¿½
+ *============================================================================*/
+
+/**
+ * @brief  ï¿½IIRï¿½æ»¤æ³¢ï¿½ä¿¡ï¿½ï¿½ï¿½
+ * @param  rawPressure: å§¼ï¿½0.01MPaï¿½
+ * @retval æ»¤æ³¢
+ * @note   ä½¿ï¿½Q8å®¹ï¿½ï¿½ï¿½æµ¹ï¿½ï¿½
+ *         ï¿½ï¿½ï¿½ï¿½ï¿½è¿¶ï¿½ï¿½ï¿½
+ */
+uint16 Pressure_IIR_Filter(uint16 rawPressure)
+{
+	uint16 filteredValue;
+	
+	/* ï¿½ï¿½ï¿½æ¨¡ï¿½ï¿½ï¿½è¿¶è·³ï¿½æ»¤æ³¢ */
+	if(rawPressure > sys_config_data.Auto_stop_pressure)
+	{
+		if(sys_flag.Pressure_HFlag == FALSE)
+		{
+			sys_flag.Pressure_HFlag = OK;
+			sys_flag.Pressure_HCount = 0;
+		}
+		
+		/* ï¿½ï¿½ï¿½è®¤ï¿½ï¿½ï¿½ï¿½ */
+		if(sys_flag.Pressure_HCount >= 6)
+		{
+			pressureIirState = (uint32)rawPressure << 8;
+			return rawPressure;
+		}
+		else
+		{
+			return Temperature_Data.Pressure_Value;
+		}
+	}
+	
+	/* æ­£å¸¸æ¨¡ï¿½ï¿½IIRæ»¤æ³¢ */
+	sys_flag.Pressure_HFlag = 0;
+	sys_flag.Pressure_HCount = 0;
+	
+	/* ï¿½æ¬¡ï¿½ï¿½ */
+	if(!pressureIirInit)
+	{
+		pressureIirState = (uint32)rawPressure << 8;
+		pressureIirInit = 1;
+		return rawPressure;
+	}
+	
+	/* IIRæ»¤æ³¢è®¡ï¿½ï¿½Q8å®¹ï¿½
+	 * filtered = 0.75 * filtered + 0.25 * new
+	 * ï¿½ç§»ï¿½: 0.75  192/256, 0.25  64/256
+	 */
+	pressureIirState = (pressureIirState * 192 + (uint32)rawPressure * 64) >> 8;
+	
+	/* è½¢ï¿½ï¿½ */
+	filteredValue = (uint16)(pressureIirState >> 8);
+	
+	return filteredValue;
+}
+
+/**
+ * @brief  ï¿½IIRæ»¤æ³¢ï¿½ï¿½ï¿½
+ * @note   ç³»ï¿½ï¿½ï¿½ï¿½
+ */
+void Pressure_Filter_Reset(void)
+{
+	pressureIirState = 0;
+	pressureIirInit = 0;
+}
+
+/*==============================================================================
+ * ï¿½ï¿½ï¿½ï¿½
+ *============================================================================*/
+
+/**
+ * @brief  å§¡ï¿½ï¿½ä½¿ï¿½ï¿½è®¤ï¿½ï¿½
+ */
+void Pressure_Calib_Init(void)
+{
+	/* ï¿½Flashä¸¡ï¿½ï¿½ï¿½æ­¤ï¿½ä½¿ï¿½ï¿½è®¤ï¿½ */
+	if(pressureCalib.calibValid != 0x5A)
+	{
+		pressureCalib.zeroMv = PRESSURE_ZERO_MV;
+		pressureCalib.spanMv = PRESSURE_SPAN_MV;
+		pressureCalib.fullScale = 160;
+		pressureCalib.calibValid = 0x5A;
+	}
+}
+
+/**
+ * @brief  ï¿½ï¿½ï¿½ï¿½ï¿½4mAï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  currentAdcMv: ï¿½ADCæµµï¿½(mV)
+ * @note   ï¿½ï¿½ï¿½4mAï¿½ï¿½0ï¼¶ï¿½
+ */
+void Pressure_Calibrate_Zero(uint16 currentAdcMv)
+{
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½300-600mV */
+	if(currentAdcMv >= 300 && currentAdcMv <= 600)
+	{
+		pressureCalib.zeroMv = currentAdcMv;
+		pressureCalib.calibValid = 0x5A;
+		
+		/* TODO: ï¿½ï¿½Flash */
+		// SaveCalibToFlash(&pressureCalib);
+		
+		/* ï¿½æ»¤æ³¢ */
+		Pressure_Filter_Reset();
+	}
+}
+
+/**
+ * @brief  æ»¡ï¿½ç¨¡ï¿½ï¿½20mAï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  currentAdcMv: ï¿½ADCæµµï¿½(mV)
+ * @param  actualPressure: å®¼ï¿½0.01MPaï¿½
+ * @note   ï¿½ï¿½ï¿½20mAï¿½æ»¡ï¿½ï¿½ï¼¶ï¿½
+ */
+void Pressure_Calibrate_Full(uint16 currentAdcMv, uint16 actualPressure)
+{
+	uint16 newSpan;
+	
+	/* ï¿½ï¿½ï¿½æ»¡ï¿½ç¨µï¿½ï¿½1500-2500mV */
+	if(currentAdcMv >= 1500 && currentAdcMv <= 2500 && actualPressure > 0)
+	{
+		newSpan = currentAdcMv - pressureCalib.zeroMv;
+		
+		/* è·¨åº¦ï¿½ï¿½ */
+		if(newSpan >= 1000 && newSpan <= 2000)
+		{
+			pressureCalib.spanMv = newSpan;
+			pressureCalib.fullScale = actualPressure;
+			pressureCalib.calibValid = 0x5A;
+			
+			/* TODO: ï¿½ï¿½Flash */
+			// SaveCalibToFlash(&pressureCalib);
+		}
+	}
+}
+
+/**
+ * @brief  ä½¿ï¿½ï¿½ï¿½ï¿½è½¢ï¿½ï¿½ï¿½ï¿½IIRæ»¤æ³¢ï¿½
+ * @param  advalue: ADCï¿½ï¿½
+ * @retval æ»¤æ³¢ï¿½ï¿½0.01MPaï¿½
+ */
+uint16 GetVoltCalibrated(uint16 advalue)
+{
+	uint16 rawPressure;
+	
+	/* ï¿½ */
+	rawPressure = GetVolt(advalue);
+	
+	/* æ»¤æ³¢ */
+	return Pressure_IIR_Filter(rawPressure);
 }
 
 
@@ -676,7 +734,7 @@ uint16 WenDu_Filter_Function(uint16 New_Value)
 	uint8 kdex = 0;
 	static uint8 Index = 0;
 	 
-	//µ±ÎÂ¶È´óÓÚ400¶È£¬ Æô¶¯ÂË²¨Á÷³Ì£¬Èô¹û³ÖÐø³¬¹ý1Ãë£¬Ôò½«ÕæÊµµÄÖµ¸³Öµ
+	//ï¿½ï¿½ï¿½Â¶È´ï¿½ï¿½ï¿½400ï¿½È£ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Öµï¿½ï¿½Öµ
 	if(New_Value > 4000)
 		{
 			if(sys_flag.WenDu_HFlag == FALSE)
@@ -685,7 +743,7 @@ uint16 WenDu_Filter_Function(uint16 New_Value)
 					sys_flag.WenDu_HCount = 0;
 				}
 
-			if(sys_flag.WenDu_HCount >= 6) //µ¥Î»Îª300ms,1.8Ãë
+			if(sys_flag.WenDu_HCount >= 6) //ï¿½ï¿½Î»Îª300ms,1.8ï¿½ï¿½
 				Return_Value = New_Value;
 				
 		}
@@ -694,14 +752,14 @@ uint16 WenDu_Filter_Function(uint16 New_Value)
 			sys_flag.WenDu_HFlag = 0;
 			sys_flag.WenDu_HCount = 0;
 			if(Index >= 20)
-				Index = 0;  //¿ØÖÆÒç³ö±ß½ç
+				Index = 0;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½
 				
 			Value_Buffer[Index] = New_Value;
 			Index++;
-			for(kdex = 0; kdex <= 19; kdex++)  //¿ØÖÆÔÚ2ÃëÄÚµÄÆ½»¬ÂË²¨
+			for(kdex = 0; kdex <= 19; kdex++)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½Úµï¿½Æ½ï¿½ï¿½ï¿½Ë²ï¿½
 				Total_Value =  Total_Value + Value_Buffer[kdex];
 
-			Total_Value = Total_Value / 20;  //Òª×¢ÒâADCÆ½¾ùÂÖ»ØÖÜÆÚÊ±¼ä£¬·ÀÖ¹Ãô¸ÐÐÔÌ«²î
+			Total_Value = Total_Value / 20;  //Òª×¢ï¿½ï¿½ADCÆ½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì«ï¿½ï¿½
 			Return_Value = Total_Value;
 		}
 	
@@ -728,7 +786,7 @@ uint8 Check_ADS_Unconnect(uint16 New_Value)
 			sys_flag.AdsUnconnect_Flag = 0;
 			
 			if(sys_flag.AdsUnconnect_Count > 9)
-				Old_State = FALSE;  //×´Ì¬³ö´íÀ­
+				Old_State = FALSE;  //×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			else
 				Old_State = OK;
 
@@ -746,9 +804,9 @@ uint8 Check_ADS_Unconnect(uint16 New_Value)
 
 
 /**
-  * @brief  ADCÊýÖµÆ½¾ùÂË²¨£¬´¦Àí
-  * @param  ÎÂ¶È±äÁ¿0--1000£¬equ 0-100¶È
-  * @retval ÎÞ
+  * @brief  ADCï¿½ï¿½ÖµÆ½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * @param  ï¿½Â¶È±ï¿½ï¿½ï¿½0--1000ï¿½ï¿½equ 0-100ï¿½ï¿½
+  * @retval ï¿½ï¿½
   */
 uint8  ADC_Process(void)
 {
@@ -766,7 +824,7 @@ uint8  ADC_Process(void)
 
 				sys_flag.ADC_100msFlag = 0;
 				
-				filter();  //ADCÂË²¨  //ÎÂ¶ÈÄ¬ÈÏÍ¨µÀÁã
+				filter();  //ADCï¿½Ë²ï¿½  //ï¿½Â¶ï¿½Ä¬ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 				for(i = 0; i < M; i++)
 				{
 					
@@ -775,60 +833,61 @@ uint8  ADC_Process(void)
 
 			
 				
-				//ADS1220 ÎÂ¶Èµç×è¼ì²â·½Ê½
-				 //PE13  DRDY½ÅÎªµÍµçÆ½£¬Ôò¶Á£¬
+				//ADS1220 ï¿½Â¶Èµï¿½ï¿½ï¿½ï¿½â·½Ê½
+				 //PE13  DRDYï¿½ï¿½Îªï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				 if(PortPin_Scan(GPIOE,GPIO_Pin_13) == 0)
 				 	{
 				 		sys_flag.Value_Buffer2++;
 				 		Data = ADS1220ReadData();
-						ResData = Data / 8388607.000 * 2000 ;//µ¥Ò»LSB¼ÆËã¹«Ê½
+						ResData = Data / 8388607.000 * 2000 ;//ï¿½ï¿½Ò»LSBï¿½ï¿½ï¿½ã¹«Ê½
 				 		ResData = ResData /16/0.5;
-				 		Data = 	ResData * 100;//³Ë100±¶£¬½øÐÐ²é±í
+				 		Data = 	ResData * 100;//ï¿½ï¿½100ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½
 				 		ADC1220_Value = Adc_to_temperature(Data);
 						Temperature_Data.Smoke_Tem  = WenDu_Filter_Function(ADC1220_Value);
 						if(Temperature_Data.Smoke_Tem > 100)
-							Temperature_Data.Smoke_Tem = Temperature_Data.Smoke_Tem - 25; //¼õ2.5¶È
+							Temperature_Data.Smoke_Tem = Temperature_Data.Smoke_Tem - 25; //ï¿½ï¿½2.5ï¿½ï¿½
 				 	}
-				 ResData = Temperature_Data.Smoke_Tem; //»»Ëã³ÉÐ¡Êý
+				 ResData = Temperature_Data.Smoke_Tem; //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½
 				 LCD10D.DLCD.Smoke_WenDu = ResData / 10;
 				
 				
 				
 				
 
-				// ADC_ConvertedValueLocal[1] ¶ÔÓ¦Ñ¹Á¦±äËÍÆ÷1µÄÖµ £¬ADC_ConvertedValueLocal[0] ¶ÔÓ¦Ñ¹Á¦±äËÍÆ÷2Öµ
+				// ADC_ConvertedValueLocal[1] å¯¹ï¿½1, ADC_ConvertedValueLocal[0] å¯¹ï¿½2
+				// ä½¿ï¿½ï¿½IIRæ»¤æ³¢ï¿½ï¿½ï¿½100Î©ï¿½ï¿½ï¿½ï¿½4mA=400mVï¿½
 				Value_Buffer = GetVolt(ADC_ConvertedValueLocal[1]);
-				Temperature_Data.Pressure_Value = Pressure_Filter_Function(Value_Buffer);
+				Temperature_Data.Pressure_Value = Pressure_IIR_Filter(Value_Buffer);
 				Temperature_Data.steam_value = pressure_to_temperature( Temperature_Data.Pressure_Value);
 
-				if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3 )  //Ïà±äÕôÆû»ú×éÅÐ¶¨
+				if(Sys_Admin.Device_Style == 1 || Sys_Admin.Device_Style == 3 )  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 					{
 						Temperature_Data.Inside_High_Pressure = Pressure25KG_GetVolt(ADC_ConvertedValueLocal[0]);
 						ResData = Temperature_Data.Inside_High_Pressure;
-						LCD10D.DLCD.Inside_High_Pressure = ResData / 100; //»»Ëã³ÉÐ¡Êý
+						LCD10D.DLCD.Inside_High_Pressure = ResData / 100; //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½
 					}
 				else
 					Temperature_Data.Inside_High_Pressure = 0;
 				
 
 				ResData = Temperature_Data.Pressure_Value;
-				LCD10D.DLCD.Steam_Pressure = ResData / 100; //»»Ëã³ÉÐ¡Êý
+				LCD10D.DLCD.Steam_Pressure = ResData / 100; //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½
 				LCD10D.DLCD.Steam_WenDu = Temperature_Data.steam_value;
 				
 				
-				/*¼ì²âPC0 ºÍPC1 µÄÖµÅÐ¶¨ ADSÓÐÃ»ÓÐÔÚÕýÈ·¶ÁÈ¡µç×èµÄÖµ£¬Î´½ÓµÄÊ±ºò£¬Á½¸öÖµÏà²îºÜÐ¡£¬Èç¹û½ÓÁËÏà²î500ÒÔÄÚ£¬PC0 Ð¡ÓÚPC1 µÄÖµ
+				/*ï¿½ï¿½ï¿½PC0 ï¿½ï¿½PC1 ï¿½ï¿½Öµï¿½Ð¶ï¿½ ADSï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Î´ï¿½Óµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½500ï¿½ï¿½ï¿½Ú£ï¿½PC0 Ð¡ï¿½ï¿½PC1 ï¿½ï¿½Öµ
 
-				µÚÒ»ÖÖ£º*²âÊÔÎÂ¶ÈµÄÖµ= 247
+				ï¿½ï¿½Ò»ï¿½Ö£ï¿½*ï¿½ï¿½ï¿½ï¿½ï¿½Â¶Èµï¿½Öµ= 247
 
-				*PC__00 ADC µÄÖµ= 2510
+				*PC__00 ADC ï¿½ï¿½Öµ= 2510
 
-				*PC__11 ADC µÄÖµ= 2578
+				*PC__11 ADC ï¿½ï¿½Öµ= 2578
 
-				µÚ¶þÖÖ£ºÈç¹ûÁ½¸ö¶¼Ã»½ÓPC0ºÍPC1µÄÖµ½Ó½ü4096
+				ï¿½Ú¶ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½PC0ï¿½ï¿½PC1ï¿½ï¿½Öµï¿½Ó½ï¿½4096
 
-				µÚÈýÖÖ£ºÏÂÃæÊÇÈýÏß½ÓÁ½ÏßµÄÊý¾Ý
-				*PC__00 ADC µÄÖµ= 1260
-				*PC__11 ADC µÄÖµ= 4077
+				ï¿½ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½
+				*PC__00 ADC ï¿½ï¿½Öµ= 1260
+				*PC__11 ADC ï¿½ï¿½Öµ= 4077
 
 				*/
 
@@ -867,1308 +926,96 @@ uint16 find_true_temperature(uint16 value)
 
 		RT = (float)(2 * V_RT)/(4 - V_RT);
 
-		RT_value = RT *100000; //¶Ôµç×èÖµ·Å´óÊ®Íò±¶£¬È¡Ð¡ÊýµãºóÎåÎ»
-		//printf("\r\nPT100µÄ×èÖµÎª = %d\r\n",RT_value);
+		RT_value = RT *100000; //ï¿½Ôµï¿½ï¿½ï¿½Öµï¿½Å´ï¿½Ê®ï¿½ò±¶£ï¿½È¡Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//printf("\r\nPT100ï¿½ï¿½ï¿½ï¿½ÖµÎª = %d\r\n",RT_value);
 	
 	
 		return  RT_value;
 		
 }
 
-//²ÉÓÃ²é±íµÄ·½·¨»ñÈ¡ÎÂ¶È
-#if 1
-
+/**
+ * @brief  ADCï¿½ï¿½è½¬æ¸©åº¦ï¿½å¯¹ï¿½ï¿½ï¿½
+ * @param  value: PT1000ï¿½ï¿½ï¿½ï¿½10
+ * @retval æ¸©åº¦ï¿½ï¿½10 (ï¿½250è¡¨ç¤º25.0Â°C), ï¿½ï¿½ï¿½9999
+ */
 uint16 Adc_to_temperature(uint16 value)
 {
-	if((value > 9126) && (value < adc_00))
-		return 0;
-
-	if((value >= adc_00) && (value < adc_10))
-		return go_00_process(value);
-	if((value >= adc_10) && (value < adc_20))
-		return go_10_process(value);
-
-	if((value >= adc_20) && (value < adc_30))
-		return go_20_process(value);
-
-	if((value >= adc_30) && (value < adc_40))
-		return go_30_process(value);
-	
-	if((value >= adc_40) && (value < adc_50))
-		return go_40_process(value);
-
-	if((value >= adc_50) && (value < adc_60))
-		return go_50_process(value);
-	
-	if((value >= adc_60) && (value < adc_70))
-		return go_60_process(value);
-
-	if((value >= adc_70) && (value < adc_80))
-		return go_70_process(value);
-	
-	if((value >= adc_80) && (value < adc_90))
-		return go_80_process(value);
-	
-	if((value >= adc_90) && (value < adc_100))
-		return go_90_process(value);
-
-	if((value >= adc_100) && (value < adc_110))
-		return go_100_process(value);
-	
-	if((value >= adc_110) && (value < adc_120))
-		return go_110_process(value);
-	
-	if((value >= adc_120) && (value < adc_130))
-		return go_120_process(value);
-
-	if((value >= adc_130) && (value < adc_140))
-		return go_130_process(value);
-
-	if((value >= adc_140) && (value < adc_150))
-		return go_140_process(value);
-
-	if((value >= adc_150) && (value < adc_160))
-		return go_150_process(value);
-
-	if((value >= adc_160) && (value < adc_170))
-		return go_160_process(value);
-
-	if((value >= adc_170) && (value < adc_180))
-		return go_170_process(value);
-
-	if((value >= adc_180) && (value < adc_190))
-		return go_180_process(value);
-
-	if((value >= adc_190) && (value < adc_200))
-		return go_190_process(value);
-
-	if((value >= adc_200) && (value < adc_210))
-		return go_200_process(value);
-		
-		return 9999 ;
+    /* çº¿ï¿½ï¿½ï¼»ï¿½ï¿½ï¿½ï¿½ */
+    if(value < pt1000Table[0] - 500)
+    {
+        return 9999;
+    }
+    
+    return Pt1000ToTemperature(value);
 }
 
 
 
 
-#endif
-
-
-
-
-#if 0 //ÔÝÊ±²»²ÉÓÃÎÂ¶È±ê¶¨µÄ·½·¨
-uint16 Adc_to_temperature(uint16 value)
+/**
+ * @brief  çº¿ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  value: å½¼ï¿½ï¿½ï¿½
+ * @param  span: ï¿½ï¿½è·¨ï¿½
+ * @retval ï¿½ï¿½ (0-10)
+ */
+static uint16 getInterpolation(uint16 value, uint16 span)
 {
-	const uint16 adc_00 = 405;//492;//Áã¶ÈÎªÍÆ¶ÏÖµ
-	const uint16 adc_10 = 595;//558;
-	const uint16 adc_20 = 770;//724;
-	const uint16 adc_30 = 951;//890;
-	const uint16 adc_40 = 1124;//1063;
-	const uint16 adc_50 = 1295;//1232;
-	const uint16 adc_60 = 1470;//1399;
-	const uint16 adc_70 = 1640;//1563;
-	const uint16 adc_80 = 1812;//1719;
-	const uint16 adc_90 = 1968;//1877;
-	const uint16 adc_100 = 2107;
-
-	
-	if((value >= adc_00) && (value < adc_10))
-		return (0 + get_dot((value - adc_00),(adc_10 - adc_00)));
-	
-	if((value >= adc_10) && (value < adc_20))
-		return (100 + get_dot((value - adc_10),(adc_20 - adc_10)));
-
-	if((value >= adc_20) && (value < adc_30))
-		return (200 + get_dot((value - adc_20),(adc_30 - adc_20)));
-
-	if((value >= adc_30) && (value < adc_40))
-		return (300 + get_dot((value - adc_30),(adc_40 - adc_30)));
-	
-	if((value >= adc_40) && (value < adc_50))
-		return (400 + get_dot((value - adc_40),(adc_50 - adc_40)));
-
-	if((value >= adc_50) && (value < adc_60))
-		return (500 + get_dot((value - adc_50),(adc_60 - adc_50)));
-	
-	if((value >= adc_60) && (value < adc_70))
-		return (600 + get_dot((value - adc_60),(adc_70 - adc_60)));
-
-	if((value >= adc_70) && (value < adc_80))
-		return (700 + get_dot((value - adc_70),(adc_80 - adc_70)));
-	
-	if((value >= adc_80) && (value < adc_90))
-		return (800 + get_dot((value - adc_80),(adc_90 - adc_80)));
-	
-	if((value >= adc_90) && (value < adc_100))
-		return (900 + get_dot((value - adc_90),(adc_100 - adc_90)));
-	
-	return 0;
+    if(span == 0) return 0;
+    return (value * 10) / span;
 }
 
-#endif
-
-
-uint16 get_dot(uint16 value,uint16 percent)
+/**
+ * @brief  PT1000é˜»å€¼è½¬æ¸©åº¦ï¼ˆäºŒåˆ†æŸ¥æ‰¾+çº¿æ€§æ’å€¼ï¼‰
+ * @param  resistance: ç”µé˜»å€¼Ã—10 (å¦‚10000è¡¨ç¤º1000.0Î©)
+ * @retval æ¸©åº¦å€¼Ã—10 (å¦‚2500è¡¨ç¤º250.0Â°C)
+ * @note   äºŒåˆ†æŸ¥æ‰¾O(log n)ï¼Œæœ€å¤š9æ¬¡æ¯”è¾ƒï¼ˆ501ä¸ªå…ƒç´ ï¼‰
+ */
+uint16 Pt1000ToTemperature(uint16 resistance)
 {
-	//get 1--10
-	return  (value*10)/percent ;
+    uint16 low = 0;
+    uint16 high = PT1000_TABLE_SIZE - 1;  /* 500 */
+    uint16 mid;
+    uint16 span;
+    
+    /* è¾¹ç•Œæ£€æŸ¥ï¼šä½ŽäºŽ0Â°C */
+    if(resistance < pt1000Table[0])
+    {
+        return 0;
+    }
+    
+    /* è¾¹ç•Œæ£€æŸ¥ï¼šé«˜äºŽ500Â°C */
+    if(resistance >= pt1000Table[PT1000_TABLE_SIZE - 1])
+    {
+        return 5000;
+    }
+    
+    /* äºŒåˆ†æŸ¥æ‰¾ï¼šæ‰¾åˆ°resistanceæ‰€åœ¨åŒºé—´ */
+    while(low < high)
+    {
+        mid = (low + high) / 2;
+        
+        if(resistance < pt1000Table[mid])
+        {
+            high = mid;
+        }
+        else if(resistance >= pt1000Table[mid + 1])
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            /* æ‰¾åˆ°åŒºé—´: pt1000Table[mid] <= resistance < pt1000Table[mid+1] */
+            low = mid;
+            break;
+        }
+    }
+    
+    /* çº¿æ€§æ’å€¼ */
+    span = pt1000Table[low + 1] - pt1000Table[low];
+    
+    return low * 10 + getInterpolation(resistance - pt1000Table[low], span);
 }
-
-
-
-uint16 go_00_process(uint16 value)
-{
-
-	 uint16 zero_value = 0; //0¶ÈÎªÆðÊ¼Öµ
-
-	  uint16 adc_0 = adc_00;  //10¶È
-	  uint16 adc_1 = adc_01; //11¶È
-	  uint16 adc_2 = adc_02;
-	  uint16 adc_3 = adc_03;
-	  uint16 adc_4 = adc_04;
-	  uint16 adc_5 = adc_05;
-	  uint16 adc_6 = adc_06;
-	  uint16 adc_7 = adc_07;
-	  uint16 adc_8 = adc_08;
-	  uint16 adc_9 = adc_09;
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_10))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_10 - adc_9)));
-
-
-	return  0;
-	
-}
-
-
-
-
-
-uint16 go_10_process(uint16 value)
-{
-	 uint16 adc_0 = adc_10;  //10¶È
-	  uint16 adc_1 = adc_11; //11¶È
-	  uint16 adc_2 = adc_12;
-	  uint16 adc_3 = adc_13;
-	  uint16 adc_4 = adc_14;
-	  uint16 adc_5 = adc_15;
-	  uint16 adc_6 = adc_16;
-	  uint16 adc_7 = adc_17;
-	  uint16 adc_8 = adc_18;
-	  uint16 adc_9 = adc_19;
-
-	const uint16 zero_value = 100; //10¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_20 ))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_20 - adc_9)));
-
-
-	return  0;
-	
-}
-
-
-uint16 go_20_process(uint16 value)
-{
-	 uint16 adc_0 = adc_20;   
-	  uint16 adc_1 = adc_21;  
-	  uint16 adc_2 = adc_22;
-	  uint16 adc_3 = adc_23;
-	  uint16 adc_4 = adc_24;
-	  uint16 adc_5 = adc_25;
-	  uint16 adc_6 = adc_26;
-	  uint16 adc_7 = adc_27;
-	  uint16 adc_8 = adc_28;
-	  uint16 adc_9 = adc_29;
-
-	const uint16 zero_value = 200; //20¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_30))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_30 - adc_9)));
-
-
-	return  0;
-	
-}
-
-
-uint16 go_30_process(uint16 value)
-{
-	 uint16 adc_0 = adc_30;   
-	  uint16 adc_1 = adc_31;  
-	  uint16 adc_2 = adc_32;
-	  uint16 adc_3 = adc_33;
-	  uint16 adc_4 = adc_34;
-	  uint16 adc_5 = adc_35;
-	  uint16 adc_6 = adc_36;
-	  uint16 adc_7 = adc_37;
-	  uint16 adc_8 = adc_38;
-	  uint16 adc_9 = adc_39;
-
-	const uint16 zero_value = 300; //30¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_40))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_40 - adc_9)));
-
-
-	return  0;
-	
-}
-
-
-
-
-uint16 go_40_process(uint16 value)
-{
-	  uint16 adc_0 = adc_40;   
-	  uint16 adc_1 = adc_41;  
-	  uint16 adc_2 = adc_42;
-	  uint16 adc_3 = adc_43;
-	  uint16 adc_4 = adc_44;
-	  uint16 adc_5 = adc_45;
-	  uint16 adc_6 = adc_46;
-	  uint16 adc_7 = adc_47;
-	  uint16 adc_8 = adc_48;
-	  uint16 adc_9 = adc_49;
-
-	const uint16 zero_value = 400; //40¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_50))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_50 - adc_9)));
-
-
-	return  0;
-	
-}
-
-uint16 go_50_process(uint16 value)
-{
-	  uint16 adc_0 = adc_50;   
-	  uint16 adc_1 = adc_51;  
-	  uint16 adc_2 = adc_52;
-	  uint16 adc_3 = adc_53;
-	  uint16 adc_4 = adc_54;
-	  uint16 adc_5 = adc_55;
-	  uint16 adc_6 = adc_56;
-	  uint16 adc_7 = adc_57;
-	  uint16 adc_8 = adc_58;
-	  uint16 adc_9 = adc_59;
-
-	const uint16 zero_value = 500; //50¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_60))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_60 - adc_9)));
-
-
-	return  0;
-	
-}
-
-
-
-
-
-
-
-
-uint16 go_60_process(uint16 value)
-{
-	uint16 adc_0 = adc_60;   
-	  uint16 adc_1 = adc_61;  
-	  uint16 adc_2 = adc_62;
-	  uint16 adc_3 = adc_63;
-	  uint16 adc_4 = adc_64;
-	  uint16 adc_5 = adc_65;
-	  uint16 adc_6 = adc_66;
-	  uint16 adc_7 = adc_67;
-	  uint16 adc_8 = adc_68;
-	  uint16 adc_9 = adc_69;
-
-	const uint16 zero_value = 600; //60¶ÈÎªÆðÊ¼Öµ
-
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_70))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_70 - adc_9)));
-
-	return 0;
-}
-
-uint16 go_70_process(uint16 value)
-{
-	uint16 adc_0 = adc_70;   
-	  uint16 adc_1 = adc_71;  
-	  uint16 adc_2 = adc_72;
-	  uint16 adc_3 = adc_73;
-	  uint16 adc_4 = adc_74;
-	  uint16 adc_5 = adc_75;
-	  uint16 adc_6 = adc_76;
-	  uint16 adc_7 = adc_77;
-	  uint16 adc_8 = adc_78;
-	  uint16 adc_9 = adc_79;
-
-	const uint16 zero_value = 700; //80¶ÈÎªÆðÊ¼Öµ
-
-		if ((value >= adc_0) && (value < adc_1))
-				return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-	
-		if ((value >= adc_1) && (value < adc_2))
-				return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-		
-		if ((value >= adc_2) && (value < adc_3))
-				return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-			
-		if ((value >= adc_3) && (value < adc_4))
-				return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-		
-		if ((value >= adc_4) && (value < adc_5))
-				return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-	
-		if ((value >= adc_5) && (value < adc_6))
-				return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-	
-		if ((value >= adc_6) && (value < adc_7))
-				return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-	
-		if ((value >= adc_7) && (value < adc_8))
-				return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-	
-		if ((value >= adc_8) && (value < adc_9))
-				return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-	
-	
-		if ((value >= adc_9) && (value < adc_80))
-				return (zero_value + 90 + get_dot((value - adc_9),(adc_80 - adc_9)));
-
-		return 0;
-	
-		
-
-}
-
-
-uint16 go_80_process(uint16 value)
-{
-	  uint16 adc_0 = adc_80;   
-	  uint16 adc_1 = adc_81;  
-	  uint16 adc_2 = adc_82;
-	  uint16 adc_3 = adc_83;
-	  uint16 adc_4 = adc_84;
-	  uint16 adc_5 = adc_85;
-	  uint16 adc_6 = adc_86;
-	  uint16 adc_7 = adc_87;
-	  uint16 adc_8 = adc_88;
-	  uint16 adc_9 = adc_89;
-
-
-	const uint16 zero_value = 800; //80¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_90))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_90 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_90_process(uint16 value)
-{
-	  uint16 adc_0 = adc_90;   
-	  uint16 adc_1 = adc_91;  
-	  uint16 adc_2 = adc_92;
-	  uint16 adc_3 = adc_93;
-	  uint16 adc_4 = adc_94;
-	  uint16 adc_5 = adc_95;
-	  uint16 adc_6 = adc_96;
-	  uint16 adc_7 = adc_97;
-	  uint16 adc_8 = adc_98;
-	  uint16 adc_9 = adc_99;
-
-
-	const uint16 zero_value = 900; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_100))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_100 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_100_process(uint16 value)
-{
-	  uint16 adc_0 = adc_100;   
-	  uint16 adc_1 = adc_101;  
-	  uint16 adc_2 = adc_102;
-	  uint16 adc_3 = adc_103;
-	  uint16 adc_4 = adc_104;
-	  uint16 adc_5 = adc_105;
-	  uint16 adc_6 = adc_106;
-	  uint16 adc_7 = adc_107;
-	  uint16 adc_8 = adc_108;
-	  uint16 adc_9 = adc_109;
-
-
-	const uint16 zero_value = 1000; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_110))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_110 - adc_9)));
-
-	return 0;
-}
-
-
-
-
-uint16 go_110_process(uint16 value)
-{
-	  uint16 adc_0 = adc_110;   
-	  uint16 adc_1 = adc_111;  
-	  uint16 adc_2 = adc_112;
-	  uint16 adc_3 = adc_113;
-	  uint16 adc_4 = adc_114;
-	  uint16 adc_5 = adc_115;
-	  uint16 adc_6 = adc_116;
-	  uint16 adc_7 = adc_117;
-	  uint16 adc_8 = adc_118;
-	  uint16 adc_9 = adc_119;
-
-
-	const uint16 zero_value = 1100; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_120))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_120 - adc_9)));
-
-	return 0;
-}
-
-
-
-uint16 go_120_process(uint16 value)
-{
-	  uint16 adc_0 = adc_120;   
-	  uint16 adc_1 = adc_121;  
-	  uint16 adc_2 = adc_122;
-	  uint16 adc_3 = adc_123;
-	  uint16 adc_4 = adc_124;
-	  uint16 adc_5 = adc_125;
-	  uint16 adc_6 = adc_126;
-	  uint16 adc_7 = adc_127;
-	  uint16 adc_8 = adc_128;
-	  uint16 adc_9 = adc_129;
-
-
-	const uint16 zero_value = 1200; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_130))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_130 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_130_process(uint16 value)
-{
-	  uint16 adc_0 = adc_130;   
-	  uint16 adc_1 = adc_131;  
-	  uint16 adc_2 = adc_132;
-	  uint16 adc_3 = adc_133;
-	  uint16 adc_4 = adc_134;
-	  uint16 adc_5 = adc_135;
-	  uint16 adc_6 = adc_136;
-	  uint16 adc_7 = adc_137;
-	  uint16 adc_8 = adc_138;
-	  uint16 adc_9 = adc_139;
-
-
-	const uint16 zero_value = 1300; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_140))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_140 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_140_process(uint16 value)
-{
-	  uint16 adc_0 = adc_140;   
-	  uint16 adc_1 = adc_141;  
-	  uint16 adc_2 = adc_142;
-	  uint16 adc_3 = adc_143;
-	  uint16 adc_4 = adc_144;
-	  uint16 adc_5 = adc_145;
-	  uint16 adc_6 = adc_146;
-	  uint16 adc_7 = adc_147;
-	  uint16 adc_8 = adc_148;
-	  uint16 adc_9 = adc_149;
-
-
-	const uint16 zero_value = 1400; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_150))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_150 - adc_9)));
-
-	return 0;
-}
-
-
-
-
-uint16 go_150_process(uint16 value)
-{
-	  uint16 adc_0 = adc_150;   
-	  uint16 adc_1 = adc_151;  
-	  uint16 adc_2 = adc_152;
-	  uint16 adc_3 = adc_153;
-	  uint16 adc_4 = adc_154;
-	  uint16 adc_5 = adc_155;
-	  uint16 adc_6 = adc_156;
-	  uint16 adc_7 = adc_157;
-	  uint16 adc_8 = adc_158;
-	  uint16 adc_9 = adc_159;
-
-
-	const uint16 zero_value = 1500; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_160))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_160 - adc_9)));
-
-	return 0;
-}
-
-
-
-uint16 go_160_process(uint16 value)
-{
-	  uint16 adc_0 = adc_160;   
-	  uint16 adc_1 = adc_161;  
-	  uint16 adc_2 = adc_162;
-	  uint16 adc_3 = adc_163;
-	  uint16 adc_4 = adc_164;
-	  uint16 adc_5 = adc_165;
-	  uint16 adc_6 = adc_166;
-	  uint16 adc_7 = adc_167;
-	  uint16 adc_8 = adc_168;
-	  uint16 adc_9 = adc_169;
-
-
-	const uint16 zero_value = 1600; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_170))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_170 - adc_9)));
-
-	return 0;
-}
-
-
-
-
-uint16 go_170_process(uint16 value)
-{
-	  uint16 adc_0 = adc_170;   
-	  uint16 adc_1 = adc_171;  
-	  uint16 adc_2 = adc_172;
-	  uint16 adc_3 = adc_173;
-	  uint16 adc_4 = adc_174;
-	  uint16 adc_5 = adc_175;
-	  uint16 adc_6 = adc_176;
-	  uint16 adc_7 = adc_177;
-	  uint16 adc_8 = adc_178;
-	  uint16 adc_9 = adc_179;
-
-
-	const uint16 zero_value = 1700; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_180))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_180 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_180_process(uint16 value)
-{
-	  uint16 adc_0 = adc_180;   
-	  uint16 adc_1 = adc_181;  
-	  uint16 adc_2 = adc_182;
-	  uint16 adc_3 = adc_183;
-	  uint16 adc_4 = adc_184;
-	  uint16 adc_5 = adc_185;
-	  uint16 adc_6 = adc_186;
-	  uint16 adc_7 = adc_187;
-	  uint16 adc_8 = adc_188;
-	  uint16 adc_9 = adc_189;
-
-
-	const uint16 zero_value = 1800; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_190))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_190 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_190_process(uint16 value)
-{
-	  uint16 adc_0 = adc_190;   
-	  uint16 adc_1 = adc_191;  
-	  uint16 adc_2 = adc_192;
-	  uint16 adc_3 = adc_193;
-	  uint16 adc_4 = adc_194;
-	  uint16 adc_5 = adc_195;
-	  uint16 adc_6 = adc_196;
-	  uint16 adc_7 = adc_197;
-	  uint16 adc_8 = adc_198;
-	  uint16 adc_9 = adc_199;
-
-
-	const uint16 zero_value = 1900; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_200))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_200 - adc_9)));
-
-	return 0;
-}
-
-uint16 go_200_process(uint16 value)
-{
-	  uint16 adc_0 = adc_200;   
-	  uint16 adc_1 = adc_201;  
-	  uint16 adc_2 = adc_202;
-	  uint16 adc_3 = adc_203;
-	  uint16 adc_4 = adc_204;
-	  uint16 adc_5 = adc_205;
-	  uint16 adc_6 = adc_206;
-	  uint16 adc_7 = adc_207;
-	  uint16 adc_8 = adc_208;
-	  uint16 adc_9 = adc_209;
-
-
-	const uint16 zero_value = 2000; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_210))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_210 - adc_9)));
-
-	return 0;
-}
-
-
-uint16 go_210_process(uint16 value)
-{
-	  uint16 adc_0 = adc_210;   
-	  uint16 adc_1 = adc_211;  
-	  uint16 adc_2 = adc_212;
-	  uint16 adc_3 = adc_213;
-	  uint16 adc_4 = adc_214;
-	  uint16 adc_5 = adc_215;
-	  uint16 adc_6 = adc_216;
-	  uint16 adc_7 = adc_217;
-	  uint16 adc_8 = adc_218;
-	  uint16 adc_9 = adc_219;
-
-
-	const uint16 zero_value = 2100; //90¶ÈÎªÆðÊ¼Öµ
-
-	if ((value >= adc_0) && (value < adc_1))
-			return (zero_value + get_dot((value - adc_0),(adc_1 - adc_0)));
-
-	if ((value >= adc_1) && (value < adc_2))
-			return (zero_value + 10 + get_dot((value - adc_1),(adc_2 - adc_1)));
-	
-	if ((value >= adc_2) && (value < adc_3))
-			return (zero_value + 20 + get_dot((value - adc_2),(adc_3 - adc_2)));
-		
-	if ((value >= adc_3) && (value < adc_4))
-			return (zero_value + 30 + get_dot((value - adc_3),(adc_4 - adc_3)));
-	
-	if ((value >= adc_4) && (value < adc_5))
-			return (zero_value + 40 + get_dot((value - adc_4),(adc_5 - adc_4)));
-
-	if ((value >= adc_5) && (value < adc_6))
-			return (zero_value + 50 + get_dot((value - adc_5),(adc_6 - adc_5)));
-
-	if ((value >= adc_6) && (value < adc_7))
-			return (zero_value + 60 + get_dot((value - adc_6),(adc_7 - adc_6)));
-
-	if ((value >= adc_7) && (value < adc_8))
-			return (zero_value + 70 + get_dot((value - adc_7),(adc_8 - adc_7)));
-
-	if ((value >= adc_8) && (value < adc_9))
-			return (zero_value + 80 + get_dot((value - adc_8),(adc_9 - adc_8)));
-
-
-	if ((value >= adc_9) && (value < adc_220))
-			return (zero_value + 90 + get_dot((value - adc_9),(adc_220 - adc_9)));
-
-	return 0;
-}
-
-
 
 
 

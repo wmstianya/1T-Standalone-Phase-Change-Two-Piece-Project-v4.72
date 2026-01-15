@@ -5,16 +5,16 @@
 #include "stm32f10x.h"
 #include "main.h"
 
-#define N 50    //²ÉÑù50´Î
-#define M 4     //Í¨µÀÊıÎª3
+#define N 50    //ï¿½ï¿½ï¿½ï¿½50ï¿½ï¿½
+#define M 4     //Í¨ï¿½ï¿½ï¿½ï¿½Îª3
 
 
 
 #define ABS(X)  ((X)>0? (X): -(X))
 
 
-// ×¢Òâ£ºÓÃ×÷ADC²É¼¯µÄIO±ØĞëÃ»ÓĞ¸´ÓÃ£¬·ñÔò²É¼¯µçÑ¹»áÓĞÓ°Ïì
-/********************ADC1ÊäÈëÍ¨µÀ£¨Òı½Å£©ÅäÖÃ**************************/
+// ×¢ï¿½â£ºï¿½ï¿½ï¿½ï¿½ADCï¿½É¼ï¿½ï¿½ï¿½IOï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ¸ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½
+/********************ADC1ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½ï¿½ï¿½**************************/
 #define    ADC_APBxClock_FUN             RCC_APB2PeriphClockCmd
 #define    ADC_CLK                       RCC_APB2Periph_ADC1
 
@@ -23,7 +23,7 @@
 #define    ADC_PORT                      GPIOA
 
 
-/*******************ÎÂ¶ÈADCÅäÖÃ**************************/
+/*******************ï¿½Â¶ï¿½ADCï¿½ï¿½ï¿½ï¿½**************************/
 
 #define    ADC_GPIO_APBxClock_FUN1        RCC_APB2PeriphClockCmd
 #define    ADC_GPIO_CLK1                 RCC_APB2Periph_GPIOC  
@@ -34,18 +34,18 @@
 
 
 
-/* Ö±½Ó²Ù×÷¼Ä´æÆ÷µÄ·½·¨¿ØÖÆIO */
-#define	digitalHi(p,i)		 {p->BSRR=i;}	 //Êä³öÎª¸ßµçÆ½		
-#define digitalLo(p,i)		 {p->BRR=i;}	 //Êä³öµÍµçÆ½
+/* Ö±ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IO */
+#define	digitalHi(p,i)		 {p->BSRR=i;}	 //ï¿½ï¿½ï¿½Îªï¿½ßµï¿½Æ½		
+#define digitalLo(p,i)		 {p->BRR=i;}	 //ï¿½ï¿½ï¿½ï¿½Íµï¿½Æ½
 
 
-/* ¶¨Òå¿ØÖÆIOµÄºê */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IOï¿½Äºï¿½ */
 
 
 
 
 
-// ×ª»»Í¨µÀ¸öÊı
+// ×ªï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define    NOFCHANEL	 4
 
 #define    ADC_PIN1                      GPIO_Pin_0
@@ -65,28 +65,48 @@
 
 
 
-// ADC1 ¶ÔÓ¦ DMA1Í¨µÀ1£¬ADC3¶ÔÓ¦DMA2Í¨µÀ5£¬ADC2Ã»ÓĞDMA¹¦ÄÜ
+// ADC1 ï¿½ï¿½Ó¦ DMA1Í¨ï¿½ï¿½1ï¿½ï¿½ADC3ï¿½ï¿½Ó¦DMA2Í¨ï¿½ï¿½5ï¿½ï¿½ADC2Ã»ï¿½ï¿½DMAï¿½ï¿½ï¿½ï¿½
 #define    ADC_x                         ADC1
 #define    ADC_DMA_CHANNEL               DMA1_Channel1
 #define    ADC_DMA_CLK                   RCC_AHBPeriph_DMA1
 
 
-//ËÄÂ·²âÎÂ½á¹¹Ìå
+/*==============================================================================
+ * å‹åŠ›å˜é€å™¨4-20mAå‚æ•°å®šä¹‰ï¼ˆ100Î©é‡‡æ ·ç”µé˜»ï¼‰
+ * 4mA = 400mV, 20mA = 2000mV
+ *============================================================================*/
+#define PRESSURE_ZERO_MV          400     /* 4mAå¯¹åº”ç”µå‹(mV) */
+#define PRESSURE_SPAN_MV          1600    /* ç”µå‹è·¨åº¦(mV): 2000-400 */
+#define PRESSURE_FAULT_LOW_MV     300     /* ä½äºæ­¤å€¼è®¤ä¸ºæ–­çº¿ */
+#define PRESSURE_FAULT_HIGH_MV    2200    /* é«˜äºæ­¤å€¼è®¤ä¸ºçŸ­è·¯ */
+
+/* æ ¡å‡†å‚æ•°ç»“æ„ä½“ */
+typedef struct {
+    uint16 zeroMv;           /* é›¶ç‚¹ç”µå‹(mV)ï¼Œé»˜è®¤400 */
+    uint16 spanMv;           /* ç”µå‹è·¨åº¦(mV)ï¼Œé»˜è®¤1600 */
+    uint16 fullScale;        /* æ»¡é‡ç¨‹å‹åŠ›å€¼(0.01MPa)ï¼Œå¦‚160=1.6MPa */
+    uint8  calibValid;       /* æ ¡å‡†æœ‰æ•ˆæ ‡å¿— 0x5A=æœ‰æ•ˆ */
+} PressureCalib_t;
+
+extern PressureCalib_t pressureCalib;
+
+
+//ï¿½ï¿½Â·ï¿½ï¿½ï¿½Â½á¹¹ï¿½ï¿½
 typedef struct _TEMPURE_
 {
 		  uint16 Main_Tem ;
 		  uint16 Out_Water_Tem ;
 		  uint16 Back_Water_Tem ;
 		  uint16 Smoke_Tem ;
-			uint16 Pressure_Value;//ÏµÍ³Ñ¹Á¦
-			uint16 steam_value; //ÕôÆûÎÂ¶È
-			uint16 inside_water_value;  //ÄÚ²¿Ë®Ñ­»·µÄÎÂ¶È
-			uint16 Inside_High_Pressure;  //ÄÚ²¿
+			uint16 Pressure_Value;//ÏµÍ³Ñ¹ï¿½ï¿½
+			uint16 steam_value; //ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
+			uint16 inside_water_value;  //ï¿½Ú²ï¿½Ë®Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
+			uint16 Inside_High_Pressure;  //ï¿½Ú²ï¿½
 }TEM_VALUE;
 
 extern TEM_VALUE Temperature_Data;
 
-// ADC1×ª»»µÄµçÑ¹ÖµÍ¨¹ıMDA·½Ê½´«µ½SRAM
+// ADC1×ªï¿½ï¿½ï¿½Äµï¿½Ñ¹ÖµÍ¨ï¿½ï¿½MDAï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½SRAM
 extern __IO uint16_t ADC_ConvertedValue[N][M];
 
 extern float ADC_ConvertedValueLocal[NOFCHANEL];
@@ -100,7 +120,7 @@ extern uint16 Back_Water_Tem ;
 extern uint16 Smoke_Tem ;
 
 
-/**************************º¯ÊıÉùÃ÷********************************/
+/**************************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½********************************/
 void 	ADCx_Init(void);
 void filter(void);
 uint16 GetVolt(uint16 advalue);
@@ -113,33 +133,23 @@ uint8 pressure_to_temperature(uint8 pressure);
 
 uint8 Check_ADS_Unconnect(uint16 New_Value);
 
+/*==============================================================================
+ * å‹åŠ›IIRæ»¤æ³¢ä¸æ ¡å‡†å‡½æ•°
+ *============================================================================*/
+uint16 Pressure_IIR_Filter(uint16 rawPressure);
+void Pressure_Filter_Reset(void);
+void Pressure_Calibrate_Zero(uint16 currentAdcMv);
+void Pressure_Calibrate_Full(uint16 currentAdcMv, uint16 actualPressure);
+void Pressure_Calib_Init(void);
+uint16 GetVoltCalibrated(uint16 advalue);
+
 uint16 find_true_temperature(uint16 value);
 
+/*==============================================================================
+ * PT1000æ¸©åº¦è½¬æ¢å‡½æ•°ï¼ˆé‡æ„åï¼‰
+ *============================================================================*/
 uint16 Adc_to_temperature(uint16 value);
-uint16 go_00_process(uint16 value);
-
-uint16 go_10_process(uint16 value);
-
-uint16 go_20_process(uint16 value);
-uint16 go_30_process(uint16 value);
-uint16 go_40_process(uint16 value);
-uint16 go_50_process(uint16 value);
-uint16 go_60_process(uint16 value);
-uint16 go_70_process(uint16 value);
-uint16 go_80_process(uint16 value);
-uint16 go_90_process(uint16 value);
-uint16 go_100_process(uint16 value);
-uint16 go_110_process(uint16 value);
-uint16 go_120_process(uint16 value);
-uint16 go_130_process(uint16 value);
-uint16 go_140_process(uint16 value);
-uint16 go_150_process(uint16 value);
-uint16 go_160_process(uint16 value);
-uint16 go_170_process(uint16 value);
-uint16 go_180_process(uint16 value);
-uint16 go_190_process(uint16 value);
-uint16 go_200_process(uint16 value);
-uint16 go_210_process(uint16 value);
+uint16 Pt1000ToTemperature(uint16 resistance);
 
 
 
